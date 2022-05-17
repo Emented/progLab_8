@@ -51,7 +51,7 @@ public class RequestThread implements Runnable {
                             .supplyAsync(acceptedRequest::getRequest)
                             .thenApplyAsync(request -> {
                                 if (request.getType().equals(CommandRequest.class)) {
-                                    return new CommandResponse(true, "Sdf");
+                                    return commandManager.executeClientCommand((CommandRequest) request);
                                 } else if (request.getType().equals(RegisterRequest.class)) {
                                     return usersManager.registerNewUser((RegisterRequest) request);
                                 } else if (request.getType().equals(LoginRequest.class)){

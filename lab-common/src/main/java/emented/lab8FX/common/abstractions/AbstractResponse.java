@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class AbstractResponse implements Serializable {
 
-    private boolean isSuccess;
+    private final boolean isSuccess;
 
-    private String message;
+    private final String message;
 
     public AbstractResponse(boolean isSuccess, String message) {
         this.isSuccess = isSuccess;
@@ -19,5 +19,9 @@ public class AbstractResponse implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    public Class<?> getType() {
+        return this.getClass();
     }
 }

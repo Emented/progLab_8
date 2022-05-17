@@ -2,6 +2,8 @@ package emented.lab8FX.server.clientcommands;
 
 import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.Request;
+import emented.lab8FX.common.util.requests.CommandRequest;
+import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.server.abstractions.AbstractClientCommand;
 import emented.lab8FX.server.util.CommandProcessor;
 
@@ -18,7 +20,7 @@ public class RemoveByIdCommand extends AbstractClientCommand {
     }
 
     @Override
-    public Response executeClientCommand(Request request) {
+    public CommandResponse executeClientCommand(CommandRequest request) {
         return commandProcessor.removeById(request);
     }
 }

@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class RegisterRequest extends AbstractRequest implements Serializable {
 
-    private String username;
+    private final String username;
 
-    private String password;
+    private final String password;
 
     public RegisterRequest(String clientInfo, String username, String password) {
         super(clientInfo);

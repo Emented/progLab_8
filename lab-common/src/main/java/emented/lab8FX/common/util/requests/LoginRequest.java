@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class LoginRequest extends AbstractRequest implements Serializable {
 
-    private String username;
+    private final String username;
 
-    private String password;
+    private final String password;
 
     public LoginRequest(String clientInfo, String username, String password) {
         super(clientInfo);

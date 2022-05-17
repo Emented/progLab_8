@@ -4,16 +4,12 @@ import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.exceptions.CollectionIsEmptyException;
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
-import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CommandResponse;
-import emented.lab8FX.server.abstractions.AbstractClientCommand;
 import emented.lab8FX.server.db.DBManager;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class CommandProcessor {
@@ -27,7 +23,7 @@ public class CommandProcessor {
         this.collectionManager = collectionManager;
     }
 
-    public CommandResponse add(Request request) {
+    public CommandResponse add(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -43,7 +39,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse removeById(Request request) {
+    public CommandResponse removeById(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -64,7 +60,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse updateById(Request request) {
+    public CommandResponse updateById(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -85,7 +81,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse clear(Request request) {
+    public CommandResponse clear(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -102,7 +98,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse removeGreater(Request request) {
+    public CommandResponse removeGreater(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -129,7 +125,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse show(Request request) {
+    public CommandResponse show(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -147,7 +143,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse info(Request request) {
+    public CommandResponse info(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -158,7 +154,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse countLessThenNumberOfParticipants(Request request) {
+    public CommandResponse countLessThenNumberOfParticipants(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -172,7 +168,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse removeAnyByNumberOfParticipants(Request request) {
+    public CommandResponse removeAnyByNumberOfParticipants(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -198,7 +194,7 @@ public class CommandProcessor {
         }
     }
 
-    public CommandResponse addIfMax(Request request) {
+    public CommandResponse addIfMax(CommandRequest request) {
         try {
             if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
                 return new CommandResponse(false, "Login and password mismatch");
@@ -218,57 +214,38 @@ public class CommandProcessor {
         }
     }
 
-    public Response minByStudio(Request request) {
+    public CommandResponse minByStudio(CommandRequest request) {
         try {
-            if (dbManager.validateUser(request.getUsername(), request.getPassword())) {
-                try {
-                    return new Response(TextColoring.getGreenText("Minimal element:"), collectionManager.returnMinByStudio());
-                } catch (CollectionIsEmptyException e) {
-                    return new Response(TextColoring.getRedText(e.getMessage()));
-                }
-            } else {
-                return new Response(TextColoring.getRedText("Login and password mismatch"));
+            if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
+                return new CommandResponse(false, "Login and password mismatch");
+            }
+            try {
+                return new CommandResponse(true, "Minimal element:", collectionManager.returnMinByStudio());
+            } catch (CollectionIsEmptyException e) {
+                return new CommandResponse(false, e.getMessage());
             }
         } catch (DatabaseException e) {
-            return new Response(TextColoring.getRedText(e.getMessage()));
+            return new CommandResponse(false, e.getMessage());
         }
     }
 
-    public Response help(Request request, HashMap<String, AbstractClientCommand> availableCommands) {
+    public CommandResponse history(CommandRequest request, ArrayDeque<String> queueOfCommands) {
         try {
-            if (dbManager.validateUser(request.getUsername(), request.getPassword())) {
-                StringBuilder sb = new StringBuilder();
-                for (AbstractClientCommand command : availableCommands.values()) {
-                    sb.append(command.toString()).append("\n");
-                }
-                sb = new StringBuilder(sb.substring(0, sb.length() - 1));
-                return new Response(TextColoring.getGreenText("Available commands:\n") + sb);
-            } else {
-                return new Response(TextColoring.getRedText("Login and password mismatch"));
+            if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
+                return new CommandResponse(false, "Login and password mismatch");
             }
-        } catch (DatabaseException e) {
-            return new Response(TextColoring.getRedText(e.getMessage()));
-        }
-    }
-
-    public Response history(Request request, ArrayDeque<String> queueOfCommands) {
-        try {
-            if (dbManager.validateUser(request.getUsername(), request.getPassword())) {
-                StringBuilder sb = new StringBuilder();
-                if (!queueOfCommands.isEmpty()) {
-                    for (String name : queueOfCommands) {
-                        sb.append(name).append("\n");
-                    }
-                } else {
-                    sb.append("History is empty");
+            StringBuilder sb = new StringBuilder();
+            if (!queueOfCommands.isEmpty()) {
+                for (String name : queueOfCommands) {
+                    sb.append(name).append("\n");
                 }
-                sb = new StringBuilder(sb.substring(0, sb.length() - 1));
-                return new Response(sb.toString());
             } else {
-                return new Response(TextColoring.getRedText("Login and password mismatch"));
+                sb.append("History is empty");
             }
+            sb = new StringBuilder(sb.substring(0, sb.length() - 1));
+            return new CommandResponse(true, sb.toString());
         } catch (DatabaseException e) {
-            return new Response(TextColoring.getRedText(e.getMessage()));
+            return new CommandResponse(false, e.getMessage());
         }
     }
 }

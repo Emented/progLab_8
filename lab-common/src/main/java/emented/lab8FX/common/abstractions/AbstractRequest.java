@@ -5,9 +5,9 @@ import java.time.LocalTime;
 
 public class AbstractRequest implements Serializable {
 
-    private String clientInfo;
+    private final String clientInfo;
 
-    private LocalTime currentTime;
+    private final LocalTime currentTime;
 
     public AbstractRequest(String clientInfo) {
         this.clientInfo = clientInfo;
