@@ -55,7 +55,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>emented.lab8FX.client/emented.lab8FX.client.App</mainClass>
+                            <mainClass>emented.lab8FX.client.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>

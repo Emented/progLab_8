@@ -1,5 +1,6 @@
 package emented.lab8FX.server.util;
 
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
 import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.Serializer;
@@ -66,7 +67,7 @@ public class ServerSocketWorker implements SocketWorkerInterface {
             return null;
     }
 
-    public void sendResponse(Response response, SocketAddress address) throws IOException {
+    public void sendResponse(AbstractResponse response, SocketAddress address) throws IOException {
         ByteBuffer bufferToSend = Serializer.serializeResponse(response);
         datagramChannel.send(bufferToSend, address);
     }

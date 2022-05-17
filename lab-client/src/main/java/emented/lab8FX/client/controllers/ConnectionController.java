@@ -1,6 +1,9 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.common.util.Request;
+import emented.lab8FX.common.util.RequestType;
+import emented.lab8FX.common.util.requests.ConnectionRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +43,9 @@ public class ConnectionController {
                     throw new IllegalArgumentException();
                 }
             }
+            clientSocketWorker.sendRequest(new ConnectionRequest("asd"));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, clientSocketWorker.receiveResponse().getMessage());
+            alert.showAndWait();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/registration.fxml"));
             fxmlLoader.setControllerFactory(controllerClass -> new RegistrationController(clientSocketWorker));
             Parent parent = fxmlLoader.load();
@@ -55,11 +61,9 @@ public class ConnectionController {
             alert.showAndWait();
             addressField.clear();
             portField.clear();
-        } catch (UnknownHostException | SocketException e) {
+        } catch (IOException | ClassNotFoundException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Some troubles with connection, try again later!");
             alert.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

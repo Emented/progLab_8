@@ -17,6 +17,10 @@ public class Request implements Serializable {
     private String password;
     private final RequestType requestType;
 
+    public Request(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
     public Request(String username, String password, RequestType requestType) {
         this.username = username;
         this.password = password;

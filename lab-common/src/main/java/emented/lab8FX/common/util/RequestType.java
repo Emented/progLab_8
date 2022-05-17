@@ -3,5 +3,6 @@ package emented.lab8FX.common.util;
 public enum RequestType {
     COMMAND,
     REGISTER,
-    LOGIN
+    LOGIN,
+    CONNECTION_TEST
 }

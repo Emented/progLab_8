@@ -1,8 +1,8 @@
 package emented.lab8FX.client.util;
 
+import emented.lab8FX.common.abstractions.AbstractRequest;
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.Serializer;
 
 import java.io.IOException;
@@ -36,14 +36,14 @@ public class ClientSocketWorker {
         serverAddress = InetAddress.getByName(address);
     }
 
-    public void sendRequest(Request request) throws IOException {
+    public void sendRequest(AbstractRequest request) throws IOException {
         ByteBuffer byteBuffer = Serializer.serializeRequest(request);
         byte[] bufferToSend = byteBuffer.array();
         DatagramPacket datagramPacket = new DatagramPacket(bufferToSend, bufferToSend.length, serverAddress, port);
         datagramSocket.send(datagramPacket);
     }
 
-    public Response receiveResponse() throws ClassNotFoundException, IOException {
+    public AbstractResponse receiveResponse() throws ClassNotFoundException, IOException {
         datagramSocket.setSoTimeout(timeToResponse);
         int receivedSize = datagramSocket.getReceiveBufferSize();
         byte[] byteBuf = new byte[receivedSize];

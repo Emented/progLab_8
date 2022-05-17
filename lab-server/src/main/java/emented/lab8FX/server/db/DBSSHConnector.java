@@ -48,6 +48,7 @@ public class DBSSHConnector implements DBConnectable {
             System.exit(1);
         } catch (JSchException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Troubles during connecting to DB with ssh!"));
+            System.out.println(e.getMessage());
             System.exit(1);
         } catch (IllegalArgumentException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Mistakes in environment variables!"));

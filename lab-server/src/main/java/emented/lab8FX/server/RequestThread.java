@@ -1,8 +1,15 @@
 package emented.lab8FX.server;
 
 
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.RequestType;
+import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.TextColoring;
+import emented.lab8FX.common.util.requests.CommandRequest;
+import emented.lab8FX.common.util.requests.LoginRequest;
+import emented.lab8FX.common.util.requests.RegisterRequest;
+import emented.lab8FX.common.util.responses.CommandResponse;
+import emented.lab8FX.common.util.responses.ConnectionResponse;
 import emented.lab8FX.server.db.DBSSHConnector;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
 import emented.lab8FX.server.util.CommandManager;
@@ -43,12 +50,14 @@ public class RequestThread implements Runnable {
                     CompletableFuture
                             .supplyAsync(acceptedRequest::getRequest)
                             .thenApplyAsync(request -> {
-                                if (request.getRequestType().equals(RequestType.COMMAND)) {
-                                    return commandManager.executeClientCommand(request);
-                                } else if (request.getRequestType().equals(RequestType.REGISTER)) {
-                                    return usersManager.registerNewUser(request);
+                                if (request.getType().equals(CommandRequest.class)) {
+                                    return new CommandResponse(true, "Sdf");
+                                } else if (request.getType().equals(RegisterRequest.class)) {
+                                    return usersManager.registerNewUser((RegisterRequest) request);
+                                } else if (request.getType().equals(LoginRequest.class)){
+                                    return usersManager.loginUser((LoginRequest) request);
                                 } else {
-                                    return usersManager.loginUser(request);
+                                    return new ConnectionResponse(true, "Connection is ok!");
                                 }
                             }, cachedService)
                             .thenAcceptAsync(response -> {
