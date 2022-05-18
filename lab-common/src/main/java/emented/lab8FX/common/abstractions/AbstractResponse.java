@@ -24,4 +24,12 @@ public class AbstractResponse implements Serializable {
     public Class<?> getType() {
         return this.getClass();
     }
+
+    @Override
+    public String toString() {
+        return "AbstractResponse{" +
+                "isSuccess=" + isSuccess +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

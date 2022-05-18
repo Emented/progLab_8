@@ -1,7 +1,6 @@
 package emented.lab8FX.server.util;
 
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
+import emented.lab8FX.common.util.requests.CommandRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -42,7 +41,7 @@ public class AspectsForLogging {
 
     @After("execution(void sendResponse(..))")
     public void sendResponseAdvice(JoinPoint joinPoint) {
-        LOGGER.info("Sent response: " + ((Response) joinPoint.getArgs()[0]).getInfoAboutResponse());
+        LOGGER.info("Sent response: " + (joinPoint.getArgs()[0]).toString());
     }
 
     @AfterReturning(pointcut = "execution(String readCommand())", returning = "res")
@@ -57,7 +56,7 @@ public class AspectsForLogging {
 
     @After("execution(* emented.lab7.server.util.CommandManager.executeClientCommand(..))")
     public void executeClientCommandAdvise(JoinPoint joinPoint) {
-        LOGGER.info("Executing client command: " + ((Request) joinPoint.getArgs()[0]).getCommandName());
+        LOGGER.info("Executing client command: " + ((CommandRequest) joinPoint.getArgs()[0]).getCommandName());
     }
 
     @After("execution(* emented.lab7.server.db.DBManager.*(..))")
