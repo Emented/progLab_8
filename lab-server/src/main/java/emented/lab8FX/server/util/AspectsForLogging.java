@@ -61,12 +61,12 @@ public class AspectsForLogging {
     }
 
     @After("execution(* emented.lab7.server.db.DBManager.*(..))")
-    public void DBQueryAdvice(JoinPoint joinPoint) {
+    public void dbQueryAdvice(JoinPoint joinPoint) {
         LOGGER.info("Executing DB query: " + joinPoint.getSignature().getName());
     }
 
     @After("execution(void connectSSH())")
-    public void SSHAdvise() {
+    public void sshAdvise() {
         LOGGER.info("Successfully started SSH session!");
     }
 

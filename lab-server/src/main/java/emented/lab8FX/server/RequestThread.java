@@ -1,14 +1,12 @@
 package emented.lab8FX.server;
 
 
+import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
-import emented.lab8FX.common.util.RequestType;
-import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.requests.LoginRequest;
 import emented.lab8FX.common.util.requests.RegisterRequest;
-import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.common.util.responses.ConnectionResponse;
 import emented.lab8FX.server.db.DBSSHConnector;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
@@ -49,17 +47,7 @@ public class RequestThread implements Runnable {
                 if (acceptedRequest != null) {
                     CompletableFuture
                             .supplyAsync(acceptedRequest::getRequest)
-                            .thenApplyAsync(request -> {
-                                if (request.getType().equals(CommandRequest.class)) {
-                                    return commandManager.executeClientCommand((CommandRequest) request);
-                                } else if (request.getType().equals(RegisterRequest.class)) {
-                                    return usersManager.registerNewUser((RegisterRequest) request);
-                                } else if (request.getType().equals(LoginRequest.class)){
-                                    return usersManager.loginUser((LoginRequest) request);
-                                } else {
-                                    return new ConnectionResponse(true, "Connection is ok!");
-                                }
-                            }, cachedService)
+                            .thenApplyAsync(this::proceedRequest, cachedService)
                             .thenAcceptAsync(response -> {
                                 try {
                                     serverSocketWorker.sendResponse(response, acceptedRequest.getSocketAddress());
@@ -82,6 +70,18 @@ public class RequestThread implements Runnable {
             forkJoinPool.shutdown();
         } catch (IOException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("An error occurred during stopping the server"));
+        }
+    }
+
+    private AbstractResponse proceedRequest(AbstractRequest request) {
+        if (request.getType().equals(CommandRequest.class)) {
+            return commandManager.executeClientCommand((CommandRequest) request);
+        } else if (request.getType().equals(RegisterRequest.class)) {
+            return usersManager.registerNewUser((RegisterRequest) request);
+        } else if (request.getType().equals(LoginRequest.class)) {
+            return usersManager.loginUser((LoginRequest) request);
+        } else {
+            return new ConnectionResponse(true, "Connection is ok!");
         }
     }
 }

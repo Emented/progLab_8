@@ -8,7 +8,6 @@ import emented.lab8FX.server.interfaces.DBConnectable;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
 import emented.lab8FX.server.util.CollectionManager;
 import emented.lab8FX.server.util.CommandManager;
-import emented.lab8FX.server.util.CommandProcessor;
 import emented.lab8FX.server.util.ServerCommandListener;
 import emented.lab8FX.server.util.ServerSocketWorker;
 import emented.lab8FX.server.util.UsersManager;
@@ -27,7 +26,6 @@ public class ServerWorker {
     private final CollectionManager collectionManager;
     private final UsersManager usersManager;
     private final DBManager dbManager;
-    private final CommandProcessor commandProcessor;
     private final CommandManager commandManager;
     private SocketWorkerInterface serverSocketWorker;
 
@@ -36,8 +34,7 @@ public class ServerWorker {
         collectionManager = new CollectionManager();
         dbManager = new DBManager(dbConnector);
         usersManager = new UsersManager(dbManager);
-        commandProcessor = new CommandProcessor(dbManager, collectionManager);
-        commandManager = new CommandManager(commandProcessor);
+        commandManager = new CommandManager(dbManager, collectionManager);
         try {
             collectionManager.setMusicBands(dbManager.loadCollection());
         } catch (DatabaseException e) {

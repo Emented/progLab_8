@@ -2,7 +2,6 @@ package emented.lab8FX.server.util;
 
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
-import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.Serializer;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
 
@@ -46,25 +45,25 @@ public class ServerSocketWorker implements SocketWorkerInterface {
     }
 
     public RequestWithAddress listenForRequest() throws IOException, ClassNotFoundException {
-            if (selector.select(selectorDelay) == 0) {
-                return null;
-            }
-            Set<SelectionKey> readyKeys = selector.selectedKeys();
-            Iterator<SelectionKey> iterator = readyKeys.iterator();
-            while (iterator.hasNext()) {
-                SelectionKey key = iterator.next();
-                iterator.remove();
-                if (key.isReadable()) {
-                    int arraySize = datagramChannel.socket().getReceiveBufferSize();
-                    ByteBuffer packet = ByteBuffer.allocate(arraySize);
-                    SocketAddress address = datagramChannel.receive(packet);
-                    ((Buffer) packet).flip();
-                    byte[] bytes = new byte[packet.remaining()];
-                    packet.get(bytes);
-                    return new RequestWithAddress(DeSerializer.deSerializeRequest(bytes), address);
-                }
-            }
+        if (selector.select(selectorDelay) == 0) {
             return null;
+        }
+        Set<SelectionKey> readyKeys = selector.selectedKeys();
+        Iterator<SelectionKey> iterator = readyKeys.iterator();
+        while (iterator.hasNext()) {
+            SelectionKey key = iterator.next();
+            iterator.remove();
+            if (key.isReadable()) {
+                int arraySize = datagramChannel.socket().getReceiveBufferSize();
+                ByteBuffer packet = ByteBuffer.allocate(arraySize);
+                SocketAddress address = datagramChannel.receive(packet);
+                ((Buffer) packet).flip();
+                byte[] bytes = new byte[packet.remaining()];
+                packet.get(bytes);
+                return new RequestWithAddress(DeSerializer.deSerializeRequest(bytes), address);
+            }
+        }
+        return null;
     }
 
     public void sendResponse(AbstractResponse response, SocketAddress address) throws IOException {

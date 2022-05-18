@@ -8,6 +8,7 @@ import java.time.LocalTime;
 
 public class Request implements Serializable {
 
+    private final RequestType requestType;
     private String commandName;
     private String clientInfo;
     private LocalTime currentTime;
@@ -15,7 +16,6 @@ public class Request implements Serializable {
     private MusicBand bandArgument;
     private String username;
     private String password;
-    private final RequestType requestType;
 
     public Request(RequestType requestType) {
         this.requestType = requestType;

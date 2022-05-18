@@ -2,9 +2,6 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.common.abstractions.AbstractResponse;
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.RequestType;
-import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.requests.RegisterRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,20 +17,15 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class RegistrationController {
+    private final ClientSocketWorker clientSocketWorker;
     @FXML
     private TextField usernameField;
-
     @FXML
     private PasswordField firstPasswordField;
-
     @FXML
     private PasswordField secondPasswordField;
-
     @FXML
     private Button loginButton;
-
-
-    private final ClientSocketWorker clientSocketWorker;
 
     public RegistrationController(ClientSocketWorker clientSocketWorker) {
         this.clientSocketWorker = clientSocketWorker;

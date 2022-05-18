@@ -79,7 +79,7 @@ public class CommandResponse extends AbstractResponse implements Serializable {
                 collection.append(m.toString()).append("\n");
             }
             collection = new StringBuilder(collection.substring(0, collection.length() - 1));
-        }  else {
+        } else {
             collection.append(TextColoring.getGreenText("Another users don't have elements in this collection!"));
         }
         if (listOfIds != null) {

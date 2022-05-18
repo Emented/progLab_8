@@ -1,8 +1,6 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.util.ClientSocketWorker;
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.RequestType;
 import emented.lab8FX.common.util.requests.ConnectionRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class ConnectionController {
 

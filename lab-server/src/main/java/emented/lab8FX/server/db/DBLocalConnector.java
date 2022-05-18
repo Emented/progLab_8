@@ -1,7 +1,6 @@
 package emented.lab8FX.server.db;
 
 
-
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.server.ServerConfig;

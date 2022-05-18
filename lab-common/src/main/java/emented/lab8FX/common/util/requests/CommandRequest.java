@@ -2,7 +2,6 @@ package emented.lab8FX.common.util.requests;
 
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.entities.MusicBand;
-import emented.lab8FX.common.util.RequestType;
 
 import java.io.Serializable;
 

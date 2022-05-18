@@ -1,7 +1,5 @@
 package emented.lab8FX.server.util;
 
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CommandResponse;
@@ -20,6 +18,7 @@ import emented.lab8FX.server.clientcommands.RemoveByIdCommand;
 import emented.lab8FX.server.clientcommands.RemoveGreaterCommand;
 import emented.lab8FX.server.clientcommands.ShowCommand;
 import emented.lab8FX.server.clientcommands.UpdateCommand;
+import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.servercommands.ServerExitCommand;
 import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
@@ -27,27 +26,29 @@ import emented.lab8FX.server.servercommands.ServerHistoryCommand;
 import java.time.format.DateTimeFormatter;
 
 public class CommandManager {
+    private final DBManager dbManager;
 
-    private final CommandProcessor commandProcessor;
+    private final CollectionManager collectionManager;
 
-    public CommandManager(CommandProcessor commandProcessor) {
-        this.commandProcessor = commandProcessor;
+    public CommandManager(DBManager dbManager, CollectionManager collectionManager) {
+        this.dbManager = dbManager;
+        this.collectionManager = collectionManager;
         setCommands();
     }
 
     private void setCommands() {
-        AbstractClientCommand infoCommand = new InfoCommand(commandProcessor);
-        AbstractClientCommand showCommand = new ShowCommand(commandProcessor);
-        AbstractClientCommand addCommand = new AddCommand(commandProcessor);
-        AbstractClientCommand updateCommand = new UpdateCommand(commandProcessor);
-        AbstractClientCommand removeByIdCommand = new RemoveByIdCommand(commandProcessor);
-        AbstractClientCommand clearCommand = new ClearCommand(commandProcessor);
-        AbstractClientCommand addIfMaxCommand = new AddIfMaxCommand(commandProcessor);
-        AbstractClientCommand removeGreaterCommand = new RemoveGreaterCommand(commandProcessor);
-        AbstractClientCommand historyCommand = new HistoryCommand(ServerConfig.getClientCommandHistory().getHistory(), commandProcessor);
-        AbstractClientCommand removeAnyByNumberOfParticipantsCommand = new RemoveAnyByNumberOfParticipantsCommand(commandProcessor);
-        AbstractClientCommand minByStudioCommand = new MinByStudioCommand(commandProcessor);
-        AbstractClientCommand countLessThanNumberOfParticipantsCommand = new CountLessThatNumberOfParticipantsCommand(commandProcessor);
+        AbstractClientCommand infoCommand = new InfoCommand(dbManager, collectionManager);
+        AbstractClientCommand showCommand = new ShowCommand(dbManager, collectionManager);
+        AbstractClientCommand addCommand = new AddCommand(dbManager, collectionManager);
+        AbstractClientCommand updateCommand = new UpdateCommand(dbManager, collectionManager);
+        AbstractClientCommand removeByIdCommand = new RemoveByIdCommand(dbManager, collectionManager);
+        AbstractClientCommand clearCommand = new ClearCommand(dbManager, collectionManager);
+        AbstractClientCommand addIfMaxCommand = new AddIfMaxCommand(dbManager, collectionManager);
+        AbstractClientCommand removeGreaterCommand = new RemoveGreaterCommand(dbManager, collectionManager);
+        AbstractClientCommand historyCommand = new HistoryCommand(ServerConfig.getClientCommandHistory().getHistory(), dbManager, collectionManager);
+        AbstractClientCommand removeAnyByNumberOfParticipantsCommand = new RemoveAnyByNumberOfParticipantsCommand(dbManager, collectionManager);
+        AbstractClientCommand minByStudioCommand = new MinByStudioCommand(dbManager, collectionManager);
+        AbstractClientCommand countLessThanNumberOfParticipantsCommand = new CountLessThatNumberOfParticipantsCommand(dbManager, collectionManager);
         AbstractServerCommand helpServerCommand = new ServerHelpCommand(ServerConfig.getServerAvailableCommands());
         AbstractServerCommand exitServerCommand = new ServerExitCommand();
         AbstractServerCommand historyServerCommand = new ServerHistoryCommand(ServerConfig.getClientCommandHistory().getHistory());
