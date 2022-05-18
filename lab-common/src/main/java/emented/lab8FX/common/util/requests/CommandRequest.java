@@ -3,9 +3,7 @@ package emented.lab8FX.common.util.requests;
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.entities.MusicBand;
 
-import java.io.Serializable;
-
-public class CommandRequest extends AbstractRequest implements Serializable {
+public class CommandRequest extends AbstractRequest {
 
     private final String commandName;
 

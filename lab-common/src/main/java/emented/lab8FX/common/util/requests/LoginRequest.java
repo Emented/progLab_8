@@ -2,9 +2,7 @@ package emented.lab8FX.common.util.requests;
 
 import emented.lab8FX.common.abstractions.AbstractRequest;
 
-import java.io.Serializable;
-
-public class LoginRequest extends AbstractRequest implements Serializable {
+public class LoginRequest extends AbstractRequest {
 
     private final String username;
 

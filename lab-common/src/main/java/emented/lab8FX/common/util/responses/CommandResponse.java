@@ -5,14 +5,13 @@ import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.util.SizeAnalyzer;
 import emented.lab8FX.common.util.TextColoring;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CommandResponse extends AbstractResponse implements Serializable {
+public class CommandResponse extends AbstractResponse {
 
     private final MusicBand bandToResponse;
     private final Set<MusicBand> yourElementsOfCollection;

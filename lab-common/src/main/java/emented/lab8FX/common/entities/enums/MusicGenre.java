@@ -1,11 +1,9 @@
 package emented.lab8FX.common.entities.enums;
 
-import java.io.Serializable;
-
 /**
  * ENUM, хранящий возможные жанры музыки
  */
-public enum MusicGenre implements Serializable {
+public enum MusicGenre {
     PROGRESSIVE_ROCK,
     PSYCHEDELIC_CLOUD_RAP,
     JAZZ,

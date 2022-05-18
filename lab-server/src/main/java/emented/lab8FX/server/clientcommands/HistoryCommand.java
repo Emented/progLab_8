@@ -6,7 +6,6 @@ import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.server.abstractions.AbstractClientCommand;
 import emented.lab8FX.server.db.DBManager;
-import emented.lab8FX.server.util.CollectionManager;
 
 import java.util.ArrayDeque;
 
@@ -14,16 +13,13 @@ public class HistoryCommand extends AbstractClientCommand {
 
     private final ArrayDeque<String> queueOfCommands;
     private final DBManager dbManager;
-    private final CollectionManager collectionManager;
 
-
-    public HistoryCommand(ArrayDeque<String> queueOfCommands, DBManager dbManager, CollectionManager collectionManager) {
+    public HistoryCommand(ArrayDeque<String> queueOfCommands, DBManager dbManager) {
         super("history",
                 0,
                 "output the last 9 commands");
         this.queueOfCommands = queueOfCommands;
         this.dbManager = dbManager;
-        this.collectionManager = collectionManager;
     }
 
     @Override

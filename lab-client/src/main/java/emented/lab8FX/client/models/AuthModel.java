@@ -1,2 +1,5 @@
-package emented.lab8FX.client.models;public class AuthModel {
+package emented.lab8FX.client.models;
+
+public class AuthModel {
+
 }
