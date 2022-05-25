@@ -12,8 +12,4 @@ public class MainModel extends AbstractModel {
         super(clientSocketWorker, currentStage);
         this.session = session;
     }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
 }

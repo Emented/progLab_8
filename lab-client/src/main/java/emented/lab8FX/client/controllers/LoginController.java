@@ -1,11 +1,9 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
-import emented.lab8FX.client.models.AbstractModel;
 import emented.lab8FX.client.models.AuthModel;
 import emented.lab8FX.client.util.PathToViews;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 

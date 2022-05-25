@@ -24,7 +24,7 @@ public class AuthModel extends AbstractModel {
         }
         try {
             getClientSocketWorker().sendRequest(new LoginRequest("test", username, password));
-            AbstractResponse response = super.getClientSocketWorker().receiveResponse();
+            AbstractResponse response = getClientSocketWorker().receiveResponse();
             checkAuthResponse(username, password, response);
         } catch (IOException e) {
             throw new ExceptionWithAlert("Some troubles during sending request!");

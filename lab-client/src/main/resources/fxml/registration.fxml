@@ -28,14 +28,14 @@
             <Font name="Arial" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="24.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER">
+      <Text layoutX="29.0" layoutY="139.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER">
          <font>
-            <Font name="Arial" size="22.0" />
+            <Font name="Arial" size="20.0" />
          </font>
       </Text>
-      <Text layoutX="26.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+      <Text layoutX="31.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
          <font>
-            <Font name="Arial" size="22.0" />
+            <Font name="Arial" size="20.0" />
          </font>
       </Text>
       <Button fx:id="registrationButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#registerAction" prefHeight="46.0" prefWidth="171.0" stylesheets="@../css/buttons.css" text="Register" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0">
@@ -43,9 +43,9 @@
             <Font name="Arial Rounded MT Bold" size="24.0" />
          </font>
       </Button>
-      <Text layoutX="27.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat password" textAlignment="CENTER" wrappingWidth="96.84814453125">
+      <Text layoutX="26.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat password" textAlignment="CENTER" wrappingWidth="96.84814453125">
          <font>
-            <Font name="Arial" size="22.0" />
+            <Font name="Arial" size="20.0" />
          </font>
       </Text>
       <Button fx:id="loginButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="46.0" prefWidth="171.0" stylesheets="@../css/buttons.css" text="Login" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="40.0">
