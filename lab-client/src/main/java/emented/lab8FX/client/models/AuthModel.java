@@ -20,7 +20,7 @@ public class AuthModel extends AbstractModel {
 
     public void processLogin(String username, String password) throws ExceptionWithAlert {
         if (username.length() < 5 || password.length() < 5) {
-            throw new IllegalArgumentException();
+            throw new ExceptionWithAlert("Login and password should be longer that 5 symbols");
         }
         try {
             getClientSocketWorker().sendRequest(new LoginRequest("test", username, password));
@@ -58,7 +58,7 @@ public class AuthModel extends AbstractModel {
             alert.showAndWait();
             Session session = new Session(username, password);
             MainModel mainModel = new MainModel(getClientSocketWorker(), getCurrentStage(), session);
-            switchScene(PathToViews.MAIN_VIEW, mainModel);
+//            switchScene(PathToViews.MAIN_VIEW, mainModel);
         } else {
             throw new ExceptionWithAlert(response.getMessage());
         }

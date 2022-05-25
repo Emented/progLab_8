@@ -1,6 +1,7 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
+import emented.lab8FX.client.models.AbstractModel;
 import emented.lab8FX.client.models.AuthModel;
 import emented.lab8FX.client.util.PathToViews;
 import javafx.fxml.FXML;
@@ -17,12 +18,16 @@ public class RegistrationController extends AbstractController {
     @FXML
     private PasswordField secondPasswordField;
 
+    private AuthModel authModel;
 
+    @Override
+    public void initializeController() {
+        authModel = (AuthModel) getModel();
+    }
 
     @FXML
     public void loginAction() {
         try {
-            AuthModel authModel = (AuthModel) getModel();
             authModel.switchScene(PathToViews.LOGIN_VIEW, authModel);
         } catch (ExceptionWithAlert e) {
             e.showAlert();
@@ -32,7 +37,6 @@ public class RegistrationController extends AbstractController {
     @FXML
     public void registerAction() {
         try {
-            AuthModel authModel = (AuthModel) getModel();
             authModel.processRegistration(usernameField.getText(), firstPasswordField.getText(), secondPasswordField.getText());
         } catch (ExceptionWithAlert e) {
             e.showAlert();

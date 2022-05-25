@@ -25,8 +25,12 @@ public class ConnectionController extends AbstractController {
     
     @FXML
     private TextField portField;
-    public void initializeController(ClientSocketWorker clientSocketWorker, Stage primaryStage) {
-        setModel(new ConnectionModel(clientSocketWorker, primaryStage));
+
+    private ConnectionModel connectionModel;
+
+    @Override
+    public void initializeController() {
+        connectionModel = (ConnectionModel) getModel();
     }
 
     @FXML
@@ -34,7 +38,6 @@ public class ConnectionController extends AbstractController {
         String host = addressField.getText();
         String port = portField.getText();
         try {
-            ConnectionModel connectionModel = (ConnectionModel) getModel();
             connectionModel.connect(host, port);
         } catch (ExceptionWithAlert e) {
             e.showAlert();

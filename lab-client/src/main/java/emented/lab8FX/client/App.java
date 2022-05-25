@@ -1,6 +1,7 @@
 package emented.lab8FX.client;
 
 import emented.lab8FX.client.controllers.ConnectionController;
+import emented.lab8FX.client.models.ConnectionModel;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import javafx.application.Application;
@@ -26,7 +27,8 @@ public class App extends Application {
         Parent parent = fxmlLoader.load();
         scene = new Scene(parent);
         ConnectionController connectionController = fxmlLoader.getController();
-        connectionController.initializeController(clientSocketWorker, primaryStage);
+        connectionController.setModel(new ConnectionModel(clientSocketWorker, primaryStage));
+        connectionController.initializeController();
         primaryStage.setTitle("MusicBands Application");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);

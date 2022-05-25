@@ -2,7 +2,7 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.models.AbstractModel;
 
-public class AbstractController {
+public abstract class AbstractController {
     private AbstractModel model;
 
     public void setModel(AbstractModel model) {
@@ -12,4 +12,6 @@ public class AbstractController {
     public AbstractModel getModel() {
         return model;
     }
+
+    public abstract void initializeController();
 }
