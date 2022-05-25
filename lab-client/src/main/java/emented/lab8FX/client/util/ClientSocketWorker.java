@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 public class ClientSocketWorker {
+    
     private final int defaultPort = 228;
     private final int timeToResponse = 4000;
     private final DatagramSocket datagramSocket;

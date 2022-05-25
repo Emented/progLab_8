@@ -1,5 +1,8 @@
 package emented.lab8FX.client;
 
+import emented.lab8FX.client.controllers.ConnectionController;
+import emented.lab8FX.client.util.PathToViews;
+import emented.lab8FX.client.util.ClientSocketWorker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,13 +21,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fxml/connection.fxml"));
+        ClientSocketWorker clientSocketWorker = new ClientSocketWorker();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(PathToViews.CONNECTION_VIEW.getPath()));
         Parent parent = fxmlLoader.load();
         scene = new Scene(parent);
-        primaryStage.setMinHeight(315);
-        primaryStage.setMinWidth(450);
+        ConnectionController connectionController = fxmlLoader.getController();
+        connectionController.initializeController(clientSocketWorker, primaryStage);
         primaryStage.setTitle("Connection menu");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         primaryStage.show();
     }
