@@ -27,7 +27,7 @@ public class App extends Application {
         scene = new Scene(parent);
         ConnectionController connectionController = fxmlLoader.getController();
         connectionController.initializeController(clientSocketWorker, primaryStage);
-        primaryStage.setTitle("Connection menu");
+        primaryStage.setTitle("MusicBands Application");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();

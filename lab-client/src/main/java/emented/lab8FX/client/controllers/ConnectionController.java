@@ -18,17 +18,15 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class ConnectionController {
+public class ConnectionController extends AbstractController {
 
     @FXML
     private TextField addressField;
     
     @FXML
     private TextField portField;
-
-    private ConnectionModel connectionModel;
     public void initializeController(ClientSocketWorker clientSocketWorker, Stage primaryStage) {
-        connectionModel = new ConnectionModel(clientSocketWorker, primaryStage);
+        setModel(new ConnectionModel(clientSocketWorker, primaryStage));
     }
 
     @FXML
@@ -36,6 +34,7 @@ public class ConnectionController {
         String host = addressField.getText();
         String port = portField.getText();
         try {
+            ConnectionModel connectionModel = (ConnectionModel) getModel();
             connectionModel.connect(host, port);
         } catch (ExceptionWithAlert e) {
             e.showAlert();

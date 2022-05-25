@@ -44,7 +44,7 @@
       </Text>
       <Button fx:id="connectButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#connectAction" prefHeight="46.0" prefWidth="371.0" stylesheets="@../css/buttons.css" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="39.0">
          <font>
-            <Font name="Arial Rounded MT Bold" size="26.0" />
+            <Font name="Arial Rounded MT Bold" size="25.0" />
          </font>
       </Button>
    </children>
