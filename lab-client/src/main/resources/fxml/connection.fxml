@@ -9,42 +9,42 @@
 
 <AnchorPane prefHeight="298.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emented.lab8FX.client.controllers.ConnectionController">
    <children>
-      <AnchorPane prefHeight="92.0" prefWidth="486.0" style="-fx-background-color: d1d1d1;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="92.0" prefWidth="486.0" style="-fx-background-color: e6e6e6; -fx-border-color: black; -fx-border-width: 0 0 1.5 0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <center>
                   <Text fx:id="connectLabel" focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Connection menu" textAlignment="CENTER" wrappingWidth="325.9716796875">
                      <font>
-                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                        <Font name="Verdana Bold" size="33.0" />
                      </font>
                   </Text>
                </center>
             </BorderPane>
          </children>
       </AnchorPane>
-      <TextField fx:id="addressField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="Input address..." AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <TextField fx:id="addressField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="Input address..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="38.0" layoutY="139.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" textAlignment="CENTER">
+      <Text layoutX="35.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" textAlignment="CENTER">
          <font>
-            <Font name="Arial" size="20.0" />
+            <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <TextField fx:id="portField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="Input port..." AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <TextField fx:id="portField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="Input port..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="57.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port">
+      <Text layoutX="53.0" layoutY="192.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Port" textAlignment="CENTER">
          <font>
-            <Font name="Arial" size="20.0" />
+            <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <Button fx:id="connectButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#connectAction" prefHeight="46.0" prefWidth="371.0" stylesheets="@../css/buttons.css" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="39.0">
+      <Button fx:id="connectButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#connectAction" prefHeight="46.0" prefWidth="371.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="39.0">
          <font>
-            <Font name="Arial Rounded MT Bold" size="25.0" />
+            <Font name="Verdana Bold" size="24.0" />
          </font>
       </Button>
    </children>

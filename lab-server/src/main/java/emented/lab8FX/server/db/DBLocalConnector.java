@@ -16,18 +16,14 @@ import java.util.Arrays;
 
 public class DBLocalConnector implements DBConnectable {
 
-    private final String dbUrl = "jdbc:postgresql://pg:5432/studs";
-    private final String user = "s336189";
-    private final String pass = "qez387";
+    private final String dbUrl = "jdbc:postgresql://localhost:5432/s336189db";
+    private final String user = "emented";
+    private final String pass = "Karaganda123";
 
     public DBLocalConnector() {
         try {
-            Class.forName("org.postgresql.Driver");
             initializeDB();
-        } catch (ClassNotFoundException e) {
-            ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("No DB driver!"));
-            System.exit(1);
-        } catch (SQLException e) {
+        }  catch (SQLException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!" + e.getMessage()));
             System.exit(1);
         }

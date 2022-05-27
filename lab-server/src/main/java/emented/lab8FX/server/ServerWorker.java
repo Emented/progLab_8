@@ -2,6 +2,7 @@ package emented.lab8FX.server;
 
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
+import emented.lab8FX.server.db.DBLocalConnector;
 import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.db.DBSSHConnector;
 import emented.lab8FX.server.interfaces.DBConnectable;

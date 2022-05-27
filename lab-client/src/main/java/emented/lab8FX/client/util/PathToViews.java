@@ -5,9 +5,10 @@ public enum PathToViews {
     CONNECTION_VIEW("/fxml/connection.fxml"),
     REGISTRATION_VIEW("/fxml/registration.fxml"),
     LOGIN_VIEW("/fxml/login.fxml"),
-    MAIN_VIEW("/fxml/main.fxml");
+    MAIN_VIEW("/fxml/main.fxml"),
+    ADD_VIEW("/fxml/add.fxml");
 
-    private String path;
+    private final String path;
 
     PathToViews(String path) {
         this.path = path;

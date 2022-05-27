@@ -8,7 +8,7 @@ public class LoginRequest extends AbstractRequest {
 
     private final String password;
 
-    public LoginRequest(String clientInfo, String username, String password) {
+    public LoginRequest(String username, String password, String clientInfo) {
         super(clientInfo);
         this.username = username;
         this.password = password;

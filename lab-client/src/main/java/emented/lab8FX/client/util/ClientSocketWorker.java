@@ -37,6 +37,14 @@ public class ClientSocketWorker {
         serverAddress = InetAddress.getByName(address);
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
     public void sendRequest(AbstractRequest request) throws IOException {
         ByteBuffer byteBuffer = Serializer.serializeRequest(request);
         byte[] bufferToSend = byteBuffer.array();
@@ -52,5 +60,8 @@ public class ClientSocketWorker {
         datagramSocket.receive(dpFromServer);
         byte[] bytesFromServer = dpFromServer.getData();
         return DeSerializer.deSerializeResponse(bytesFromServer);
+    }
+    public void closeSocket() {
+        datagramSocket.close();
     }
 }

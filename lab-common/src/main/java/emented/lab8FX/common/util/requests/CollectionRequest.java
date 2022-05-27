@@ -2,13 +2,12 @@ package emented.lab8FX.common.util.requests;
 
 import emented.lab8FX.common.abstractions.AbstractRequest;
 
-public class RegisterRequest extends AbstractRequest {
+public class CollectionRequest extends AbstractRequest {
 
     private final String username;
-
     private final String password;
 
-    public RegisterRequest(String username, String password, String clientInfo) {
+    public CollectionRequest(String username, String password, String clientInfo) {
         super(clientInfo);
         this.username = username;
         this.password = password;
@@ -24,6 +23,6 @@ public class RegisterRequest extends AbstractRequest {
 
     @Override
     public String toString() {
-        return "Register request";
+        return "Collection request";
     }
 }

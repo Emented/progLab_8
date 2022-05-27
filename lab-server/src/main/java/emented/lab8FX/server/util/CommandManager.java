@@ -1,5 +1,6 @@
 package emented.lab8FX.server.util;
 
+import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CommandResponse;
@@ -24,6 +25,7 @@ import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 public class CommandManager {
     private final DBManager dbManager;
@@ -83,5 +85,9 @@ public class CommandManager {
         } else {
             return TextColoring.getRedText("There is no such command, type HELP to get list on commands");
         }
+    }
+
+    public Set<MusicBand> returnCollection() {
+        return collectionManager.getMusicBands();
     }
 }

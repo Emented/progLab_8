@@ -1,5 +1,7 @@
 package emented.lab8FX.client.models;
 
+import emented.lab8FX.client.controllers.ConnectionController;
+import emented.lab8FX.client.controllers.RegistrationController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
@@ -10,9 +12,13 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 public class ConnectionModel extends AbstractModel {
-    public ConnectionModel(ClientSocketWorker clientSocketWorker, Stage currentStage) {
+
+    private final ConnectionController currentController;
+    public ConnectionModel(ClientSocketWorker clientSocketWorker, Stage currentStage, ConnectionController connectionController) {
         super(clientSocketWorker, currentStage);
+        this.currentController = connectionController;
     }
+
 
     public void connect(String host, String port) throws ExceptionWithAlert {
         try {
@@ -27,17 +33,15 @@ public class ConnectionModel extends AbstractModel {
             if (!"".equals(host)) {
                 getClientSocketWorker().setAddress(host);
             }
-            getClientSocketWorker().sendRequest(new ConnectionRequest("localhost"));
+            getClientSocketWorker().sendRequest(new ConnectionRequest(getClientInfo()));
             if (getClientSocketWorker().receiveResponse().isSuccess()) {
-                AuthModel authModel = new AuthModel(getClientSocketWorker(), getCurrentStage());
-                switchScene(PathToViews.REGISTRATION_VIEW, authModel);
+                currentController.switchScene(PathToViews.REGISTRATION_VIEW, comp -> new RegistrationController(getClientSocketWorker()));
             }
         } catch (IllegalArgumentException e) {
             throw new ExceptionWithAlert("Wrong port! It should be a number between 1 and 65535");
         } catch (UnknownHostException e) {
             throw new ExceptionWithAlert("Wrong address!");
-        }
-        catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new ExceptionWithAlert("Some troubles with connection, try again later!");
         }
     }

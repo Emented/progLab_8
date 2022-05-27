@@ -1,8 +1,10 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
-import emented.lab8FX.client.models.AuthModel;
+import emented.lab8FX.client.models.LoginModel;
+import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
+import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -14,17 +16,17 @@ public class LoginController extends AbstractController {
     @FXML
     private PasswordField passwordField;
 
-    private AuthModel authModel;
+    private final LoginModel loginModel;
 
-    @Override
-    public void initializeController() {
-        authModel = (AuthModel) getModel();
+    public LoginController(ClientSocketWorker clientSocketWorker) {
+        this.loginModel = new LoginModel(clientSocketWorker, getCurrentStage(), this);
     }
 
     @FXML
     public void loginAction() {
         try {
-            authModel.processLogin(usernameField.getText(), passwordField.getText());
+            Session session = loginModel.processLogin(usernameField.getText(), passwordField.getText());
+            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(loginModel.getClientSocketWorker(), session));
         } catch (ExceptionWithAlert e) {
             e.showAlert();
             usernameField.clear();
@@ -35,7 +37,7 @@ public class LoginController extends AbstractController {
     @FXML
     public void registerAction() {
         try {
-            authModel.switchScene(PathToViews.REGISTRATION_VIEW, authModel);
+            switchScene(PathToViews.REGISTRATION_VIEW, param -> new RegistrationController(loginModel.getClientSocketWorker()));
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }

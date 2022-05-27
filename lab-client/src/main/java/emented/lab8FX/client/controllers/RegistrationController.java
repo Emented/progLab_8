@@ -1,8 +1,10 @@
 package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
-import emented.lab8FX.client.models.AuthModel;
+import emented.lab8FX.client.models.RegistrationModel;
+import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
+import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,17 +19,16 @@ public class RegistrationController extends AbstractController {
     @FXML
     private PasswordField secondPasswordField;
 
-    private AuthModel authModel;
+    private final RegistrationModel registrationModel;
 
-    @Override
-    public void initializeController() {
-        authModel = (AuthModel) getModel();
+    public RegistrationController(ClientSocketWorker clientSocketWorker) {
+        this.registrationModel = new RegistrationModel(clientSocketWorker, getCurrentStage(), this);
     }
 
     @FXML
     public void loginAction() {
         try {
-            authModel.switchScene(PathToViews.LOGIN_VIEW, authModel);
+            switchScene(PathToViews.LOGIN_VIEW, param -> new LoginController(registrationModel.getClientSocketWorker()));
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -36,7 +37,10 @@ public class RegistrationController extends AbstractController {
     @FXML
     public void registerAction() {
         try {
-            authModel.processRegistration(usernameField.getText(), firstPasswordField.getText(), secondPasswordField.getText());
+            Session session = registrationModel.processRegistration(usernameField.getText(),
+                    firstPasswordField.getText(),
+                    secondPasswordField.getText());
+            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(registrationModel.getClientSocketWorker(), session));
         } catch (ExceptionWithAlert e) {
             e.showAlert();
             usernameField.clear();

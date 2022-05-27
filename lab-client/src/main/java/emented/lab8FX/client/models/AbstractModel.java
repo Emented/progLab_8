@@ -10,17 +10,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public abstract class AbstractModel {
 
+    private final String clientInfo;
     private final ClientSocketWorker clientSocketWorker;
-
     private final Stage currentStage;
-
 
     public AbstractModel(ClientSocketWorker clientSocketWorker, Stage currentStage) {
         this.clientSocketWorker = clientSocketWorker;
         this.currentStage = currentStage;
+        this.clientInfo = clientSocketWorker.getAddress() + ":" + clientSocketWorker.getPort();
     }
 
     public ClientSocketWorker getClientSocketWorker() {
@@ -31,19 +32,7 @@ public abstract class AbstractModel {
         return currentStage;
     }
 
-    public <T extends AbstractController, V extends AbstractModel> void switchScene(PathToViews pathToViews, V model) throws ExceptionWithAlert {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(pathToViews.getPath()));
-            Parent parent = fxmlLoader.load();
-            Scene scene = new Scene(parent);
-            T controller = fxmlLoader.getController();
-            controller.setModel(model);
-            controller.initializeController();
-            getCurrentStage().setScene(scene);
-            getCurrentStage().sizeToScene();
-        } catch (IOException e) {
-            throw new ExceptionWithAlert("Troubles during switching to next stage!");
-        }
+    public String getClientInfo() {
+        return clientInfo;
     }
 }
