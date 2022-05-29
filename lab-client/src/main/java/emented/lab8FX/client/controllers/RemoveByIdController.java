@@ -2,6 +2,7 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
+import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.RemoveByIdModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
@@ -14,11 +15,14 @@ import java.util.List;
 public class RemoveByIdController extends AbstractController {
 
     private final RemoveByIdModel removeByIdModel;
+
+    private final MainModel mainModel;
     @FXML
     private TextField idField;
 
-    public RemoveByIdController(ClientSocketWorker clientSocketWorker, Session session) {
+    public RemoveByIdController(ClientSocketWorker clientSocketWorker, Session session, MainModel mainModel) {
         removeByIdModel = new RemoveByIdModel(clientSocketWorker, getCurrentStage(), session, this);
+        this.mainModel = mainModel;
     }
 
     public void setField(Long id) {
@@ -33,6 +37,7 @@ public class RemoveByIdController extends AbstractController {
             Alert alert = removeByIdModel.processRemove(idField.getText());
             if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
                 alert.showAndWait();
+                mainModel.getNewCollection();
                 getCurrentStage().close();
             } else {
                 alert.showAndWait();

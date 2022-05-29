@@ -108,6 +108,11 @@
                   <Font name="Verdana" size="13.0" />
                </font>
             </Label>
+            <Button fx:id="clearFilterButton" layoutX="731.0" layoutY="15.0" mnemonicParsing="false" onAction="#clearFilterAction" prefHeight="46.0" prefWidth="96.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="Clear" textAlignment="CENTER">
+               <font>
+                  <Font name="Verdana Bold" size="22.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="-1.0" layoutY="75.0" prefWidth="278.0" style="-fx-border-color: black; -fx-border-width: 0 1.5 0 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="829.0" AnchorPane.topAnchor="75.0">
@@ -166,11 +171,6 @@
                   <Font name="Verdana Bold" size="22.0" />
                </font>
             </Button>
-            <Label layoutX="76.0" layoutY="536.0" prefHeight="63.0" prefWidth="118.0" text="\@emented @dimibazi" wrapText="true">
-               <font>
-                  <Font name="Verdana Bold" size="20.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
    </children>

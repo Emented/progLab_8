@@ -4,6 +4,7 @@ import emented.lab8FX.common.entities.enums.MusicGenre;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class MusicBand implements Serializable, Comparable<MusicBand> {
 

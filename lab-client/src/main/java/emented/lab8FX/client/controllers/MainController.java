@@ -14,11 +14,13 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,6 +29,24 @@ public class MainController extends AbstractController {
 
     private final MainModel mainModel;
     private final ObservableList<MusicBand> musicBandsList = FXCollections.observableArrayList();
+    @FXML
+    public TextField dateFilter;
+    @FXML
+    public TextField idFilter;
+    @FXML
+    public TextField nameFilter;
+    @FXML
+    public TextField xFilter;
+    @FXML
+    public TextField yFilter;
+    @FXML
+    public TextField numberFilter;
+    @FXML
+    public TextField descriptionFilter;
+    @FXML
+    private ComboBox<MusicGenre> genreFilter;
+    @FXML
+    public TextField addressFilter;
     @FXML
     private TableView<MusicBand> tableView;
     @FXML
@@ -51,8 +71,6 @@ public class MainController extends AbstractController {
     private Button userInfoButton;
     @FXML
     private Label connectionLabel;
-    @FXML
-    private ComboBox<MusicGenre> genreFilter;
 
     public MainController(ClientSocketWorker clientSocketWorker, Session session) {
         mainModel = new MainModel(clientSocketWorker, getCurrentStage(), session, this);
@@ -88,6 +106,7 @@ public class MainController extends AbstractController {
         mainModel.setToolTip(studioColumn);
         initializeContextMenu();
         tableView.setItems(musicBandsList);
+        tableView.getSortOrder().add(idColumn);
     }
 
     public void updateTable(Set<MusicBand> collection) {
@@ -116,8 +135,7 @@ public class MainController extends AbstractController {
     @FXML
     public void addAction() {
         try {
-            showPopUpStage(PathToViews.ADD_VIEW, param -> new AddController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Add menu");
-            mainModel.getNewCollection();
+            showPopUpStage(PathToViews.ADD_VIEW, param -> new AddController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Add menu");
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -180,8 +198,7 @@ public class MainController extends AbstractController {
     @FXML
     public void updateAction() {
         try {
-            showPopUpStage(PathToViews.UPDATE_VIEW, param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Update menu");
-            mainModel.getNewCollection();
+            showPopUpStage(PathToViews.UPDATE_VIEW, param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Update menu");
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -190,8 +207,7 @@ public class MainController extends AbstractController {
     @FXML
     public void removeByIdAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW, param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Remove by id menu");
-            mainModel.getNewCollection();
+            showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW, param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove by id menu");
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -200,8 +216,7 @@ public class MainController extends AbstractController {
     @FXML
     public void removeGreaterAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_GREATER_VIEW, param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Remove greater menu");
-            mainModel.getNewCollection();
+            showPopUpStage(PathToViews.REMOVE_GREATER_VIEW, param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove greater menu");
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -210,8 +225,7 @@ public class MainController extends AbstractController {
     @FXML
     public void removeByNumberOfParticipantsAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_ANY_VIEW, param -> new RemoveAnyController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Remove any menu");
-            mainModel.getNewCollection();
+            showPopUpStage(PathToViews.REMOVE_ANY_VIEW, param -> new RemoveAnyController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove any menu");
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -223,13 +237,13 @@ public class MainController extends AbstractController {
                     final TableRow<MusicBand> row = new TableRow<>();
                     final ContextMenu rowMenu = new ContextMenu();
                     MenuItem editItem = new MenuItem("Update");
-                    MenuItem removeItem = new MenuItem("Delete");
+                    MenuItem removeItem = new MenuItem("Remove by id");
                     MenuItem removeGreaterItem = new MenuItem("Remove greater");
                     MenuItem countItem = new MenuItem("Count less than number of participants");
                     editItem.setOnAction(event -> {
                         try {
                             UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
-                                    param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
                                     "Update menu");
                             controller.setFields(row.getItem().getId(),
                                     row.getItem().getName(),
@@ -239,7 +253,6 @@ public class MainController extends AbstractController {
                                     row.getItem().getGenre(),
                                     row.getItem().getDescription(),
                                     (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
-                            mainModel.getNewCollection();
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
                         }
@@ -247,10 +260,9 @@ public class MainController extends AbstractController {
                     removeItem.setOnAction(event -> {
                         try {
                             RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
-                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
                                     "Remove by id menu");
                             controller.setField(row.getItem().getId());
-                            mainModel.getNewCollection();
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
                         }
@@ -258,7 +270,7 @@ public class MainController extends AbstractController {
                     removeGreaterItem.setOnAction(event -> {
                         try {
                             RemoveGreaterController controller = showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
-                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
                                     "Remove grater menu");
                             controller.setFields(row.getItem().getName(),
                                     row.getItem().getCoordinates().getX(),
@@ -267,7 +279,6 @@ public class MainController extends AbstractController {
                                     row.getItem().getGenre(),
                                     row.getItem().getDescription(),
                                     (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
-                            mainModel.getNewCollection();
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
                         }
@@ -278,19 +289,29 @@ public class MainController extends AbstractController {
                                     param -> new CountController(mainModel.getClientSocketWorker(), mainModel.getSession()),
                                     "Count menu");
                             controller.setField(row.getItem().getNumberOfParticipants());
-                            mainModel.getNewCollection();
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
                         }
                     });
                     rowMenu.getItems().addAll(editItem, removeItem, removeGreaterItem, countItem);
-
                     row.contextMenuProperty().bind(
                             Bindings.when(row.emptyProperty())
                                     .then((ContextMenu) null)
                                     .otherwise(rowMenu));
+                    getCurrentStage().getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/context.css")).toExternalForm());
                     return row;
                 });
     }
 
+    public void clearFilterAction() {
+        dateFilter.clear();
+        idFilter.clear();
+        nameFilter.clear();
+        xFilter.clear();
+        yFilter.clear();
+        numberFilter.clear();
+        descriptionFilter.clear();
+        genreFilter.getSelectionModel().clearSelection();
+        addressFilter.clear();
+    }
 }

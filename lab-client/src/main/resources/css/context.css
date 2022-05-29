@@ -1,0 +1,30 @@
+.menu-item
+{
+    -fx-pref-width: 275;
+    -fx-pref-height: 25;
+    -fx-border-color: black;
+    -fx-border-radius: 2;
+    -fx-background-color: #e6e6e6;
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+}
+
+.menu-item:hover
+{
+    -fx-background-color: #d7d7d7;
+    -fx-text-fill: black;
+}
+.menu-item:hover .label, .menu-item:focused .label
+{
+    -fx-text-fill: black;
+}
+
+.menu-item:pressed
+{
+    -fx-background-color: #b2b2b2;
+}
+
+.context-menu {
+    -fx-background-color: transparent;
+}

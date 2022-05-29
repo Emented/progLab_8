@@ -2,11 +2,13 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
+import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.UpdateModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
@@ -20,6 +22,8 @@ import java.util.stream.Stream;
 public class UpdateController extends AbstractController {
 
     private final UpdateModel updateModel;
+
+    private final MainModel mainModel;
     @FXML
     private TextField idField;
     @FXML
@@ -37,8 +41,9 @@ public class UpdateController extends AbstractController {
     @FXML
     private TextField addressField;
 
-    public UpdateController(ClientSocketWorker clientSocketWorker, Session session) {
+    public UpdateController(ClientSocketWorker clientSocketWorker, Session session, MainModel mainModel) {
         updateModel = new UpdateModel(clientSocketWorker, getCurrentStage(), session, this);
+        this.mainModel = mainModel;
     }
 
     public void initialize() {
@@ -71,6 +76,7 @@ public class UpdateController extends AbstractController {
                     addressField.getText());
             if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
                 alert.showAndWait();
+                mainModel.getNewCollection();
                 getCurrentStage().close();
             } else {
                 alert.showAndWait();
@@ -98,5 +104,9 @@ public class UpdateController extends AbstractController {
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
+    }
+
+    public void clearGenreAction() {
+        genreBox.getSelectionModel().clearSelection();
     }
 }
