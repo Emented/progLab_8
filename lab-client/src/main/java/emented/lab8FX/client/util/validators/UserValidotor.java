@@ -1,7 +1,5 @@
 package emented.lab8FX.client.util.validators;
 
-import emented.lab8FX.client.exceptions.ExceptionWithAlert;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +63,8 @@ public final class UserValidotor {
             errorList.add(null);
         } catch (IllegalArgumentException e) {
             errorList.add(e.getMessage());
+            errorList.add(e.getMessage());
+            return errorList;
         }
         try {
             validatePasswordsMatch(fPassword, sPassword);

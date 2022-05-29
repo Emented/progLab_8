@@ -26,15 +26,16 @@ public final class ConnectionValidator {
         if ("".equals(port)) {
             return null;
         }
+        int portNum = -1;
         try {
-            int portNum = Integer.parseInt(port);
-            if (portNum <= 0 || portNum > 65535) {
-                throw new IllegalArgumentException("Port should be a number between 1 and 65535!");
-            }
-            return portNum;
+            portNum = Integer.parseInt(port);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Port should be a number!");
         }
+        if (portNum <= 0 || portNum > 65535) {
+            throw new IllegalArgumentException("Port should be a number between 1 and 65535!");
+        }
+        return portNum;
     }
 
     public static List<String> validateConnection(String address, String port) {

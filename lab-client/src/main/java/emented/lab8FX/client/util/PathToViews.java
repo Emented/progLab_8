@@ -7,9 +7,10 @@ public enum PathToViews {
     LOGIN_VIEW("/fxml/login.fxml"),
     MAIN_VIEW("/fxml/main.fxml"),
     ADD_VIEW("/fxml/add.fxml"),
-    REMOVE_GREATER("/fxml/remove_greater.fxml"),
+    REMOVE_GREATER_VIEW("/fxml/remove_greater.fxml"),
     REMOVE_BY_ID_VIEW("/fxml/remove_by_id.fxml"),
-    REMOVE_ANY("/fxml/remove_any.fxml");
+    REMOVE_ANY_VIEW("/fxml/remove_any.fxml"),
+    UPDATE_VIEW("/fxml/update.fxml");
 
     private final String path;
 

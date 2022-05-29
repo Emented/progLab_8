@@ -1,8 +1,13 @@
 package emented.lab8FX.server.util;
 
+import emented.lab8FX.common.abstractions.AbstractRequest;
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.entities.MusicBand;
+import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
+import emented.lab8FX.common.util.requests.CheckIdRequest;
 import emented.lab8FX.common.util.requests.CommandRequest;
+import emented.lab8FX.common.util.responses.CheckIdResponse;
 import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.server.ServerConfig;
 import emented.lab8FX.server.abstractions.AbstractClientCommand;
@@ -23,6 +28,7 @@ import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.servercommands.ServerExitCommand;
 import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
+import org.checkerframework.checker.units.qual.C;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -84,6 +90,21 @@ public class CommandManager {
             return ServerConfig.getServerAvailableCommands().get(commandName).executeServerCommand();
         } else {
             return TextColoring.getRedText("There is no such command, type HELP to get list on commands");
+        }
+    }
+
+    public CheckIdResponse checkId(CheckIdRequest request) {
+        try {
+            if (!dbManager.validateUser(request.getUsername(), request.getPassword())) {
+                return new CheckIdResponse(false, "Login and password mismatch");
+            }
+            if (dbManager.checkBandExistence(request.getId())) {
+                return new CheckIdResponse(true, "Band with this ID exists");
+            } else {
+                return new CheckIdResponse(false, "Band with this ID doesn't exist");
+            }
+        } catch (DatabaseException e) {
+            return new CheckIdResponse(false, e.getMessage());
         }
     }
 

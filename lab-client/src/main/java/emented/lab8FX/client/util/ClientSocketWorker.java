@@ -1,40 +1,26 @@
 package emented.lab8FX.client.util;
 
-import emented.lab8FX.client.controllers.AbstractController;
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
 import emented.lab8FX.common.util.Serializer;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ClientSocketWorker {
-    
+
     private final int defaultPort = 228;
     private final int timeToResponse = 4000;
     private final DatagramSocket datagramSocket;
     private int port;
     private String address = "localhost";
     private InetAddress serverAddress;
+
     public ClientSocketWorker() throws UnknownHostException, SocketException {
         port = defaultPort;
         datagramSocket = new DatagramSocket();
-        serverAddress = InetAddress.getByName(address);
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public void setAddress(String address) throws UnknownHostException {
-        this.address = address;
         serverAddress = InetAddress.getByName(address);
     }
 
@@ -42,8 +28,17 @@ public class ClientSocketWorker {
         return port;
     }
 
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) throws UnknownHostException {
+        this.address = address;
+        serverAddress = InetAddress.getByName(address);
     }
 
     public void sendRequest(AbstractRequest request) throws IOException {

@@ -5,7 +5,6 @@ import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
-import emented.lab8FX.client.util.validators.ConnectionValidator;
 import emented.lab8FX.client.util.validators.UserValidotor;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.requests.LoginRequest;

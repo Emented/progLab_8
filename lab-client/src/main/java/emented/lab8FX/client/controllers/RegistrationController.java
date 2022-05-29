@@ -14,17 +14,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RegistrationController extends AbstractController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField firstPasswordField;
-    @FXML private PasswordField secondPasswordField;
-
     private final RegistrationModel registrationModel;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField firstPasswordField;
+    @FXML
+    private PasswordField secondPasswordField;
 
     public RegistrationController(ClientSocketWorker clientSocketWorker) {
         this.registrationModel = new RegistrationModel(clientSocketWorker, getCurrentStage(), this);
     }
 
-    @FXML public void loginAction() {
+    @FXML
+    public void loginAction() {
         try {
             switchScene(PathToViews.LOGIN_VIEW, param -> new LoginController(registrationModel.getClientSocketWorker()));
         } catch (ExceptionWithAlert e) {
@@ -32,16 +35,14 @@ public class RegistrationController extends AbstractController {
         }
     }
 
-    @FXML public void registerAction() {
-        String username = usernameField.getText();
-        String fPassword = firstPasswordField.getText();
-        String sPassword = secondPasswordField.getText();
+    @FXML
+    public void registerAction() {
         List<TextField> textFields = Arrays.asList(usernameField, firstPasswordField, secondPasswordField);
         removeFieldsColoring(textFields);
         try {
-            Session session = registrationModel.processRegistration(username,
-                    fPassword,
-                    sPassword);
+            Session session = registrationModel.processRegistration(usernameField.getText(),
+                    firstPasswordField.getText(),
+                    secondPasswordField.getText());
             switchScene(PathToViews.MAIN_VIEW, param -> new MainController(registrationModel.getClientSocketWorker(), session));
         } catch (ExceptionWithAlert e) {
             e.showAlert();

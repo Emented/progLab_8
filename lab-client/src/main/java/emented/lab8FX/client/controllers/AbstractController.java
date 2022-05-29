@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -28,6 +27,7 @@ public abstract class AbstractController {
     public void setCurrentStage(Stage currentStage) {
         this.currentStage = currentStage;
     }
+
     public <T extends AbstractController> void switchScene(PathToViews pathToViews,
                                                            Callback<Class<?>, Object> constructorCallback) throws ExceptionWithAlert {
         try {
@@ -47,8 +47,8 @@ public abstract class AbstractController {
         }
     }
 
-    public <T extends AbstractController> void showPopUpStage(PathToViews pathToViews,
-                                                              Callback<Class<?>, Object> constructorCallback, String name) throws ExceptionWithAlert {
+    public <T extends AbstractController> T showPopUpStage(PathToViews pathToViews,
+                                                           Callback<Class<?>, Object> constructorCallback, String name) throws ExceptionWithAlert {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader();
@@ -59,12 +59,12 @@ public abstract class AbstractController {
             T controller = loader.getController();
             controller.setCurrentStage(stage);
             stage.setTitle(name);
-            stage.setAlwaysOnTop(true);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.sizeToScene();
             stage.show();
+            return controller;
         } catch (IOException e) {
             e.printStackTrace();
             throw new ExceptionWithAlert("Troubles during showing a popup!");

@@ -4,10 +4,7 @@ package emented.lab8FX.server;
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.TextColoring;
-import emented.lab8FX.common.util.requests.CollectionRequest;
-import emented.lab8FX.common.util.requests.CommandRequest;
-import emented.lab8FX.common.util.requests.LoginRequest;
-import emented.lab8FX.common.util.requests.RegisterRequest;
+import emented.lab8FX.common.util.requests.*;
 import emented.lab8FX.common.util.responses.CollectionResponse;
 import emented.lab8FX.common.util.responses.ConnectionResponse;
 import emented.lab8FX.server.db.DBSSHConnector;
@@ -84,6 +81,8 @@ public class RequestThread implements Runnable {
             return usersManager.loginUser((LoginRequest) request);
         } else if (request.getType().equals(CollectionRequest.class)) {
             return new CollectionResponse(true, "Collection", commandManager.returnCollection());
+        } else if (request.getType().equals(CheckIdRequest.class)) {
+            return commandManager.checkId((CheckIdRequest) request);
         } else {
             return new ConnectionResponse(true, "Connection is ok!");
         }

@@ -1,11 +1,41 @@
 package emented.lab8FX.client.controllers;
 
-import javafx.event.ActionEvent;
+import emented.lab8FX.client.exceptions.ExceptionWithAlert;
+import emented.lab8FX.client.exceptions.FieldsValidationException;
+import emented.lab8FX.client.models.RemoveAnyModel;
+import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-public class RemoveAnyController extends AbstractController {
-    @FXML public TextField numberField;
 
-    @FXML public void removeAction(ActionEvent actionEvent) {
+import java.util.List;
+
+public class RemoveAnyController extends AbstractController {
+    private final RemoveAnyModel removeAnyModel;
+    @FXML
+    private TextField numberField;
+
+    public RemoveAnyController(ClientSocketWorker clientSocketWorker, Session session) {
+        removeAnyModel = new RemoveAnyModel(clientSocketWorker, getCurrentStage(), session, this);
+    }
+
+    @FXML
+    public void removeAction() {
+        List<TextField> textFields = List.of(numberField);
+        removeFieldsColoring(textFields);
+        try {
+            Alert alert = removeAnyModel.processRemove(numberField.getText());
+            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
+                alert.showAndWait();
+                getCurrentStage().close();
+            } else {
+                alert.showAndWait();
+            }
+        } catch (FieldsValidationException e) {
+            showFieldsErrors(e.getErrorList(), textFields);
+        } catch (ExceptionWithAlert e) {
+            e.showAlert();
+        }
     }
 }

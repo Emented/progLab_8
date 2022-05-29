@@ -1,9 +1,8 @@
 package emented.lab8FX.client;
 
 import emented.lab8FX.client.controllers.ConnectionController;
-import emented.lab8FX.client.models.ConnectionModel;
-import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.PathToViews;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

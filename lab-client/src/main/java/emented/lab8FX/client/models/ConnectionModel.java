@@ -12,13 +12,13 @@ import emented.lab8FX.common.util.requests.ConnectionRequest;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 
 public class ConnectionModel extends AbstractModel {
 
     private final ConnectionController currentController;
+
     public ConnectionModel(ClientSocketWorker clientSocketWorker, Stage currentStage, ConnectionController connectionController) {
         super(clientSocketWorker, currentStage);
         this.currentController = connectionController;

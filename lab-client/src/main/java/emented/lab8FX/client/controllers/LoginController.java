@@ -14,22 +14,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LoginController extends AbstractController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-
     private final LoginModel loginModel;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
 
     public LoginController(ClientSocketWorker clientSocketWorker) {
         this.loginModel = new LoginModel(clientSocketWorker, getCurrentStage(), this);
     }
 
-    @FXML public void loginAction() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+    @FXML
+    public void loginAction() {
         List<TextField> textFields = Arrays.asList(usernameField, passwordField);
         removeFieldsColoring(textFields);
         try {
-            Session session = loginModel.processLogin(username, password);
+            Session session = loginModel.processLogin(usernameField.getText(),
+                    passwordField.getText());
             switchScene(PathToViews.MAIN_VIEW, param -> new MainController(loginModel.getClientSocketWorker(), session));
         } catch (ExceptionWithAlert e) {
             e.showAlert();
@@ -39,7 +40,8 @@ public class LoginController extends AbstractController {
         }
     }
 
-    @FXML public void registerAction() {
+    @FXML
+    public void registerAction() {
         try {
             switchScene(PathToViews.REGISTRATION_VIEW, param -> new RegistrationController(loginModel.getClientSocketWorker()));
         } catch (ExceptionWithAlert e) {

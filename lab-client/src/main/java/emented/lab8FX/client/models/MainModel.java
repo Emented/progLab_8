@@ -15,7 +15,9 @@ import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainModel extends AbstractModel {
 
     private final static int UPDATE_TIME = 5000;
