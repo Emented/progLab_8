@@ -43,6 +43,16 @@ public class RemoveGreaterController extends AbstractController {
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
     }
 
+    public void setFields(String name, Double x, Float y, Long number, MusicGenre genre, String description, String address) {
+        nameField.setText(name);
+        xField.setText(x.toString());
+        yField.setText(y.toString());
+        numberField.setText(number.toString());
+        genreBox.setValue(genre);
+        descriptionField.setText(description);
+        addressField.setText(address);
+    }
+
     @FXML
     public void removeAction() {
         List<TextField> textFields = Arrays.asList(nameField, xField, yField, numberField, descriptionField, addressField);

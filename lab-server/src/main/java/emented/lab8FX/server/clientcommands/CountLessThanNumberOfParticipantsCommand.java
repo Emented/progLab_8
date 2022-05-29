@@ -8,13 +8,13 @@ import emented.lab8FX.server.abstractions.AbstractClientCommand;
 import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.util.CollectionManager;
 
-public class CountLessThatNumberOfParticipantsCommand extends AbstractClientCommand {
+public class CountLessThanNumberOfParticipantsCommand extends AbstractClientCommand {
 
     private final DBManager dbManager;
 
     private final CollectionManager collectionManager;
 
-    public CountLessThatNumberOfParticipantsCommand(DBManager dbManager, CollectionManager collectionManager) {
+    public CountLessThanNumberOfParticipantsCommand(DBManager dbManager, CollectionManager collectionManager) {
         super("count_less_than_number_of_participants",
                 1,
                 "print the number of groups whose number of participants is less than the specified one",

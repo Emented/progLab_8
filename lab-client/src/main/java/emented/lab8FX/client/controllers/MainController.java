@@ -86,49 +86,7 @@ public class MainController extends AbstractController {
         mainModel.setToolTip(descriptionColumn);
         mainModel.setToolTip(genreColumn);
         mainModel.setToolTip(studioColumn);
-        tableView.setRowFactory(
-                tableView -> {
-                    final TableRow<MusicBand> row = new TableRow<>();
-                    final ContextMenu rowMenu = new ContextMenu();
-                    MenuItem editItem = new MenuItem("Update");
-                    MenuItem removeItem = new MenuItem("Delete");
-                    editItem.setOnAction(event -> {
-                        try {
-                            UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
-                                    param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession()),
-                                    "Update menu");
-                            controller.setFields(row.getItem().getId(),
-                                    row.getItem().getName(),
-                                    row.getItem().getCoordinates().getX(),
-                                    row.getItem().getCoordinates().getY(),
-                                    row.getItem().getNumberOfParticipants(),
-                                    row.getItem().getGenre(),
-                                    row.getItem().getDescription(),
-                                    (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
-                            mainModel.getNewCollection();
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    removeItem.setOnAction(event -> {
-                        try {
-                            RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
-                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession()),
-                                    "Remove by id menu");
-                            controller.setField(row.getItem().getId());
-                            mainModel.getNewCollection();
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    rowMenu.getItems().addAll(editItem, removeItem);
-
-                    row.contextMenuProperty().bind(
-                            Bindings.when(row.emptyProperty())
-                                    .then((ContextMenu) null)
-                                    .otherwise(rowMenu));
-                    return row;
-                });
+        initializeContextMenu();
         tableView.setItems(musicBandsList);
     }
 
@@ -205,6 +163,12 @@ public class MainController extends AbstractController {
 
     @FXML
     public void countAction() {
+        try {
+            showPopUpStage(PathToViews.COUNT_VIEW, param -> new CountController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Count menu");
+            mainModel.getNewCollection();
+        } catch (ExceptionWithAlert e) {
+            e.showAlert();
+        }
     }
 
     @FXML
@@ -252,4 +216,81 @@ public class MainController extends AbstractController {
             e.showAlert();
         }
     }
+
+    private void initializeContextMenu() {
+        tableView.setRowFactory(
+                tableView -> {
+                    final TableRow<MusicBand> row = new TableRow<>();
+                    final ContextMenu rowMenu = new ContextMenu();
+                    MenuItem editItem = new MenuItem("Update");
+                    MenuItem removeItem = new MenuItem("Delete");
+                    MenuItem removeGreaterItem = new MenuItem("Remove greater");
+                    MenuItem countItem = new MenuItem("Count less than number of participants");
+                    editItem.setOnAction(event -> {
+                        try {
+                            UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
+                                    param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    "Update menu");
+                            controller.setFields(row.getItem().getId(),
+                                    row.getItem().getName(),
+                                    row.getItem().getCoordinates().getX(),
+                                    row.getItem().getCoordinates().getY(),
+                                    row.getItem().getNumberOfParticipants(),
+                                    row.getItem().getGenre(),
+                                    row.getItem().getDescription(),
+                                    (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
+                            mainModel.getNewCollection();
+                        } catch (ExceptionWithAlert e) {
+                            e.showAlert();
+                        }
+                    });
+                    removeItem.setOnAction(event -> {
+                        try {
+                            RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
+                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    "Remove by id menu");
+                            controller.setField(row.getItem().getId());
+                            mainModel.getNewCollection();
+                        } catch (ExceptionWithAlert e) {
+                            e.showAlert();
+                        }
+                    });
+                    removeGreaterItem.setOnAction(event -> {
+                        try {
+                            RemoveGreaterController controller = showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
+                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    "Remove grater menu");
+                            controller.setFields(row.getItem().getName(),
+                                    row.getItem().getCoordinates().getX(),
+                                    row.getItem().getCoordinates().getY(),
+                                    row.getItem().getNumberOfParticipants(),
+                                    row.getItem().getGenre(),
+                                    row.getItem().getDescription(),
+                                    (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
+                            mainModel.getNewCollection();
+                        } catch (ExceptionWithAlert e) {
+                            e.showAlert();
+                        }
+                    });
+                    countItem.setOnAction(event -> {
+                        try {
+                            CountController controller = showPopUpStage(PathToViews.COUNT_VIEW,
+                                    param -> new CountController(mainModel.getClientSocketWorker(), mainModel.getSession()),
+                                    "Count menu");
+                            controller.setField(row.getItem().getNumberOfParticipants());
+                            mainModel.getNewCollection();
+                        } catch (ExceptionWithAlert e) {
+                            e.showAlert();
+                        }
+                    });
+                    rowMenu.getItems().addAll(editItem, removeItem, removeGreaterItem, countItem);
+
+                    row.contextMenuProperty().bind(
+                            Bindings.when(row.emptyProperty())
+                                    .then((ContextMenu) null)
+                                    .otherwise(rowMenu));
+                    return row;
+                });
+    }
+
 }

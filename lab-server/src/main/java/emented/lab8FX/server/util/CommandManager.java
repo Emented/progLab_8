@@ -1,7 +1,5 @@
 package emented.lab8FX.server.util;
 
-import emented.lab8FX.common.abstractions.AbstractRequest;
-import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
@@ -15,7 +13,7 @@ import emented.lab8FX.server.abstractions.AbstractServerCommand;
 import emented.lab8FX.server.clientcommands.AddCommand;
 import emented.lab8FX.server.clientcommands.AddIfMaxCommand;
 import emented.lab8FX.server.clientcommands.ClearCommand;
-import emented.lab8FX.server.clientcommands.CountLessThatNumberOfParticipantsCommand;
+import emented.lab8FX.server.clientcommands.CountLessThanNumberOfParticipantsCommand;
 import emented.lab8FX.server.clientcommands.HistoryCommand;
 import emented.lab8FX.server.clientcommands.InfoCommand;
 import emented.lab8FX.server.clientcommands.MinByStudioCommand;
@@ -28,7 +26,6 @@ import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.servercommands.ServerExitCommand;
 import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
-import org.checkerframework.checker.units.qual.C;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -56,7 +53,7 @@ public class CommandManager {
         AbstractClientCommand historyCommand = new HistoryCommand(ServerConfig.getClientCommandHistory().getHistory(), dbManager);
         AbstractClientCommand removeAnyByNumberOfParticipantsCommand = new RemoveAnyByNumberOfParticipantsCommand(dbManager, collectionManager);
         AbstractClientCommand minByStudioCommand = new MinByStudioCommand(dbManager, collectionManager);
-        AbstractClientCommand countLessThanNumberOfParticipantsCommand = new CountLessThatNumberOfParticipantsCommand(dbManager, collectionManager);
+        AbstractClientCommand countLessThanNumberOfParticipantsCommand = new CountLessThanNumberOfParticipantsCommand(dbManager, collectionManager);
         AbstractServerCommand helpServerCommand = new ServerHelpCommand(ServerConfig.getServerAvailableCommands());
         AbstractServerCommand exitServerCommand = new ServerExitCommand();
         AbstractServerCommand historyServerCommand = new ServerHistoryCommand(ServerConfig.getClientCommandHistory().getHistory());
