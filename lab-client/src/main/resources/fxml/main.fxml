@@ -17,13 +17,13 @@
 
 <AnchorPane prefHeight="730.0" prefWidth="1103.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emented.lab8FX.client.controllers.MainController">
    <children>
-      <Pane layoutX="272.0" layoutY="75.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+      <Pane fx:id="tablePain" layoutX="272.0" layoutY="75.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
          <children>
             <TableView fx:id="tableView" editable="true" layoutY="27.0" prefHeight="630.0" prefWidth="830.0" stylesheets="@../css/table.css">
               <columns>
                   <TableColumn fx:id="creationDateColumn" editable="false" prefWidth="113.0" resizable="false" text="Creation date" />
                 <TableColumn fx:id="idColumn" editable="false" prefWidth="56.0" resizable="false" text="Id" />
-                <TableColumn fx:id="nameColumn" editable="true" prefWidth="85.0" resizable="false" text="Name" />
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="85.0" resizable="false" text="Name" />
                   <TableColumn fx:id="coordinatesColumn" editable="false" prefWidth="85.0" resizable="false" sortable="false" text="Coordinates">
                      <columns>
                         <TableColumn editable="false" prefWidth="50.0" resizable="false" text="X" fx:id="xColumn" />
@@ -173,5 +173,10 @@
             </Button>
          </children>
       </AnchorPane>
+      <Pane fx:id="visualPane" layoutX="273.0" layoutY="75.0" prefHeight="657.0" prefWidth="830.0" visible="false">
+         <children>
+            <Label layoutX="379.0" layoutY="320.0" text="Идите нахуй" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

@@ -20,7 +20,7 @@ import java.util.TimerTask;
 
 public class MainModel extends AbstractModel {
 
-    private final static int UPDATE_TIME = 15000;
+    private final static int UPDATE_TIME = 2000;
     private final Session session;
 
     private final MainController currentController;

@@ -14,10 +14,12 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -43,6 +45,12 @@ public class MainController extends AbstractController {
     public TextField numberFilter;
     @FXML
     public TextField descriptionFilter;
+    @FXML
+    public Pane tablePain;
+    @FXML
+    public Pane visualPane;
+    @FXML
+    public Button switchButton;
     @FXML
     private ComboBox<MusicGenre> genreFilter;
     @FXML
@@ -81,6 +89,9 @@ public class MainController extends AbstractController {
         connectionLabel.setText("Connected to " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
         initializeTable();
+        tablePain.setVisible(true);
+        visualPane.setVisible(false);
+//        applyFilters();
         mainModel.runUpdateLoop();
     }
 
@@ -115,8 +126,34 @@ public class MainController extends AbstractController {
         tableView.sort();
     }
 
+    public void applyFilters() {
+        FilteredList<MusicBand> filtered = new FilteredList<>(musicBandsList, t -> true);
+        idFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getId()).equals(newValue)));
+        nameFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getName().toLowerCase().contains(newValue.toLowerCase())));
+        xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).equals(newValue)));
+        yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).equals(newValue)));
+        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().toString().equals(newValue)));
+        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).equals(newValue)));
+        genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre().equals(genreFilter.getValue())));
+        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getDescription().toLowerCase().contains(newValue.toLowerCase())));
+        addressFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getStudio() == null) ? "" : musicBand.getStudio().getAddress()).equalsIgnoreCase(newValue)));
+
+        SortedList<MusicBand> sorted = new SortedList<>(filtered);
+        sorted.comparatorProperty().bind(tableView.comparatorProperty());
+        tableView.setItems(sorted);
+    }
+
     @FXML
     public void switchView() {
+        if (tablePain.isVisible()) {
+            tablePain.setVisible(false);
+            visualPane.setVisible(true);
+            switchButton.setText("Switch to table");
+        } else {
+            tablePain.setVisible(true);
+            visualPane.setVisible(false);
+            switchButton.setText("Switch to visual");
+        }
     }
 
     @FXML
@@ -313,5 +350,7 @@ public class MainController extends AbstractController {
         descriptionFilter.clear();
         genreFilter.getSelectionModel().clearSelection();
         addressFilter.clear();
+//        tableView.setItems(musicBandsList);
+//        applyFilters();
     }
 }
