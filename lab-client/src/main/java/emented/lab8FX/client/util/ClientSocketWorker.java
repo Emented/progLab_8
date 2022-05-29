@@ -1,5 +1,6 @@
 package emented.lab8FX.client.util;
 
+import emented.lab8FX.client.controllers.AbstractController;
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
@@ -12,6 +13,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ClientSocketWorker {
     
@@ -21,7 +23,6 @@ public class ClientSocketWorker {
     private int port;
     private String address = "localhost";
     private InetAddress serverAddress;
-
     public ClientSocketWorker() throws UnknownHostException, SocketException {
         port = defaultPort;
         datagramSocket = new DatagramSocket();
@@ -61,6 +62,13 @@ public class ClientSocketWorker {
         byte[] bytesFromServer = dpFromServer.getData();
         return DeSerializer.deSerializeResponse(bytesFromServer);
     }
+
+    public synchronized AbstractResponse proceedTransaction(AbstractRequest request) throws IOException, ClassNotFoundException {
+        sendRequest(request);
+        return receiveResponse();
+    }
+
+
     public void closeSocket() {
         datagramSocket.close();
     }

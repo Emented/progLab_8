@@ -166,6 +166,11 @@
                   <Font name="Verdana Bold" size="22.0" />
                </font>
             </Button>
+            <Label layoutX="76.0" layoutY="536.0" prefHeight="63.0" prefWidth="118.0" text="\@emented @dimibazi" wrapText="true">
+               <font>
+                  <Font name="Verdana Bold" size="20.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
