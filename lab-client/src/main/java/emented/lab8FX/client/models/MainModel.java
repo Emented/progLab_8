@@ -175,7 +175,7 @@ public class MainModel extends AbstractModel {
         return canvas;
     }
 
-    public void updateElements(Set<MusicBand> collection, List<Long> ids) {
+    public void updateElements(Set<MusicBand> collection, List<Long> usersIDs) {
         List<Long> currentIDs;
         currentIDs = currentController.getMusicBandsList().stream().map(MusicBand::getId).toList();
         for (Long id : currentIDs) {
@@ -186,7 +186,7 @@ public class MainModel extends AbstractModel {
                 currentController.getMusicBandsList().add(m);
                 Platform.runLater(() -> {
                     currentController.removeFromVisual(n);
-                    currentController.addToVisual(m, !ids.contains(id));
+                    currentController.addToVisual(m, !usersIDs.contains(id));
                 });
             }
         }
@@ -202,12 +202,12 @@ public class MainModel extends AbstractModel {
         }
     }
 
-    public void addNewElements(Set<MusicBand> collection, List<Long> ids, List<Long> currentIDs, List<Long> newIDs) {
+    public void addNewElements(Set<MusicBand> collection, List<Long> usersIDs, List<Long> currentIDs, List<Long> newIDs) {
         for (Long id : newIDs) {
             if (!currentIDs.contains(id)) {
                 MusicBand m = collection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
                 currentController.getMusicBandsList().add(m);
-                if (ids.contains(id)) {
+                if (usersIDs.contains(id)) {
                     Platform.runLater(() -> currentController.addToVisual(m, false));
                 } else {
                     Platform.runLater(() -> currentController.addToVisual(m, true));

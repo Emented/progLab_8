@@ -68,7 +68,7 @@
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <ChoiceBox fx:id="genreBox" layoutX="151.0" layoutY="351.0" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: e6e6e6; -fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="109.0" />
+      <ChoiceBox fx:id="genreBox" layoutX="151.0" layoutY="351.0" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: e6e6e6; -fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/choice.css" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="109.0" />
       <Text layoutX="14.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Music genre" textAlignment="CENTER" wrappingWidth="119.62890625">
          <font>
             <Font name="Verdana" size="19.0" />

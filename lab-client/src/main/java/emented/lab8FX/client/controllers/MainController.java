@@ -17,11 +17,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -96,69 +98,26 @@ public class MainController extends AbstractController {
         userInfoButton.setText(mainModel.getSession().getUsername());
         connectionLabel.setText("Connected to " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        genreFilter.setOnMouseClicked(event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)){
+                if(event.getClickCount() == 2){
+                    genreFilter.getSelectionModel().clearSelection();
+                }
+            }
+        });
         addRegex(idFilter, numberFilter, xFilter, yFilter);
         initializeTable();
         tablePain.setVisible(true);
         visualPane.setVisible(false);
-//        applyFilters();
+        applyFilters();
         mainModel.runUpdateLoop();
-    }
-
-    private void initializeTable() {
-        creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        xColumn.setCellValueFactory(musicBand -> new SimpleDoubleProperty(musicBand.getValue().getCoordinates().getX()).asObject());
-        yColumn.setCellValueFactory(musicBand -> new SimpleFloatProperty(musicBand.getValue().getCoordinates().getY()).asObject());
-        numberOfParticipantsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfParticipants"));
-        descriptionColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getDescription() != null
-                ? musicBand.getValue().getDescription()
-                : "-"));
-        genreColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getGenre() != null
-                ? musicBand.getValue().getGenre().toString()
-                : "-"));
-        studioColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getStudio() != null
-                ? musicBand.getValue().getStudio().getAddress()
-                : "-"));
-        mainModel.setToolTip(nameColumn);
-        mainModel.setToolTip(descriptionColumn);
-        mainModel.setToolTip(genreColumn);
-        mainModel.setToolTip(studioColumn);
-        initializeContextMenu();
-        tableView.setItems(musicBandsList);
-        tableView.getSortOrder().add(idColumn);
-    }
-
-    public void updateTable(Set<MusicBand> collection, List<Long> ids) {
-        List<Long> currentIDs = musicBandsList.stream().map(MusicBand::getId).toList();
-        List<Long> newIDs = collection.stream().map(MusicBand::getId).toList();
-        mainModel.addNewElements(collection, ids, currentIDs, newIDs);
-        mainModel.removeElements(currentIDs, newIDs);
-        mainModel.updateElements(collection, ids);
-        tableView.sort();
     }
 
     public ObservableList<MusicBand> getMusicBandsList() {
         return musicBandsList;
     }
 
-    public void applyFilters() {
-        FilteredList<MusicBand> filtered = new FilteredList<>(musicBandsList, t -> true);
-        idFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getId()).equals(newValue)));
-        nameFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getName().toLowerCase().contains(newValue.toLowerCase())));
-        xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).equals(newValue)));
-        yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).equals(newValue)));
-        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().toString().equals(newValue)));
-        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).equals(newValue)));
-        genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre().equals(genreFilter.getValue())));
-        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getDescription().toLowerCase().contains(newValue.toLowerCase())));
-        addressFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getStudio() == null) ? "" : musicBand.getStudio().getAddress()).equalsIgnoreCase(newValue)));
-
-        SortedList<MusicBand> sorted = new SortedList<>(filtered);
-        sorted.comparatorProperty().bind(tableView.comparatorProperty());
-        tableView.setItems(sorted);
-    }
-
+    // working with buttons
     @FXML
     public void switchView() {
         if (tablePain.isVisible()) {
@@ -181,47 +140,6 @@ public class MainController extends AbstractController {
             }
             switchButton.setText("Switch to visual");
         }
-    }
-
-    public void removeFromVisual(MusicBand musicBand) {
-        Canvas canvas = mainModel.getVisualBands().get(musicBand);
-        bandsPane.getChildren().remove(canvas);
-    }
-
-
-    public void addToVisual(MusicBand musicBand, boolean alien) {
-        Color color;
-        if (alien) {
-            color = Color.BLUE;
-        } else {
-            color = Color.GREEN;
-        }
-        Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
-        FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(1500));
-        fade.setFromValue(0);
-        fade.setToValue(10);
-        fade.setNode(canvas);
-        fade.play();
-        bandsPane.getChildren().add(canvas);
-    }
-
-    public void reloadVisual() {
-        ObservableList<Node> nodes = FXCollections.observableArrayList(bandsPane.getChildren());
-        bandsPane.getChildren().clear();
-        for (Node node : nodes) {
-            FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.millis(1500));
-            fade.setFromValue(0);
-            fade.setToValue(10);
-            fade.setNode(node);
-            fade.play();
-            bandsPane.getChildren().add(node);
-        }
-    }
-
-    @FXML
-    public void userInfoAction() {
     }
 
     @FXML
@@ -332,6 +250,7 @@ public class MainController extends AbstractController {
         }
     }
 
+    // working with table
     private void initializeContextMenu() {
         tableView.setRowFactory(
                 tableView -> {
@@ -404,6 +323,58 @@ public class MainController extends AbstractController {
                 });
     }
 
+    private void initializeTable() {
+        creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        xColumn.setCellValueFactory(musicBand -> new SimpleDoubleProperty(musicBand.getValue().getCoordinates().getX()).asObject());
+        yColumn.setCellValueFactory(musicBand -> new SimpleFloatProperty(musicBand.getValue().getCoordinates().getY()).asObject());
+        numberOfParticipantsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfParticipants"));
+        descriptionColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getDescription() != null
+                ? musicBand.getValue().getDescription()
+                : "-"));
+        genreColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getGenre() != null
+                ? musicBand.getValue().getGenre().toString()
+                : "-"));
+        studioColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getStudio() != null
+                ? musicBand.getValue().getStudio().getAddress()
+                : "-"));
+        mainModel.setToolTip(nameColumn);
+        mainModel.setToolTip(descriptionColumn);
+        mainModel.setToolTip(genreColumn);
+        mainModel.setToolTip(studioColumn);
+        initializeContextMenu();
+        tableView.setItems(musicBandsList);
+        tableView.getSortOrder().add(idColumn);
+    }
+
+    public void updateTable(Set<MusicBand> collection, List<Long> usersIDs) {
+        List<Long> currentIDs = musicBandsList.stream().map(MusicBand::getId).toList();
+        List<Long> newIDs = collection.stream().map(MusicBand::getId).toList();
+        mainModel.addNewElements(collection, usersIDs, currentIDs, newIDs);
+        mainModel.removeElements(currentIDs, newIDs);
+        mainModel.updateElements(collection, usersIDs);
+        tableView.sort();
+    }
+
+    // working with filters
+    public void applyFilters() {
+        FilteredList<MusicBand> filtered = new FilteredList<>(musicBandsList, t -> true);
+        idFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getId()).startsWith(newValue)));
+        nameFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getName().toLowerCase().contains(newValue.toLowerCase())));
+        xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).startsWith(newValue)));
+        yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).startsWith(newValue)));
+        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().toString().startsWith(newValue)));
+        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).startsWith(newValue)));
+        genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre() == genreFilter.getValue()));
+        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getDescription() == null) ? "-" : musicBand.getDescription().toLowerCase()).contains(newValue.toLowerCase())));
+        addressFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getStudio() == null) ? "-" : musicBand.getStudio().getAddress()).toLowerCase().contains(newValue.toLowerCase())));
+        SortedList<MusicBand> sorted = new SortedList<>(filtered);
+        sorted.comparatorProperty().bind(tableView.comparatorProperty());
+        tableView.setItems(sorted);
+    }
+
+    @FXML
     public void clearFilterAction() {
         dateFilter.clear();
         idFilter.clear();
@@ -414,7 +385,44 @@ public class MainController extends AbstractController {
         descriptionFilter.clear();
         genreFilter.getSelectionModel().clearSelection();
         addressFilter.clear();
-//        tableView.setItems(musicBandsList);
-//        applyFilters();
+        applyFilters();
+    }
+
+    // working with visual part
+    public void removeFromVisual(MusicBand musicBand) {
+        Canvas canvas = mainModel.getVisualBands().get(musicBand);
+        bandsPane.getChildren().remove(canvas);
+    }
+
+
+    public void addToVisual(MusicBand musicBand, boolean alien) {
+        Color color;
+        if (alien) {
+            color = Color.BLUE;
+        } else {
+            color = Color.GREEN;
+        }
+        Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
+        FadeTransition fade = new FadeTransition();
+        fade.setDuration(Duration.millis(1500));
+        fade.setFromValue(0);
+        fade.setToValue(10);
+        fade.setNode(canvas);
+        fade.play();
+        bandsPane.getChildren().add(canvas);
+    }
+
+    public void reloadVisual() {
+        ObservableList<Node> nodes = FXCollections.observableArrayList(bandsPane.getChildren());
+        bandsPane.getChildren().clear();
+        for (Node node : nodes) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.millis(1500));
+            fade.setFromValue(0);
+            fade.setToValue(10);
+            fade.setNode(node);
+            fade.play();
+            bandsPane.getChildren().add(node);
+        }
     }
 }
