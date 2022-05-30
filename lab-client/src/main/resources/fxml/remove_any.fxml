@@ -13,7 +13,7 @@
             <children>
                 <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <center>
-                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove any by number of participants" textAlignment="CENTER" wrappingWidth="374.9716796875">
+                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="%remove_by_number.subtitle" textAlignment="CENTER" wrappingWidth="374.9716796875">
                             <font>
                                 <Font name="Verdana Bold" size="29.0" />
                             </font>
@@ -22,17 +22,17 @@
                 </BorderPane>
             </children>
         </AnchorPane>
-        <TextField fx:id="numberField" layoutX="165.0" layoutY="120.0" prefHeight="30.0" prefWidth="249.0" promptText="Input number..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="36.0">
+        <TextField fx:id="numberField" layoutX="165.0" layoutY="120.0" prefHeight="30.0" prefWidth="249.0" promptText="%remove_by_number.text_field.number" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="36.0">
             <font>
                 <Font name="Verdana" size="14.0" />
             </font>
         </TextField>
-        <Text layoutX="23.0" layoutY="130.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of participants" textAlignment="CENTER" wrappingWidth="113.62890625">
+        <Text layoutX="23.0" layoutY="130.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="%remove_by_number.text.number" textAlignment="CENTER" wrappingWidth="113.62890625">
             <font>
                 <Font name="Verdana" size="19.0" />
             </font>
         </Text>
-        <Button fx:id="removeButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="359.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="Remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+        <Button fx:id="removeButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="359.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="%remove_by_number.button.remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
             <font>
                 <Font name="Verdana Bold" size="22.0" />
             </font>

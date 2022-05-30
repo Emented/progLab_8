@@ -25,60 +25,60 @@
          <children>
             <TableView fx:id="tableView" editable="true" layoutY="27.0" prefHeight="630.0" prefWidth="830.0" stylesheets="@../css/table.css">
               <columns>
-                  <TableColumn fx:id="creationDateColumn" editable="false" prefWidth="113.0" resizable="false" text="Creation date" />
-                <TableColumn fx:id="idColumn" editable="false" prefWidth="56.0" resizable="false" text="Id" />
-                <TableColumn fx:id="nameColumn" editable="false" prefWidth="85.0" resizable="false" text="Name" />
-                  <TableColumn fx:id="coordinatesColumn" editable="false" prefWidth="85.0" resizable="false" sortable="false" text="Coordinates">
+                  <TableColumn fx:id="creationDateColumn" editable="false" prefWidth="113.0" resizable="false" text="%main_menu.table.creation_date" />
+                <TableColumn fx:id="idColumn" editable="false" prefWidth="56.0" resizable="false" text="%main_menu.table.id" />
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="85.0" resizable="false" text="%main_menu.table.name" />
+                  <TableColumn fx:id="coordinatesColumn" editable="false" prefWidth="85.0" resizable="false" sortable="false" text="%main_menu.table.coordinates">
                      <columns>
-                        <TableColumn editable="false" prefWidth="50.0" resizable="false" text="X" fx:id="xColumn" />
-                        <TableColumn fx:id="yColumn" editable="false" prefWidth="50.0" resizable="false" text="Y" />
+                        <TableColumn editable="false" prefWidth="50.0" resizable="false" text="%main_menu.table.X" fx:id="xColumn" />
+                        <TableColumn fx:id="yColumn" editable="false" prefWidth="50.0" resizable="false" text="%main_menu.table.Y" />
                      </columns>
                   </TableColumn>
-                  <TableColumn fx:id="numberOfParticipantsColumn" editable="false" prefWidth="145.0" resizable="false" text="Number of participants" />
-                  <TableColumn fx:id="descriptionColumn" editable="false" minWidth="75.0" prefWidth="114.0" resizable="false" text="Description" />
-                  <TableColumn fx:id="genreColumn" editable="false" prefWidth="89.0" resizable="false" text="Genre" />
-                  <TableColumn fx:id="studioColumn" editable="false" prefWidth="112.0" resizable="false" text="Studio address" />
+                  <TableColumn fx:id="numberOfParticipantsColumn" editable="false" prefWidth="145.0" resizable="false" text="%main_menu.table.number_of_participants" />
+                  <TableColumn fx:id="descriptionColumn" editable="false" minWidth="75.0" prefWidth="114.0" resizable="false" text="%main_menu.table.description" />
+                  <TableColumn fx:id="genreColumn" editable="false" prefWidth="89.0" resizable="false" text="%main_menu.table.genre" />
+                  <TableColumn fx:id="studioColumn" editable="false" prefWidth="112.0" resizable="false" text="%main_menu.table.studio_address" />
               </columns>
             </TableView>
             <HBox prefHeight="27.0" prefWidth="830.0">
                <children>
-                  <TextField fx:id="dateFilter" prefHeight="27.0" prefWidth="114.0" promptText="Date..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="dateFilter" prefHeight="27.0" prefWidth="114.0" promptText="%main_menu.table_filter.date" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="idFilter" prefHeight="27.0" prefWidth="56.0" promptText="Id...." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="idFilter" prefHeight="27.0" prefWidth="56.0" promptText="%main_menu.table_filter.id" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="nameFilter" prefHeight="27.0" prefWidth="85.0" promptText="Name...." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="nameFilter" prefHeight="27.0" prefWidth="85.0" promptText="%main_menu.table_filter.name" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField prefHeight="27.0" prefWidth="50.0" promptText="X..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;" fx:id="xFilter">
+                  <TextField prefHeight="27.0" prefWidth="50.0" promptText="%main_menu.table_filter.X" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;" fx:id="xFilter">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="yFilter" prefHeight="27.0" prefWidth="50.0" promptText="Y..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="yFilter" prefHeight="27.0" prefWidth="50.0" promptText="%main_menu.table_filter.Y" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="numberFilter" prefHeight="27.0" prefWidth="145.0" promptText="Number..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="numberFilter" prefHeight="27.0" prefWidth="145.0" promptText="%main_menu.table_filter.number" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="descriptionFilter" prefHeight="27.0" prefWidth="114.0" promptText="Description..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+                  <TextField fx:id="descriptionFilter" prefHeight="27.0" prefWidth="114.0" promptText="%main_menu.table_filter.description" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
                   </TextField>
                   <ComboBox fx:id="genreFilter" prefHeight="27.0" prefWidth="89.0" style="-fx-background-color: e6e6e6; -fx-background-radius: 0; -fx-border-color: black; -fx-border-width: 0 1 1 1;" stylesheets="@../css/drop_menu.css" />
-                  <TextField fx:id="addressFilter" prefHeight="27.0" prefWidth="127.0" promptText="Address..." style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 0 1 1;">
+                  <TextField fx:id="addressFilter" prefHeight="27.0" prefWidth="127.0" promptText="%main_menu.table_filter.address" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 0 1 1;">
                      <font>
                         <Font name="Verdana" size="13.0" />
                      </font>
@@ -97,12 +97,12 @@
                   <Font name="Verdana Bold" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="switchButton" layoutX="843.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchView" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/main_buttons.css" text="Switch to visual" textAlignment="CENTER">
+            <Button fx:id="switchButton" layoutX="843.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchView" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/main_buttons.css" text="%main_menu.button.switch_to_visual" textAlignment="CENTER">
                <font>
                   <Font name="Verdana Bold" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="logoutButton" layoutX="274.0" layoutY="15.0" mnemonicParsing="false" onAction="#logoutAction" prefHeight="46.0" prefWidth="118.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="Logout" textAlignment="CENTER">
+            <Button fx:id="logoutButton" layoutX="274.0" layoutY="15.0" mnemonicParsing="false" onAction="#logoutAction" prefHeight="46.0" prefWidth="118.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="%main_menu.command_button.logout" textAlignment="CENTER">
                <font>
                   <Font name="Verdana Bold" size="22.0" />
                </font>
@@ -112,7 +112,7 @@
                   <Font name="Verdana" size="13.0" />
                </font>
             </Label>
-            <Button fx:id="clearFilterButton" layoutX="731.0" layoutY="15.0" mnemonicParsing="false" onAction="#clearFilterAction" prefHeight="46.0" prefWidth="96.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="Clear" textAlignment="CENTER">
+            <Button fx:id="clearFilterButton" layoutX="731.0" layoutY="15.0" mnemonicParsing="false" onAction="#clearFilterAction" prefHeight="46.0" prefWidth="96.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="%main_menu.button.clear" textAlignment="CENTER">
                <font>
                   <Font name="Verdana Bold" size="22.0" />
                </font>
@@ -123,54 +123,49 @@
          <children>
             <VBox alignment="TOP_CENTER" layoutX="13.0" layoutY="14.0" prefHeight="527.0" prefWidth="243.0" spacing="15.0">
                <children>
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Add" textAlignment="CENTER">
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.add" textAlignment="CENTER">
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </Button>
-                  <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Update" textAlignment="CENTER">
+                  <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.update" textAlignment="CENTER">
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </Button>
-                  <MenuButton contentDisplay="RIGHT" mnemonicParsing="false" popupSide="RIGHT" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Remove">
+                  <MenuButton contentDisplay="RIGHT" mnemonicParsing="false" popupSide="RIGHT" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.remove_button">
                     <items>
-                      <MenuItem fx:id="removeById" mnemonicParsing="false" onAction="#removeByIdAction" text="Remove by id" />
-                      <MenuItem fx:id="removeGreater" mnemonicParsing="false" onAction="#removeGreaterAction" text="Remove greater" />
-                        <MenuItem fx:id="removeByNumberOfParticipants" mnemonicParsing="false" onAction="#removeByNumberOfParticipantsAction" text="Remove any by number of participants" />
+                      <MenuItem fx:id="removeById" mnemonicParsing="false" onAction="#removeByIdAction" text="%main_menu.command_button.remove.remove_id" />
+                      <MenuItem fx:id="removeGreater" mnemonicParsing="false" onAction="#removeGreaterAction" text="%main_menu.command_button.remove.remove_greater" />
+                        <MenuItem fx:id="removeByNumberOfParticipants" mnemonicParsing="false" onAction="#removeByNumberOfParticipantsAction" text="%main_menu.command_button.remove.remove_by_number" />
                     </items>
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </MenuButton>
-                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Clear" textAlignment="CENTER">
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.clear" textAlignment="CENTER">
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </Button>
-                  <Button fx:id="infoButton" mnemonicParsing="false" onAction="#infoAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Info" textAlignment="CENTER">
+                  <Button fx:id="infoButton" mnemonicParsing="false" onAction="#infoAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.info" textAlignment="CENTER">
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </Button>
-                  <Button fx:id="historyButton" mnemonicParsing="false" onAction="#historyAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="History" textAlignment="CENTER">
+                  <Button fx:id="historyButton" mnemonicParsing="false" onAction="#historyAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.history" textAlignment="CENTER">
                      <font>
                         <Font name="Verdana Bold" size="22.0" />
                      </font>
                   </Button>
-                  <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScriptAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Execute script" textAlignment="CENTER">
-                     <font>
-                        <Font name="Verdana Bold" size="22.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="countButton" mnemonicParsing="false" onAction="#countAction" prefHeight="82.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Count less than number of participants" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="countButton" mnemonicParsing="false" onAction="#countAction" prefHeight="82.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%main_menu.command_button.count_less" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Verdana Bold" size="17.0" />
                      </font>
                   </Button>
                </children>
             </VBox>
-            <Button fx:id="exitButton" layoutX="13.0" layoutY="667.0" mnemonicParsing="false" onAction="#exitAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="Exit" textAlignment="CENTER" AnchorPane.bottomAnchor="12.0">
+            <Button fx:id="exitButton" layoutX="13.0" layoutY="667.0" mnemonicParsing="false" onAction="#exitAction" prefHeight="46.0" prefWidth="243.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="%main_menu.command_button.exit" textAlignment="CENTER" AnchorPane.bottomAnchor="12.0">
                <font>
                   <Font name="Verdana Bold" size="22.0" />
                </font>

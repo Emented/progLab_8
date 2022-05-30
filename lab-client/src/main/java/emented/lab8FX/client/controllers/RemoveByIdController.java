@@ -7,12 +7,15 @@ import emented.lab8FX.client.models.RemoveByIdModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class RemoveByIdController extends AbstractController {
+public class RemoveByIdController extends AbstractController implements Initializable {
 
     private final RemoveByIdModel removeByIdModel;
 
@@ -25,7 +28,9 @@ public class RemoveByIdController extends AbstractController {
         this.mainModel = mainModel;
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
         addRegex(idField);
     }
 

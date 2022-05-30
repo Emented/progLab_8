@@ -5,12 +5,16 @@ import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.ConnectionModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
+import java.awt.image.ImageConsumer;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ConnectionController extends AbstractController {
+public class ConnectionController extends AbstractController implements Initializable {
 
     private final ConnectionModel connectionModel;
     @FXML
@@ -22,7 +26,9 @@ public class ConnectionController extends AbstractController {
         connectionModel = new ConnectionModel(clientSocketWorker, getCurrentStage(), this);
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
         addRegex(portField);
     }
 

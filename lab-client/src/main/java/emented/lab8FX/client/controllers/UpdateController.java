@@ -9,16 +9,19 @@ import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class UpdateController extends AbstractController {
+public class UpdateController extends AbstractController implements Initializable {
 
     private final UpdateModel updateModel;
 
@@ -45,7 +48,9 @@ public class UpdateController extends AbstractController {
         this.mainModel = mainModel;
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
         addRegex(idField, xField, yField, numberField);
     }

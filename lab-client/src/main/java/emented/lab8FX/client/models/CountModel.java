@@ -19,12 +19,12 @@ public class CountModel extends AbstractModel {
 
     private final Session session;
 
-    private final CountController countController;
+    private final CountController currentController;
 
-    public CountModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, CountController countController) {
+    public CountModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, CountController currentController) {
         super(clientSocketWorker, currentStage);
         this.session = session;
-        this.countController = countController;
+        this.currentController = currentController;
     }
 
     public Alert processCount(String number) throws ExceptionWithAlert, FieldsValidationException {
@@ -41,9 +41,9 @@ public class CountModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

@@ -17,6 +17,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public abstract class AbstractController {
     private Stage currentStage;
@@ -25,15 +26,27 @@ public abstract class AbstractController {
         return currentStage;
     }
 
+    private ResourceBundle resourceBundle;
+
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
+
     public void setCurrentStage(Stage currentStage) {
         this.currentStage = currentStage;
     }
 
     public <T extends AbstractController> void switchScene(PathToViews pathToViews,
-                                                           Callback<Class<?>, Object> constructorCallback) throws ExceptionWithAlert {
+                                                           Callback<Class<?>, Object> constructorCallback,
+                                                           ResourceBundle resourceBundle) throws ExceptionWithAlert {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource(pathToViews.getPath()));
+            fxmlLoader.setResources(resourceBundle);
             fxmlLoader.setControllerFactory(constructorCallback);
             Parent parent = fxmlLoader.load();
             Scene scene = new Scene(parent);
@@ -44,16 +57,19 @@ public abstract class AbstractController {
             getCurrentStage().centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Troubles during switching to next stage!");
+            throw new ExceptionWithAlert(getResourceBundle().getString("switch_exception.scene"));
         }
     }
 
     public <T extends AbstractController> T showPopUpStage(PathToViews pathToViews,
-                                                           Callback<Class<?>, Object> constructorCallback, String name) throws ExceptionWithAlert {
+                                                           Callback<Class<?>, Object> constructorCallback,
+                                                           String name,
+                                                           ResourceBundle resourceBundle) throws ExceptionWithAlert {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource(pathToViews.getPath()));
+            loader.setResources(resourceBundle);
             loader.setControllerFactory(constructorCallback);
             Parent parent = loader.load();
             Scene scene = new Scene(parent);
@@ -68,7 +84,7 @@ public abstract class AbstractController {
             return controller;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Troubles during showing a popup!");
+            throw new ExceptionWithAlert(getResourceBundle().getString("switch_exception.pop_up"));
         }
     }
 
@@ -77,7 +93,7 @@ public abstract class AbstractController {
         for (int i = 0; i < errorList.size(); i++) {
             String error = errorList.get(i);
             if (error != null) {
-                res.append(errorList.get(i)).append("\n");
+                res.append(getResourceBundle().getString(error)).append("\n");
                 fieldList.get(i).setBackground(new Background(new BackgroundFill(Color.web("#F8CECC"), null, null)));
                 fieldList.get(i).clear();
             }

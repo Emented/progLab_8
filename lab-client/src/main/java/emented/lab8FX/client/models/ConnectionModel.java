@@ -19,9 +19,9 @@ public class ConnectionModel extends AbstractModel {
 
     private final ConnectionController currentController;
 
-    public ConnectionModel(ClientSocketWorker clientSocketWorker, Stage currentStage, ConnectionController connectionController) {
+    public ConnectionModel(ClientSocketWorker clientSocketWorker, Stage currentStage, ConnectionController currentController) {
         super(clientSocketWorker, currentStage);
-        this.currentController = connectionController;
+        this.currentController = currentController;
     }
 
 
@@ -41,10 +41,10 @@ public class ConnectionModel extends AbstractModel {
             }
             AbstractResponse response = getClientSocketWorker().proceedTransaction(new ConnectionRequest(getClientInfo()));
             if (response.isSuccess()) {
-                currentController.switchScene(PathToViews.REGISTRATION_VIEW, comp -> new RegistrationController(getClientSocketWorker()));
+                currentController.switchScene(PathToViews.REGISTRATION_VIEW, comp -> new RegistrationController(getClientSocketWorker()), currentController.getResourceBundle());
             }
         } catch (IOException | ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Some troubles with connection, try again later!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         }
     }
 }

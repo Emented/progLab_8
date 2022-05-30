@@ -7,13 +7,16 @@ import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class RegistrationController extends AbstractController {
+public class RegistrationController extends AbstractController implements Initializable {
     private final RegistrationModel registrationModel;
     @FXML
     private TextField usernameField;
@@ -26,10 +29,15 @@ public class RegistrationController extends AbstractController {
         this.registrationModel = new RegistrationModel(clientSocketWorker, getCurrentStage(), this);
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
+    }
+
     @FXML
     public void loginAction() {
         try {
-            switchScene(PathToViews.LOGIN_VIEW, param -> new LoginController(registrationModel.getClientSocketWorker()));
+            switchScene(PathToViews.LOGIN_VIEW, param -> new LoginController(registrationModel.getClientSocketWorker()), getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -43,7 +51,7 @@ public class RegistrationController extends AbstractController {
             Session session = registrationModel.processRegistration(usernameField.getText(),
                     firstPasswordField.getText(),
                     secondPasswordField.getText());
-            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(registrationModel.getClientSocketWorker(), session));
+            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(registrationModel.getClientSocketWorker(), session), getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
             clearFields(textFields);

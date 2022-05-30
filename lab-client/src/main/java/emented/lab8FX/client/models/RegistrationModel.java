@@ -19,9 +19,9 @@ public class RegistrationModel extends AbstractModel {
 
     private final RegistrationController currentController;
 
-    public RegistrationModel(ClientSocketWorker clientSocketWorker, Stage currentStage, RegistrationController registrationController) {
+    public RegistrationModel(ClientSocketWorker clientSocketWorker, Stage currentStage, RegistrationController currentController) {
         super(clientSocketWorker, currentStage);
-        this.currentController = registrationController;
+        this.currentController = currentController;
     }
 
     public Session processRegistration(String username, String fPassword, String sPassword) throws ExceptionWithAlert, FieldsValidationException {
@@ -40,9 +40,9 @@ public class RegistrationModel extends AbstractModel {
                 throw new ExceptionWithAlert(response.getMessage());
             }
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection, try again later!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

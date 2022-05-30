@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ConnectionValidator {
+public final class  ConnectionValidator {
 
     private ConnectionValidator() {
     }
@@ -18,7 +18,7 @@ public final class ConnectionValidator {
             InetAddress.getByName(address);
             return address;
         } catch (UnknownHostException e) {
-            throw new IllegalArgumentException("Wrong address!");
+            throw new IllegalArgumentException("connection_exception.wrong_address");
         }
     }
 
@@ -30,10 +30,10 @@ public final class ConnectionValidator {
         try {
             portNum = Integer.parseInt(port);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Port should be a number!");
+            throw new IllegalArgumentException("connection_exception.port_number");
         }
         if (portNum <= 0 || portNum > 65535) {
-            throw new IllegalArgumentException("Port should be a number between 1 and 65535!");
+            throw new IllegalArgumentException("connection_exception.port_range");
         }
         return portNum;
     }

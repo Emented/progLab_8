@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class App extends Application {
 
@@ -22,13 +24,15 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         ClientSocketWorker clientSocketWorker = new ClientSocketWorker();
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(PathToViews.CONNECTION_VIEW.getPath()));
-        fxmlLoader.setControllerFactory(cont -> new ConnectionController(clientSocketWorker));
-        Parent parent = fxmlLoader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(App.class.getResource(PathToViews.CONNECTION_VIEW.getPath()));
+        loader.setResources(ResourceBundle.getBundle("localization.locale", new Locale("en")));
+        loader.setControllerFactory(cont -> new ConnectionController(clientSocketWorker));
+        Parent parent = loader.load();
         scene = new Scene(parent);
-        ConnectionController connectionController = fxmlLoader.getController();
+        ConnectionController connectionController = loader.getController();
         connectionController.setCurrentStage(primaryStage);
-        primaryStage.setTitle("MusicBands Application");
+        primaryStage.setTitle(loader.getResources().getString("app.menu"));
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();

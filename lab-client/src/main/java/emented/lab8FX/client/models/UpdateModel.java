@@ -23,12 +23,12 @@ public class UpdateModel extends AbstractModel {
 
     private final Session session;
 
-    private final UpdateController updateController;
+    private final UpdateController currentController;
 
-    public UpdateModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, UpdateController updateController) {
+    public UpdateModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, UpdateController currentController) {
         super(clientSocketWorker, currentStage);
         this.session = session;
-        this.updateController = updateController;
+        this.currentController = currentController;
     }
 
     public Alert processUpdate(String id, String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException, ExceptionWithAlert {
@@ -48,9 +48,9 @@ public class UpdateModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -67,9 +67,9 @@ public class UpdateModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

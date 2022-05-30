@@ -11,25 +11,25 @@ public final class UserValidotor {
 
     private static void validateUsername(String username) {
         if (username.length() < 5) {
-            throw new IllegalArgumentException("Login should be longer than 5 symbols!");
+            throw new IllegalArgumentException("user_exception.small_username");
         }
         if (username.split(" ").length != 1) {
-            throw new IllegalArgumentException("Username should not have spaces!");
+            throw new IllegalArgumentException("user_exception.splited_username");
         }
     }
 
     private static void validatePassword(String password) {
         if (password.length() < 5) {
-            throw new IllegalArgumentException("Password should be longer than 5 symbols!");
+            throw new IllegalArgumentException("user_exception.small_password");
         }
         if (password.split(" ").length != 1) {
-            throw new IllegalArgumentException("Password should not have spaces!");
+            throw new IllegalArgumentException("user_exception.splited_password");
         }
     }
 
     private static void validatePasswordsMatch(String fPassword, String sPassword) {
         if (!fPassword.equals(sPassword)) {
-            throw new IllegalArgumentException("Passwords doesn't match!");
+            throw new IllegalArgumentException("user_exception.passwords_mismatch");
         }
     }
 

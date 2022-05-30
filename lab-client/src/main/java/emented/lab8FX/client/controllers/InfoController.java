@@ -5,22 +5,28 @@ import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.common.entities.MusicBand;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
-public class InfoController extends AbstractController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class InfoController extends AbstractController implements Initializable {
 
 
     private final MusicBand musicBand;
     private final MainModel mainModel;
     @FXML
-    public Label bandLabel;
+    private Label bandLabel;
 
     public InfoController(MusicBand band, MainModel mainModel) {
         this.musicBand = band;
         this.mainModel = mainModel;
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
         bandLabel.setText(musicBand.toString());
     }
 
@@ -29,7 +35,8 @@ public class InfoController extends AbstractController {
         try {
             UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
                     param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
-                    "Update menu");
+                    getResourceBundle().getString("update_menu.title"),
+                    getResourceBundle());
             controller.setFields(musicBand.getId(),
                     musicBand.getName(),
                     musicBand.getCoordinates().getX(),
@@ -49,7 +56,8 @@ public class InfoController extends AbstractController {
         try {
             RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
                     param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
-                    "Remove by id menu");
+                    getResourceBundle().getString("remove_by_id.title"),
+                    getResourceBundle());
             controller.setField(musicBand.getId());
             getCurrentStage().close();
         } catch (ExceptionWithAlert e) {

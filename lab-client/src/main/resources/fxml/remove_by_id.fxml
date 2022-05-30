@@ -13,7 +13,7 @@
             <children>
                 <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <center>
-                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove by id" textAlignment="CENTER" wrappingWidth="343.9716796875">
+                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="%remove_by_id.subtitle" textAlignment="CENTER" wrappingWidth="343.9716796875">
                             <font>
                                 <Font name="Verdana Bold" size="33.0" />
                             </font>
@@ -22,17 +22,17 @@
                 </BorderPane>
             </children>
         </AnchorPane>
-        <TextField fx:id="idField" layoutX="113.0" layoutY="120.0" prefHeight="30.0" prefWidth="231.0" promptText="Input ID..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="36.0">
+        <TextField fx:id="idField" layoutX="113.0" layoutY="120.0" prefHeight="30.0" prefWidth="231.0" promptText="%remove_by_id.text_field.id" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="36.0">
             <font>
                 <Font name="Verdana" size="14.0" />
             </font>
         </TextField>
-        <Text layoutX="48.0" layoutY="142.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Id" textAlignment="CENTER">
+        <Text layoutX="48.0" layoutY="142.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="%remove_by_id.text.id" textAlignment="CENTER">
             <font>
                 <Font name="Verdana" size="19.0" />
             </font>
         </Text>
-        <Button fx:id="removeButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="Remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+        <Button fx:id="removeButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="%remove_by_id.button.remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
             <font>
                 <Font name="Verdana Bold" size="22.0" />
             </font>

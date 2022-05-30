@@ -13,7 +13,7 @@
             <children>
                 <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <center>
-                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Info" textAlignment="CENTER" wrappingWidth="343.9716796875">
+                        <Text focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="%visual_info.subtitle" textAlignment="CENTER" wrappingWidth="343.9716796875">
                             <font>
                                 <Font name="Verdana Bold" size="33.0" />
                             </font>
@@ -22,17 +22,17 @@
                 </BorderPane>
             </children>
         </AnchorPane>
-        <Button fx:id="updateButton" layoutX="35.0" layoutY="423.0" mnemonicParsing="false" onAction="#updateAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Update" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="30.0">
+        <Button fx:id="updateButton" layoutX="35.0" layoutY="423.0" mnemonicParsing="false" onAction="#updateAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%visual_info.button.update" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="30.0">
             <font>
                 <Font name="Verdana Bold" size="22.0" />
             </font>
         </Button>
-        <Button fx:id="removeButton" layoutX="173.0" layoutY="423.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="173.0">
+        <Button fx:id="removeButton" layoutX="173.0" layoutY="423.0" mnemonicParsing="false" onAction="#removeAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%visual_info.button.remove" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="173.0">
             <font>
                 <Font name="Verdana Bold" size="22.0" />
             </font>
         </Button>
-      <Button fx:id="closeButton" layoutX="321.0" layoutY="423.0" mnemonicParsing="false" onAction="#closeAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="Close" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="30.0">
+      <Button fx:id="closeButton" layoutX="321.0" layoutY="423.0" mnemonicParsing="false" onAction="#closeAction" prefHeight="46.0" prefWidth="133.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/exit_buttons.css" text="%visual_info.button.close" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="30.0">
          <font>
             <Font name="Verdana Bold" size="22.0" />
          </font>

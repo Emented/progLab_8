@@ -79,9 +79,9 @@ public class MainModel extends AbstractModel {
                 currentController.updateTable(((CollectionResponse) response).getCollection(), ((CollectionResponse) response).getUsersIds());
             }
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -93,9 +93,9 @@ public class MainModel extends AbstractModel {
                     getClientInfo()));
             return response.toString();
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -107,9 +107,9 @@ public class MainModel extends AbstractModel {
                     getClientInfo()));
             return response.toString();
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -121,9 +121,9 @@ public class MainModel extends AbstractModel {
                     getClientInfo()));
             return response.toString();
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -216,11 +216,12 @@ public class MainModel extends AbstractModel {
         }
     }
 
-    private void showInfoElement(MusicBand musicBand) {
+    public void showInfoElement(MusicBand musicBand) {
         try {
             currentController.showPopUpStage(PathToViews.INFO_VIEW,
                     param -> new InfoController(musicBand, this),
-                    "Info menu");
+                    currentController.getResourceBundle().getString("visual_info.title"),
+                    currentController.getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }

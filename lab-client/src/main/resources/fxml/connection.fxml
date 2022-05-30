@@ -13,7 +13,7 @@
          <children>
             <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <center>
-                  <Text fx:id="connectLabel" focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Connection menu" textAlignment="CENTER" wrappingWidth="325.9716796875">
+                  <Text fx:id="connectLabel" focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="%connection_menu.subtitle" textAlignment="CENTER" wrappingWidth="325.9716796875">
                      <font>
                         <Font name="Verdana Bold" size="33.0" />
                      </font>
@@ -22,27 +22,27 @@
             </BorderPane>
          </children>
       </AnchorPane>
-      <TextField fx:id="addressField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="Input address..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <TextField fx:id="addressField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="%connection_menu.text_field.address" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
             <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="35.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" textAlignment="CENTER">
+      <Text layoutX="35.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="%connection_menu.address" textAlignment="CENTER">
          <font>
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <TextField fx:id="portField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="Input port..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <TextField fx:id="portField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="%connection_menu.text_field.port" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
             <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="53.0" layoutY="192.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Port" textAlignment="CENTER">
+      <Text layoutX="40.0" layoutY="192.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="%connection_menu.port" textAlignment="CENTER">
          <font>
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <Button fx:id="connectButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#connectAction" prefHeight="46.0" prefWidth="371.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="39.0">
+      <Button fx:id="connectButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#connectAction" prefHeight="46.0" prefWidth="371.0" style="-fx-border-color: black; -fx-border-radius: 2;" stylesheets="@../css/buttons.css" text="%connection_menu.button.connect" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="39.0">
          <font>
             <Font name="Verdana Bold" size="24.0" />
          </font>

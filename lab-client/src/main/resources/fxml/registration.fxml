@@ -14,7 +14,7 @@
          <children>
             <BorderPane layoutY="3.0" prefHeight="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <center>
-                  <Text fx:id="connectLabel" focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Registration menu" textAlignment="CENTER" wrappingWidth="343.9716796875">
+                  <Text fx:id="connectLabel" focusTraversable="true" strokeType="OUTSIDE" strokeWidth="0.0" text="%register_menu.subtitle" textAlignment="CENTER" wrappingWidth="382.9716796875">
                      <font>
                         <Font name="Verdana Bold" size="33.0" />
                      </font>
@@ -23,42 +23,42 @@
             </BorderPane>
          </children>
       </AnchorPane>
-      <TextField fx:id="usernameField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="Input username..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <TextField fx:id="usernameField" layoutX="144.0" layoutY="118.0" prefHeight="29.0" prefWidth="270.0" promptText="%register_menu.text_field.username" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
             <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <Text layoutX="26.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER">
+      <Text layoutX="34.0" layoutY="140.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="%register_menu.username" textAlignment="CENTER">
          <font>
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <Text layoutX="29.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+      <Text layoutX="36.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%register_menu.password">
          <font>
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <Button fx:id="registrationButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#registerAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="Register" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0">
+      <Button fx:id="registrationButton" layoutX="40.0" layoutY="220.0" mnemonicParsing="false" onAction="#registerAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="%register_menu.button.register" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="40.0">
          <font>
             <Font name="Verdana Bold" size="22.0" />
          </font>
       </Button>
-      <Text layoutX="26.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat password" textAlignment="CENTER" wrappingWidth="96.84814453125">
+      <Text layoutX="23.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%register_menu.repeat_password" textAlignment="CENTER" wrappingWidth="120.84814453125">
          <font>
             <Font name="Verdana" size="19.0" />
          </font>
       </Text>
-      <Button fx:id="loginButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="Login" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="40.0">
+      <Button fx:id="loginButton" layoutX="243.0" layoutY="290.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: black; -fx-background-radius: 2;" stylesheets="@../css/buttons.css" text="%register_menu.button.login" textAlignment="CENTER" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="40.0">
          <font>
             <Font name="Verdana Bold" size="22.0" />
          </font>
       </Button>
-      <PasswordField fx:id="firstPasswordField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="Input password..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <PasswordField fx:id="firstPasswordField" layoutX="144.0" layoutY="170.0" prefHeight="29.0" prefWidth="270.0" promptText="%register_menu.text_field.password" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
             <Font name="Verdana" size="14.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="secondPasswordField" layoutX="144.0" layoutY="228.0" prefHeight="29.0" prefWidth="270.0" promptText="Input password..." style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
+      <PasswordField fx:id="secondPasswordField" layoutX="144.0" layoutY="228.0" prefHeight="29.0" prefWidth="270.0" promptText="%register_menu.text_field.repeat_password" style="-fx-border-color: black; -fx-border-radius: 2;" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="36.0">
          <font>
             <Font name="Verdana" size="14.0" />
          </font>

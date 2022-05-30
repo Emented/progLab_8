@@ -18,8 +18,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -29,14 +29,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MainController extends AbstractController {
+public class MainController extends AbstractController implements Initializable {
 
     private final MainModel mainModel;
     private final ObservableList<MusicBand> musicBandsList = FXCollections.observableArrayList();
@@ -99,18 +98,27 @@ public class MainController extends AbstractController {
         mainModel = new MainModel(clientSocketWorker, getCurrentStage(), session, this);
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
         userInfoButton.setText(mainModel.getSession().getUsername());
-        connectionLabel.setText("Connected to " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
+        connectionLabel.setText(getResourceBundle().getString("main_menu.text.connection") + " " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
         languageBox.setItems(FXCollections.observableArrayList(Stream.of(LanguagesEnum.values()).collect(Collectors.toList())));
-        languageBox.setValue(LanguagesEnum.ENGLISH);
+        languageBox.setValue(getLanguage(getResourceBundle().getLocale().getLanguage()));
         languageBox.getSelectionModel().selectedItemProperty().addListener((m, oldValue, newValue) -> {
-            System.out.println(newValue);
+            try {
+                setResourceBundle(ResourceBundle.getBundle("localization.locale", new Locale(newValue.getLanguageName())));
+                switchScene(PathToViews.MAIN_VIEW,
+                        param -> new MainController(mainModel.getClientSocketWorker(), mainModel.getSession()), getResourceBundle());
+                languageBox.setValue(newValue);
+            } catch (ExceptionWithAlert e) {
+                e.showAlert();
+            }
         });
         genreFilter.setOnMouseClicked(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)){
-                if(event.getClickCount() == 2){
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
                     genreFilter.getSelectionModel().clearSelection();
                 }
             }
@@ -141,7 +149,7 @@ public class MainController extends AbstractController {
             } catch (ExceptionWithAlert e) {
                 e.showAlert();
             }
-            switchButton.setText("Switch to table");
+            switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_table"));
         } else {
             tablePain.setVisible(true);
             clearFilterButton.setVisible(true);
@@ -151,14 +159,16 @@ public class MainController extends AbstractController {
             } catch (ExceptionWithAlert e) {
                 e.showAlert();
             }
-            switchButton.setText("Switch to visual");
+            switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_visual"));
         }
     }
 
     @FXML
     public void logoutAction() {
         try {
-            switchScene(PathToViews.LOGIN_VIEW, param -> new LoginController(mainModel.getClientSocketWorker()));
+            switchScene(PathToViews.LOGIN_VIEW,
+                    param -> new LoginController(mainModel.getClientSocketWorker()),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -167,7 +177,12 @@ public class MainController extends AbstractController {
     @FXML
     public void addAction() {
         try {
-            showPopUpStage(PathToViews.ADD_VIEW, param -> new AddController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Add menu");
+            showPopUpStage(PathToViews.ADD_VIEW,
+                    param -> new AddController(mainModel.getClientSocketWorker(),
+                    mainModel.getSession(),
+                    mainModel),
+                    getResourceBundle().getString("add_menu.title"),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -176,7 +191,8 @@ public class MainController extends AbstractController {
     @FXML
     public void clearAction() {
         try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, mainModel.processClearAction());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    mainModel.processClearAction());
             alert.setHeaderText(null);
             alert.showAndWait();
             mainModel.getNewCollection();
@@ -188,7 +204,8 @@ public class MainController extends AbstractController {
     @FXML
     public void infoAction() {
         try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, mainModel.processInfoAction());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    mainModel.processInfoAction());
             alert.setHeaderText(null);
             alert.showAndWait();
         } catch (ExceptionWithAlert e) {
@@ -199,7 +216,8 @@ public class MainController extends AbstractController {
     @FXML
     public void historyAction() {
         try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, mainModel.processHistoryAction());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    mainModel.processHistoryAction());
             alert.setHeaderText(null);
             alert.showAndWait();
         } catch (ExceptionWithAlert e) {
@@ -208,13 +226,13 @@ public class MainController extends AbstractController {
     }
 
     @FXML
-    public void executeScriptAction() {
-    }
-
-    @FXML
     public void countAction() {
         try {
-            showPopUpStage(PathToViews.COUNT_VIEW, param -> new CountController(mainModel.getClientSocketWorker(), mainModel.getSession()), "Count menu");
+            showPopUpStage(PathToViews.COUNT_VIEW,
+                    param -> new CountController(mainModel.getClientSocketWorker(),
+                    mainModel.getSession()),
+                    getResourceBundle().getString("count_less.title"),
+                    getResourceBundle());
             mainModel.getNewCollection();
         } catch (ExceptionWithAlert e) {
             e.showAlert();
@@ -230,7 +248,12 @@ public class MainController extends AbstractController {
     @FXML
     public void updateAction() {
         try {
-            showPopUpStage(PathToViews.UPDATE_VIEW, param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Update menu");
+            showPopUpStage(PathToViews.UPDATE_VIEW,
+                    param -> new UpdateController(mainModel.getClientSocketWorker(),
+                            mainModel.getSession(),
+                            mainModel),
+                    getResourceBundle().getString("update_menu.title"),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -239,7 +262,12 @@ public class MainController extends AbstractController {
     @FXML
     public void removeByIdAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW, param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove by id menu");
+            showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
+                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(),
+                            mainModel.getSession(),
+                            mainModel),
+                    getResourceBundle().getString("remove_by_id.title"),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -248,7 +276,12 @@ public class MainController extends AbstractController {
     @FXML
     public void removeGreaterAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_GREATER_VIEW, param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove greater menu");
+            showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
+                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(),
+                    mainModel.getSession(),
+                            mainModel),
+                    getResourceBundle().getString("remove_greater.title"),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -257,7 +290,12 @@ public class MainController extends AbstractController {
     @FXML
     public void removeByNumberOfParticipantsAction() {
         try {
-            showPopUpStage(PathToViews.REMOVE_ANY_VIEW, param -> new RemoveAnyController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel), "Remove any menu");
+            showPopUpStage(PathToViews.REMOVE_ANY_VIEW,
+                    param -> new RemoveAnyController(mainModel.getClientSocketWorker(),
+                            mainModel.getSession(),
+                            mainModel),
+                    getResourceBundle().getString("remove_by_number.title"),
+                    getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
         }
@@ -268,16 +306,26 @@ public class MainController extends AbstractController {
         tableView.setRowFactory(
                 tableView -> {
                     final TableRow<MusicBand> row = new TableRow<>();
+                    row.setOnMouseClicked(event -> {
+                        if(event.getButton().equals(MouseButton.PRIMARY)) {
+                            if(event.getClickCount() == 2) {
+                                mainModel.showInfoElement(row.getItem());
+                            }
+                        }
+                    });
                     final ContextMenu rowMenu = new ContextMenu();
-                    MenuItem editItem = new MenuItem("Update");
-                    MenuItem removeItem = new MenuItem("Remove by id");
-                    MenuItem removeGreaterItem = new MenuItem("Remove greater");
-                    MenuItem countItem = new MenuItem("Count less than number of participants");
+                    MenuItem editItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.update"));
+                    MenuItem removeItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.remove.remove_id"));
+                    MenuItem removeGreaterItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.remove.remove_greater"));
+                    MenuItem countItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.count_less"));
                     editItem.setOnAction(event -> {
                         try {
                             UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
-                                    param -> new UpdateController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
-                                    "Update menu");
+                                    param -> new UpdateController(mainModel.getClientSocketWorker(),
+                                            mainModel.getSession(),
+                                            mainModel),
+                                    getResourceBundle().getString("update_menu.title"),
+                                    getResourceBundle());
                             controller.setFields(row.getItem().getId(),
                                     row.getItem().getName(),
                                     row.getItem().getCoordinates().getX(),
@@ -293,8 +341,11 @@ public class MainController extends AbstractController {
                     removeItem.setOnAction(event -> {
                         try {
                             RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
-                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
-                                    "Remove by id menu");
+                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(),
+                                            mainModel.getSession(),
+                                            mainModel),
+                                    getResourceBundle().getString("remove_by_id.title"),
+                                    getResourceBundle());
                             controller.setField(row.getItem().getId());
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
@@ -303,8 +354,11 @@ public class MainController extends AbstractController {
                     removeGreaterItem.setOnAction(event -> {
                         try {
                             RemoveGreaterController controller = showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
-                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(), mainModel.getSession(), mainModel),
-                                    "Remove grater menu");
+                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(),
+                                            mainModel.getSession(),
+                                            mainModel),
+                                    getResourceBundle().getString("remove_greater.title"),
+                                    getResourceBundle());
                             controller.setFields(row.getItem().getName(),
                                     row.getItem().getCoordinates().getX(),
                                     row.getItem().getCoordinates().getY(),
@@ -319,8 +373,10 @@ public class MainController extends AbstractController {
                     countItem.setOnAction(event -> {
                         try {
                             CountController controller = showPopUpStage(PathToViews.COUNT_VIEW,
-                                    param -> new CountController(mainModel.getClientSocketWorker(), mainModel.getSession()),
-                                    "Count menu");
+                                    param -> new CountController(mainModel.getClientSocketWorker(),
+                                            mainModel.getSession()),
+                                    getResourceBundle().getString("count_less.title"),
+                                    getResourceBundle());
                             controller.setField(row.getItem().getNumberOfParticipants());
                         } catch (ExceptionWithAlert e) {
                             e.showAlert();
@@ -437,6 +493,18 @@ public class MainController extends AbstractController {
             fade.setNode(node);
             fade.play();
             bandsPane.getChildren().add(node);
+        }
+    }
+
+    private LanguagesEnum getLanguage(String s) {
+        if ("".equals(s)) {
+            return LanguagesEnum.ENGLISH;
+        } else if ("sk".equals(s)) {
+            return LanguagesEnum.SLOVAK;
+        } else if ("lt".equals(s)) {
+            return LanguagesEnum.LITHUANIAN;
+        } else {
+            return LanguagesEnum.SPANISH;
         }
     }
 }

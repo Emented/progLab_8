@@ -11,7 +11,7 @@ public class BandValidator {
 
     public static String validateName(String name) {
         if (name.length() < 5) {
-            throw new IllegalArgumentException("Login should be longer than 5 symbols!");
+            throw new IllegalArgumentException("band_exception.name_length");
         }
         return name;
     }
@@ -21,10 +21,10 @@ public class BandValidator {
         try {
             xNum = Double.parseDouble(x);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("X should be a number!");
+            throw new IllegalArgumentException("band_exception.x_number");
         }
         if (xNum < 0 || xNum > 947) {
-            throw new IllegalArgumentException("X coordinate should be a number between 0 and 947!");
+            throw new IllegalArgumentException("band_exception.x_range");
         }
         return xNum;
     }
@@ -34,10 +34,10 @@ public class BandValidator {
         try {
             yNum = Float.parseFloat(y);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Y should be a number!");
+            throw new IllegalArgumentException("band_exception.y_number");
         }
         if (yNum < 0 || yNum > 104) {
-            throw new IllegalArgumentException("Y coordinate should be a number between 0 and 104!");
+            throw new IllegalArgumentException("band_exception.y_range");
         }
         return yNum;
     }
@@ -47,10 +47,10 @@ public class BandValidator {
         try {
             number = Long.parseLong(numberOfParticipants);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Number of participants should be a number!");
+            throw new IllegalArgumentException("band_exception.number_number");
         }
         if (number <= 0) {
-            throw new IllegalArgumentException("Number of participants should be grater then 0!");
+            throw new IllegalArgumentException("band_exception.number_range");
         }
         return number;
     }

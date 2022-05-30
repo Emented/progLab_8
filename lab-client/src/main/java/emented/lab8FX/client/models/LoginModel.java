@@ -19,9 +19,9 @@ public class LoginModel extends AbstractModel {
 
     private final LoginController currentController;
 
-    public LoginModel(ClientSocketWorker clientSocketWorker, Stage currentStage, LoginController loginController) {
+    public LoginModel(ClientSocketWorker clientSocketWorker, Stage currentStage, LoginController currentController) {
         super(clientSocketWorker, currentStage);
-        this.currentController = loginController;
+        this.currentController = currentController;
     }
 
     public Session processLogin(String username, String password) throws ExceptionWithAlert, FieldsValidationException {
@@ -40,9 +40,9 @@ public class LoginModel extends AbstractModel {
                 throw new ExceptionWithAlert(response.getMessage());
             }
         } catch (IOException e) {
-            throw new ExceptionWithAlert("Some troubles with connection, try again later!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

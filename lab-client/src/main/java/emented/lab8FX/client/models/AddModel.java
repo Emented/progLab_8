@@ -21,12 +21,12 @@ public class AddModel extends AbstractModel {
 
     private final Session session;
 
-    private final AddController addController;
+    private final AddController currentController;
 
-    public AddModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, AddController addController) {
+    public AddModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, AddController currentController) {
         super(clientSocketWorker, currentStage);
         this.session = session;
-        this.addController = addController;
+        this.currentController = currentController;
     }
 
     public Alert processAdd(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException, ExceptionWithAlert {
@@ -44,9 +44,9 @@ public class AddModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 
@@ -65,9 +65,9 @@ public class AddModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

@@ -19,12 +19,12 @@ public class RemoveByIdModel extends AbstractModel {
 
     private final Session session;
 
-    private final RemoveByIdController removeByIdController;
+    private final RemoveByIdController currentController;
 
-    public RemoveByIdModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, RemoveByIdController removeByIdController) {
+    public RemoveByIdModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, RemoveByIdController currentController) {
         super(clientSocketWorker, currentStage);
         this.session = session;
-        this.removeByIdController = removeByIdController;
+        this.currentController = currentController;
     }
 
     public Alert processRemove(String id) throws FieldsValidationException, ExceptionWithAlert {
@@ -41,9 +41,9 @@ public class RemoveByIdModel extends AbstractModel {
             return getResponseInfo(response);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ExceptionWithAlert("Some troubles with connection!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert("Response came damaged!");
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }
