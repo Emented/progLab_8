@@ -3,6 +3,7 @@ package emented.lab8FX.client.controllers;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.MusicBand;
@@ -66,6 +67,8 @@ public class MainController extends AbstractController {
     @FXML
     public Button clearFilterButton;
     @FXML
+    public ChoiceBox<LanguagesEnum> languageBox;
+    @FXML
     private ComboBox<MusicGenre> genreFilter;
     @FXML
     private TableView<MusicBand> tableView;
@@ -100,6 +103,11 @@ public class MainController extends AbstractController {
         userInfoButton.setText(mainModel.getSession().getUsername());
         connectionLabel.setText("Connected to " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        languageBox.setItems(FXCollections.observableArrayList(Stream.of(LanguagesEnum.values()).collect(Collectors.toList())));
+        languageBox.setValue(LanguagesEnum.ENGLISH);
+        languageBox.getSelectionModel().selectedItemProperty().addListener((m, oldValue, newValue) -> {
+            System.out.println(newValue);
+        });
         genreFilter.setOnMouseClicked(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)){
                 if(event.getClickCount() == 2){
