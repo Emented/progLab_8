@@ -46,6 +46,7 @@ public class AddController extends AbstractController {
 
     public void initialize() {
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        addRegex(xField, yField, numberField);
     }
 
 

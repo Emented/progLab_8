@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -82,6 +83,16 @@ public abstract class AbstractController {
             }
         }
         showErrorAlert(res.toString());
+    }
+
+    public void addRegex(TextField... textFields) {
+        for (TextField t : textFields) {
+            t.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
+                if (!"9876543210-".contains(keyEvent.getCharacter())) {
+                    keyEvent.consume();
+                }
+            });
+        }
     }
 
     public void clearFields(List<TextField> fieldList) {

@@ -80,7 +80,7 @@ public class RequestThread implements Runnable {
         } else if (request.getType().equals(LoginRequest.class)) {
             return usersManager.loginUser((LoginRequest) request);
         } else if (request.getType().equals(CollectionRequest.class)) {
-            return new CollectionResponse(true, "Collection", commandManager.returnCollection());
+            return commandManager.returnCollection((CollectionRequest) request);
         } else if (request.getType().equals(CheckIdRequest.class)) {
             return commandManager.checkId((CheckIdRequest) request);
         } else {

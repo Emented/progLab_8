@@ -45,6 +45,7 @@ public class RemoveGreaterController extends AbstractController {
 
     public void initialize() {
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        addRegex(xField, yField, nameField);
     }
 
     public void setFields(String name, Double x, Float y, Long number, MusicGenre genre, String description, String address) {

@@ -48,6 +48,7 @@ public class UpdateController extends AbstractController {
 
     public void initialize() {
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        addRegex(idField, xField, yField, nameField);
     }
 
     public void setFields(Long id, String name, Double x, Float y, Long number, MusicGenre genre, String description, String address) {

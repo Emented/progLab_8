@@ -4,6 +4,7 @@ import emented.lab8FX.common.entities.enums.MusicGenre;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class MusicBand implements Serializable, Comparable<MusicBand> {
 
@@ -185,5 +186,17 @@ public class MusicBand implements Serializable, Comparable<MusicBand> {
                 + ", description: " + ((description == null) ? "missing" : description)
                 + ", genre: " + ((genre == null) ? "not defined" : genre)
                 + ", " + ((studio == null) ? "the studio is missing" : studio);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MusicBand musicBand)) return false;
+        return numberOfParticipants == musicBand.numberOfParticipants && creationDate.equals(musicBand.creationDate) && id.equals(musicBand.id) && name.equals(musicBand.name) && coordinates.equals(musicBand.coordinates) && Objects.equals(description, musicBand.description) && genre == musicBand.genre && Objects.equals(studio, musicBand.studio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(creationDate, id, name, coordinates, numberOfParticipants, description, genre, studio);
     }
 }

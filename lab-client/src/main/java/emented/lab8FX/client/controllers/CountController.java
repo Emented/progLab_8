@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 import java.util.List;
 
@@ -21,6 +22,10 @@ public class CountController extends AbstractController {
 
     public CountController(ClientSocketWorker clientSocketWorker, Session session) {
         countModel = new CountModel(clientSocketWorker, getCurrentStage(), session, this);
+    }
+
+    public void initialize() {
+        addRegex(numberField);
     }
 
     public void setField(Long number) {

@@ -25,6 +25,10 @@ public class RemoveByIdController extends AbstractController {
         this.mainModel = mainModel;
     }
 
+    public void initialize() {
+        addRegex(idField);
+    }
+
     public void setField(Long id) {
         idField.setText(id.toString());
     }

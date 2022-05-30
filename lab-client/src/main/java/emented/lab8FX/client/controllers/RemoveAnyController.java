@@ -24,6 +24,10 @@ public class RemoveAnyController extends AbstractController {
         this.mainModel = mainModel;
     }
 
+    public void initialize() {
+        addRegex(numberField);
+    }
+
     @FXML
     public void removeAction() {
         List<TextField> textFields = List.of(numberField);

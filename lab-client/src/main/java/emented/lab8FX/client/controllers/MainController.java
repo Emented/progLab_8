@@ -7,6 +7,7 @@ import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.entities.enums.MusicGenre;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -17,11 +18,16 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,6 +57,8 @@ public class MainController extends AbstractController {
     public Pane visualPane;
     @FXML
     public Button switchButton;
+    @FXML
+    public Pane bandsPane;
     @FXML
     private ComboBox<MusicGenre> genreFilter;
     @FXML
@@ -88,6 +96,7 @@ public class MainController extends AbstractController {
         userInfoButton.setText(mainModel.getSession().getUsername());
         connectionLabel.setText("Connected to " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
+        addRegex(idFilter, numberFilter, xFilter, yFilter);
         initializeTable();
         tablePain.setVisible(true);
         visualPane.setVisible(false);
@@ -120,10 +129,17 @@ public class MainController extends AbstractController {
         tableView.getSortOrder().add(idColumn);
     }
 
-    public void updateTable(Set<MusicBand> collection) {
-        musicBandsList.clear();
-        musicBandsList.addAll(collection);
+    public void updateTable(Set<MusicBand> collection, List<Long> ids) {
+        List<Long> currentIDs = musicBandsList.stream().map(MusicBand::getId).toList();
+        List<Long> newIDs = collection.stream().map(MusicBand::getId).toList();
+        mainModel.addNewElements(collection, ids, currentIDs, newIDs);
+        mainModel.removeElements(currentIDs, newIDs);
+        mainModel.updateElements(collection, ids);
         tableView.sort();
+    }
+
+    public ObservableList<MusicBand> getMusicBandsList() {
+        return musicBandsList;
     }
 
     public void applyFilters() {
@@ -148,11 +164,66 @@ public class MainController extends AbstractController {
         if (tablePain.isVisible()) {
             tablePain.setVisible(false);
             visualPane.setVisible(true);
+            try {
+                mainModel.getNewCollection();
+                reloadVisual();
+            } catch (ExceptionWithAlert e) {
+                e.showAlert();
+            }
             switchButton.setText("Switch to table");
         } else {
             tablePain.setVisible(true);
             visualPane.setVisible(false);
+            try {
+                mainModel.getNewCollection();
+            } catch (ExceptionWithAlert e) {
+                e.showAlert();
+            }
             switchButton.setText("Switch to visual");
+        }
+    }
+
+    public void removeFromVisual(MusicBand musicBand) {
+        Canvas canvas = mainModel.getVisualBands().get(musicBand);
+        FadeTransition fade = new FadeTransition();
+        fade.setDuration(Duration.millis(1000));
+        fade.setFromValue(10);
+        fade.setToValue(0);
+        fade.setNode(canvas);
+        fade.play();
+        bandsPane.getChildren().remove(canvas);
+    }
+
+
+
+    public void addToVisual(MusicBand musicBand, boolean alien) {
+        Color color;
+        if (alien) {
+            color = Color.BLUE;
+        } else {
+            color = Color.GREEN;
+        }
+        Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
+        FadeTransition fade = new FadeTransition();
+        fade.setDuration(Duration.millis(1000));
+        fade.setFromValue(0);
+        fade.setToValue(10);
+        fade.setNode(canvas);
+        fade.play();
+        bandsPane.getChildren().add(canvas);
+    }
+
+    public void reloadVisual() {
+        ObservableList<Node> nodes = FXCollections.observableArrayList(bandsPane.getChildren());
+        bandsPane.getChildren().clear();
+        for (Node node : nodes) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.millis(1000));
+            fade.setFromValue(0);
+            fade.setToValue(10);
+            fade.setNode(node);
+            fade.play();
+            bandsPane.getChildren().add(node);
         }
     }
 

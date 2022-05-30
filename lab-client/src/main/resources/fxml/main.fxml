@@ -13,11 +13,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="730.0" prefWidth="1103.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emented.lab8FX.client.controllers.MainController">
    <children>
-      <Pane fx:id="tablePain" layoutX="272.0" layoutY="75.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+      <Pane fx:id="tablePain" layoutX="272.0" layoutY="75.0" visible="false" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
          <children>
             <TableView fx:id="tableView" editable="true" layoutY="27.0" prefHeight="630.0" prefWidth="830.0" stylesheets="@../css/table.css">
               <columns>
@@ -173,9 +176,24 @@
             </Button>
          </children>
       </AnchorPane>
-      <Pane fx:id="visualPane" layoutX="273.0" layoutY="75.0" prefHeight="657.0" prefWidth="830.0" visible="false">
+      <Pane fx:id="visualPane" layoutX="273.0" layoutY="75.0" prefHeight="657.0" prefWidth="830.0">
          <children>
-            <Label layoutX="379.0" layoutY="320.0" text="Идите нахуй" />
+            <Line endY="358.0" layoutX="15.0" layoutY="299.0" startY="-299.0" />
+            <Line endX="729.0" layoutX="100.0" layoutY="643.0" startX="-100.0" />
+            <Circle layoutX="15.0" layoutY="643.0" radius="4.0" stroke="BLACK" strokeType="INSIDE" />
+            <Polygon layoutX="15.0" layoutY="60.0" points="-8.0, -43.5, 8.0, -43.5, 0.0, -60.0" stroke="BLACK" strokeType="INSIDE" />
+            <Polygon layoutX="822.0" layoutY="695.0" points="-8.0, -43.5, 8.0, -43.5, 0.0, -60.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label layoutX="805.0" layoutY="607.0" text="X">
+               <font>
+                  <Font name="Verdana Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" text="Y">
+               <font>
+                  <Font name="Verdana Bold" size="22.0" />
+               </font>
+            </Label>
+            <Pane fx:id="bandsPane" prefHeight="657.0" prefWidth="830.0" />
          </children>
       </Pane>
    </children>

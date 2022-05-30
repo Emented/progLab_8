@@ -4,8 +4,10 @@ import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CheckIdRequest;
+import emented.lab8FX.common.util.requests.CollectionRequest;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CheckIdResponse;
+import emented.lab8FX.common.util.responses.CollectionResponse;
 import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.server.ServerConfig;
 import emented.lab8FX.server.abstractions.AbstractClientCommand;
@@ -26,8 +28,10 @@ import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.servercommands.ServerExitCommand;
 import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
+import org.checkerframework.checker.units.qual.C;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 
 public class CommandManager {
@@ -105,7 +109,14 @@ public class CommandManager {
         }
     }
 
-    public Set<MusicBand> returnCollection() {
-        return collectionManager.getMusicBands();
+    public CollectionResponse returnCollection(CollectionRequest commandRequest) {
+        try {
+            if (!dbManager.validateUser(commandRequest.getUsername(), commandRequest.getPassword())) {
+                return new CollectionResponse(false, "Login and password mismatch", null, null);
+            }
+            return new CollectionResponse(true, "Ok", collectionManager.getMusicBands(), dbManager.getIdsOfUsersElements(commandRequest.getUsername()));
+        } catch (DatabaseException e) {
+            return new CollectionResponse(false, e.getMessage(), null, null);
+        }
     }
 }
