@@ -40,7 +40,8 @@ public class DBSSHConnector implements DBConnectable {
             connectSSH();
             initializeDB();
         } catch (SQLException e) {
-            ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!" + e.getMessage()));
+            ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!"));
+            e.printStackTrace();
             System.exit(1);
         } catch (JSchException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Troubles during connecting to DB with ssh!"));

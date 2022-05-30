@@ -64,6 +64,8 @@ public class MainController extends AbstractController {
     @FXML
     public TextField addressFilter;
     @FXML
+    public Button clearFilterButton;
+    @FXML
     private ComboBox<MusicGenre> genreFilter;
     @FXML
     private TableView<MusicBand> tableView;
@@ -123,6 +125,8 @@ public class MainController extends AbstractController {
         if (tablePain.isVisible()) {
             tablePain.setVisible(false);
             visualPane.setVisible(true);
+            clearFilterButton.setVisible(false);
+
             try {
                 mainModel.getNewCollection();
                 reloadVisual();
@@ -132,6 +136,7 @@ public class MainController extends AbstractController {
             switchButton.setText("Switch to table");
         } else {
             tablePain.setVisible(true);
+            clearFilterButton.setVisible(true);
             visualPane.setVisible(false);
             try {
                 mainModel.getNewCollection();
@@ -344,7 +349,6 @@ public class MainController extends AbstractController {
         mainModel.setToolTip(genreColumn);
         mainModel.setToolTip(studioColumn);
         initializeContextMenu();
-        tableView.setItems(musicBandsList);
         tableView.getSortOrder().add(idColumn);
     }
 
@@ -365,9 +369,11 @@ public class MainController extends AbstractController {
         xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).startsWith(newValue)));
         yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).startsWith(newValue)));
         dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().toString().startsWith(newValue)));
-        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).startsWith(newValue)));
+        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.
+                setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).startsWith(newValue)));
         genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre() == genreFilter.getValue()));
-        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getDescription() == null) ? "-" : musicBand.getDescription().toLowerCase()).contains(newValue.toLowerCase())));
+        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered
+                .setPredicate(musicBand -> ((musicBand.getDescription() == null) ? "-" : musicBand.getDescription().toLowerCase()).contains(newValue.toLowerCase())));
         addressFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getStudio() == null) ? "-" : musicBand.getStudio().getAddress()).toLowerCase().contains(newValue.toLowerCase())));
         SortedList<MusicBand> sorted = new SortedList<>(filtered);
         sorted.comparatorProperty().bind(tableView.comparatorProperty());
@@ -398,9 +404,9 @@ public class MainController extends AbstractController {
     public void addToVisual(MusicBand musicBand, boolean alien) {
         Color color;
         if (alien) {
-            color = Color.BLUE;
+            color = Color.web("4143C4FF");
         } else {
-            color = Color.GREEN;
+            color = Color.web("5CD20EFF");
         }
         Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
         FadeTransition fade = new FadeTransition();
