@@ -11,7 +11,8 @@ public enum PathToViews {
     REMOVE_BY_ID_VIEW("/fxml/remove_by_id.fxml"),
     REMOVE_ANY_VIEW("/fxml/remove_any.fxml"),
     UPDATE_VIEW("/fxml/update.fxml"),
-    COUNT_VIEW("/fxml/count.fxml");
+    COUNT_VIEW("/fxml/count.fxml"),
+    INFO_VIEW("/fxml/info.fxml");
 
     private final String path;
 

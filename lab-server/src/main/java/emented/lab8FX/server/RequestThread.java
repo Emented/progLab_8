@@ -5,7 +5,6 @@ import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.*;
-import emented.lab8FX.common.util.responses.CollectionResponse;
 import emented.lab8FX.common.util.responses.ConnectionResponse;
 import emented.lab8FX.server.db.DBSSHConnector;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
@@ -14,12 +13,7 @@ import emented.lab8FX.server.util.RequestWithAddress;
 import emented.lab8FX.server.util.UsersManager;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 
 public class RequestThread implements Runnable {

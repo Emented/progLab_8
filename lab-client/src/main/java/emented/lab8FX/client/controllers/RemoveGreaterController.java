@@ -8,7 +8,6 @@ import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
@@ -45,7 +44,7 @@ public class RemoveGreaterController extends AbstractController {
 
     public void initialize() {
         genreBox.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
-        addRegex(xField, yField, nameField);
+        addRegex(xField, yField, numberField);
     }
 
     public void setFields(String name, Double x, Float y, Long number, MusicGenre genre, String description, String address) {

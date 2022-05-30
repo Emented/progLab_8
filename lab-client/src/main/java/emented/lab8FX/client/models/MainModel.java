@@ -1,8 +1,10 @@
 package emented.lab8FX.client.models;
 
+import emented.lab8FX.client.controllers.InfoController;
 import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.entities.MusicBand;
@@ -140,6 +142,17 @@ public class MainModel extends AbstractModel {
         }
         canvas.setLayoutX(15.0 + (750.0 / 947.0) * musicBand.getCoordinates().getX());
         canvas.setLayoutY(593.0 - (593.0 / 104.0) * musicBand.getCoordinates().getY());
+        canvas.setOnMouseEntered(event -> {
+            canvas.setScaleX(1.07);
+            canvas.setScaleY(1.07);
+        });
+        canvas.setOnMouseExited(event -> {
+            canvas.setScaleX(1);
+            canvas.setScaleY(1);
+        });
+        canvas.setOnMouseClicked(event -> {
+            showInfoElement(musicBand);
+        });
         visualBands.put(musicBand, canvas);
         return canvas;
     }
@@ -152,7 +165,7 @@ public class MainModel extends AbstractModel {
         gc.setStroke(color);
         gc.setLineWidth(3);
         for (int i = 0; i < amount; i++) {
-            gc.fillOval(5 + i * offset,6, 12, 12);
+            gc.fillOval(5 + i * offset, 6, 12, 12);
             gc.strokeLine(11 + i * offset, 12, 11 + i * offset, 36);
             gc.strokeLine(11 + i * offset, 17, 20 + i * offset, 29);
             gc.strokeLine(11 + i * offset, 17, 2 + i * offset, 29);
@@ -201,6 +214,17 @@ public class MainModel extends AbstractModel {
                 }
             }
         }
+    }
+
+    private void showInfoElement(MusicBand musicBand) {
+        try {
+            currentController.showPopUpStage(PathToViews.INFO_VIEW,
+                    param -> new InfoController(musicBand, this),
+                    "Info menu");
+        } catch (ExceptionWithAlert e) {
+            e.showAlert();
+        }
+
     }
 
 }

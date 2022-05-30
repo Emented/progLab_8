@@ -6,7 +6,6 @@ import emented.lab8FX.client.models.ConnectionModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 
 import java.util.Arrays;
 import java.util.List;

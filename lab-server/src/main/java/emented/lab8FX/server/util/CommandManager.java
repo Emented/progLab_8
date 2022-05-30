@@ -1,6 +1,5 @@
 package emented.lab8FX.server.util;
 
-import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.exceptions.DatabaseException;
 import emented.lab8FX.common.util.TextColoring;
 import emented.lab8FX.common.util.requests.CheckIdRequest;
@@ -12,27 +11,13 @@ import emented.lab8FX.common.util.responses.CommandResponse;
 import emented.lab8FX.server.ServerConfig;
 import emented.lab8FX.server.abstractions.AbstractClientCommand;
 import emented.lab8FX.server.abstractions.AbstractServerCommand;
-import emented.lab8FX.server.clientcommands.AddCommand;
-import emented.lab8FX.server.clientcommands.AddIfMaxCommand;
-import emented.lab8FX.server.clientcommands.ClearCommand;
-import emented.lab8FX.server.clientcommands.CountLessThanNumberOfParticipantsCommand;
-import emented.lab8FX.server.clientcommands.HistoryCommand;
-import emented.lab8FX.server.clientcommands.InfoCommand;
-import emented.lab8FX.server.clientcommands.MinByStudioCommand;
-import emented.lab8FX.server.clientcommands.RemoveAnyByNumberOfParticipantsCommand;
-import emented.lab8FX.server.clientcommands.RemoveByIdCommand;
-import emented.lab8FX.server.clientcommands.RemoveGreaterCommand;
-import emented.lab8FX.server.clientcommands.ShowCommand;
-import emented.lab8FX.server.clientcommands.UpdateCommand;
+import emented.lab8FX.server.clientcommands.*;
 import emented.lab8FX.server.db.DBManager;
 import emented.lab8FX.server.servercommands.ServerExitCommand;
 import emented.lab8FX.server.servercommands.ServerHelpCommand;
 import emented.lab8FX.server.servercommands.ServerHistoryCommand;
-import org.checkerframework.checker.units.qual.C;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Set;
 
 public class CommandManager {
     private final DBManager dbManager;

@@ -53,7 +53,7 @@ public class Studio implements Serializable, Comparable<Studio> {
      */
     @Override
     public String toString() {
-        return "адрес студии: " + address;
+        return "Studio address: " + address;
     }
 
     @Override

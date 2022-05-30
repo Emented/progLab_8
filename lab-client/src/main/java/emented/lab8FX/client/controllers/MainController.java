@@ -60,9 +60,9 @@ public class MainController extends AbstractController {
     @FXML
     public Pane bandsPane;
     @FXML
-    private ComboBox<MusicGenre> genreFilter;
-    @FXML
     public TextField addressFilter;
+    @FXML
+    private ComboBox<MusicGenre> genreFilter;
     @FXML
     private TableView<MusicBand> tableView;
     @FXML
@@ -185,15 +185,8 @@ public class MainController extends AbstractController {
 
     public void removeFromVisual(MusicBand musicBand) {
         Canvas canvas = mainModel.getVisualBands().get(musicBand);
-        FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(1000));
-        fade.setFromValue(10);
-        fade.setToValue(0);
-        fade.setNode(canvas);
-        fade.play();
         bandsPane.getChildren().remove(canvas);
     }
-
 
 
     public void addToVisual(MusicBand musicBand, boolean alien) {
@@ -205,7 +198,7 @@ public class MainController extends AbstractController {
         }
         Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
         FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(1000));
+        fade.setDuration(Duration.millis(1500));
         fade.setFromValue(0);
         fade.setToValue(10);
         fade.setNode(canvas);
@@ -218,7 +211,7 @@ public class MainController extends AbstractController {
         bandsPane.getChildren().clear();
         for (Node node : nodes) {
             FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.millis(1000));
+            fade.setDuration(Duration.millis(1500));
             fade.setFromValue(0);
             fade.setToValue(10);
             fade.setNode(node);

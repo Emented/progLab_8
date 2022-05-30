@@ -23,7 +23,7 @@ public class DBLocalConnector implements DBConnectable {
     public DBLocalConnector() {
         try {
             initializeDB();
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!" + e.getMessage()));
             System.exit(1);
         }

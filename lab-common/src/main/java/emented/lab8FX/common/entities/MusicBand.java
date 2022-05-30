@@ -178,14 +178,14 @@ public class MusicBand implements Serializable, Comparable<MusicBand> {
      */
     @Override
     public String toString() {
-        return "ID: " + id
-                + ", name: " + name
-                + ", coordinates: " + coordinates
-                + ", creation date: " + creationDate
-                + ", number of participants: " + numberOfParticipants
-                + ", description: " + ((description == null) ? "missing" : description)
-                + ", genre: " + ((genre == null) ? "not defined" : genre)
-                + ", " + ((studio == null) ? "the studio is missing" : studio);
+        return "ID: " + id + "\n"
+                + "Name: " + name + "\n"
+                + "Coordinates: " + coordinates + "\n"
+                + "Creation date: " + creationDate + "\n"
+                + "Number of participants: " + numberOfParticipants + "\n"
+                + "Description: " + ((description == null) ? "missing" : description) + "\n"
+                + "Genre: " + ((genre == null) ? "not defined" : genre) + "\n"
+                + ((studio == null) ? "The studio is missing" : studio);
     }
 
     @Override

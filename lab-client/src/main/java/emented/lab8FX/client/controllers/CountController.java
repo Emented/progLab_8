@@ -5,20 +5,17 @@ import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.CountModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 
 import java.util.List;
 
 public class CountController extends AbstractController {
 
+    private final CountModel countModel;
     @FXML
     public TextField numberField;
-
-    private final CountModel countModel;
 
     public CountController(ClientSocketWorker clientSocketWorker, Session session) {
         countModel = new CountModel(clientSocketWorker, getCurrentStage(), session, this);
