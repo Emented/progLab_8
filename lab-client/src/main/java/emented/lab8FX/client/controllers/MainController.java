@@ -30,7 +30,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,7 +73,7 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private TableView<MusicBand> tableView;
     @FXML
-    private TableColumn<MusicBand, LocalDate> creationDateColumn;
+    private TableColumn<MusicBand, String> creationDateColumn;
     @FXML
     private TableColumn<MusicBand, Long> idColumn;
     @FXML
@@ -94,6 +95,8 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private Label connectionLabel;
 
+    private DateTimeFormatter dateTimeFormatter;
+
     public MainController(ClientSocketWorker clientSocketWorker, Session session) {
         mainModel = new MainModel(clientSocketWorker, getCurrentStage(), session, this);
     }
@@ -101,6 +104,9 @@ public class MainController extends AbstractController implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setResourceBundle(resources);
+        dateTimeFormatter = DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.SHORT)
+                .withLocale(getResourceBundle().getLocale());
         userInfoButton.setText(mainModel.getSession().getUsername());
         connectionLabel.setText(getResourceBundle().getString("main_menu.text.connection") + " " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
@@ -393,7 +399,7 @@ public class MainController extends AbstractController implements Initializable 
     }
 
     private void initializeTable() {
-        creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
+        creationDateColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getCreationDate().format(dateTimeFormatter)));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         xColumn.setCellValueFactory(musicBand -> new SimpleDoubleProperty(musicBand.getValue().getCoordinates().getX()).asObject());
@@ -427,12 +433,15 @@ public class MainController extends AbstractController implements Initializable 
 
     // working with filters
     public void applyFilters() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.SHORT)
+                .withLocale(getResourceBundle().getLocale());
         FilteredList<MusicBand> filtered = new FilteredList<>(musicBandsList, t -> true);
         idFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getId()).startsWith(newValue)));
         nameFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getName().toLowerCase().contains(newValue.toLowerCase())));
         xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).startsWith(newValue)));
         yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).startsWith(newValue)));
-        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().toString().startsWith(newValue)));
+        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().format(dateTimeFormatter).startsWith(newValue)));
         numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.
                 setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).startsWith(newValue)));
         genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre() == genreFilter.getValue()));
