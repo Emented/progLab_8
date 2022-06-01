@@ -2,170 +2,81 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.models.MainModel;
-import emented.lab8FX.client.util.ClientSocketWorker;
-import emented.lab8FX.client.util.LanguagesEnum;
-import emented.lab8FX.client.util.PathToViews;
-import emented.lab8FX.client.util.Session;
+import emented.lab8FX.client.util.*;
 import emented.lab8FX.common.entities.MusicBand;
-import emented.lab8FX.common.entities.enums.MusicGenre;
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainController extends AbstractController implements Initializable {
 
-    private final MainModel mainModel;
-    private final ObservableList<MusicBand> musicBandsList = FXCollections.observableArrayList();
-    @FXML
-    public TextField dateFilter;
-    @FXML
-    public TextField idFilter;
-    @FXML
-    public TextField nameFilter;
-    @FXML
-    public TextField xFilter;
-    @FXML
-    public TextField yFilter;
-    @FXML
-    public TextField numberFilter;
-    @FXML
-    public TextField descriptionFilter;
-    @FXML
-    public Pane tablePain;
-    @FXML
-    public Pane visualPane;
     @FXML
     public Button switchButton;
     @FXML
-    public Pane bandsPane;
-    @FXML
-    public TextField addressFilter;
-    @FXML
-    public Button clearFilterButton;
-    @FXML
     public ChoiceBox<LanguagesEnum> languageBox;
     @FXML
-    private ComboBox<MusicGenre> genreFilter;
-    @FXML
-    private TableView<MusicBand> tableView;
-    @FXML
-    private TableColumn<MusicBand, String> creationDateColumn;
-    @FXML
-    private TableColumn<MusicBand, Long> idColumn;
-    @FXML
-    private TableColumn<MusicBand, String> nameColumn;
-    @FXML
-    private TableColumn<MusicBand, Double> xColumn;
-    @FXML
-    private TableColumn<MusicBand, Float> yColumn;
-    @FXML
-    private TableColumn<MusicBand, Long> numberOfParticipantsColumn;
-    @FXML
-    private TableColumn<MusicBand, String> descriptionColumn;
-    @FXML
-    private TableColumn<MusicBand, String> genreColumn;
-    @FXML
-    private TableColumn<MusicBand, String> studioColumn;
+    public Pane visualizationPane;
     @FXML
     private Button userInfoButton;
     @FXML
     private Label connectionLabel;
 
-    private DateTimeFormatter dateTimeFormatter;
+    private final MainModel mainModel;
 
-    public MainController(ClientSocketWorker clientSocketWorker, Session session) {
+    private PathToVisuals currentVisual;
+    private AbstractDataController currentDataController;
+
+    public MainController(ClientSocketWorker clientSocketWorker, Session session, PathToVisuals currentVisual) {
         mainModel = new MainModel(clientSocketWorker, getCurrentStage(), session, this);
+        this.currentVisual = currentVisual;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setResourceBundle(resources);
-        dateTimeFormatter = DateTimeFormatter
-                .ofLocalizedDate(FormatStyle.SHORT)
-                .withLocale(getResourceBundle().getLocale());
         userInfoButton.setText(mainModel.getSession().getUsername());
         connectionLabel.setText(getResourceBundle().getString("main_menu.text.connection") + " " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
-        genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
         languageBox.setItems(FXCollections.observableArrayList(Stream.of(LanguagesEnum.values()).collect(Collectors.toList())));
-        languageBox.setValue(getLanguage(getResourceBundle().getLocale().getLanguage()));
+        languageBox.setValue(mainModel.getLanguage(getResourceBundle().getLocale().getLanguage()));
         languageBox.getSelectionModel().selectedItemProperty().addListener((m, oldValue, newValue) -> {
             try {
                 setResourceBundle(ResourceBundle.getBundle("localization.locale", new Locale(newValue.getLanguageName())));
                 switchScene(PathToViews.MAIN_VIEW,
-                        param -> new MainController(mainModel.getClientSocketWorker(), mainModel.getSession()), getResourceBundle());
+                        param -> new MainController(mainModel.getClientSocketWorker(), mainModel.getSession(), currentVisual), getResourceBundle());
                 languageBox.setValue(newValue);
             } catch (ExceptionWithAlert e) {
                 e.showAlert();
             }
         });
-        genreFilter.setOnMouseClicked(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
-                if(event.getClickCount() == 2) {
-                    genreFilter.getSelectionModel().clearSelection();
-                }
-            }
-        });
-        addRegex(idFilter, numberFilter, xFilter, yFilter);
-        initializeTable();
-        tablePain.setVisible(true);
-        visualPane.setVisible(false);
-        applyFilters();
+        loadUI(currentVisual, visualizationPane);
         mainModel.runUpdateLoop();
     }
 
-    public ObservableList<MusicBand> getMusicBandsList() {
-        return musicBandsList;
+    public MainModel getMainModel() {
+        return mainModel;
     }
 
-    // working with buttons
+    public AbstractDataController getCurrentDataController() {
+        return currentDataController;
+    }
+
     @FXML
     public void switchView() {
-        if (tablePain.isVisible()) {
-            tablePain.setVisible(false);
-            visualPane.setVisible(true);
-            clearFilterButton.setVisible(false);
-
-            try {
-                mainModel.getNewCollection();
-                reloadVisual();
-            } catch (ExceptionWithAlert e) {
-                e.showAlert();
-            }
-            switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_table"));
+        if (currentVisual.equals(PathToVisuals.VISUALIZATION_VIEW)) {
+            loadUI(PathToVisuals.TABLE_VIEW, visualizationPane);
         } else {
-            tablePain.setVisible(true);
-            clearFilterButton.setVisible(true);
-            visualPane.setVisible(false);
-            try {
-                mainModel.getNewCollection();
-            } catch (ExceptionWithAlert e) {
-                e.showAlert();
-            }
-            switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_visual"));
+            loadUI(PathToVisuals.VISUALIZATION_VIEW, visualizationPane);
         }
     }
 
@@ -307,213 +218,28 @@ public class MainController extends AbstractController implements Initializable 
         }
     }
 
-    // working with table
-    private void initializeContextMenu() {
-        tableView.setRowFactory(
-                tableView -> {
-                    final TableRow<MusicBand> row = new TableRow<>();
-                    row.setOnMouseClicked(event -> {
-                        if(event.getButton().equals(MouseButton.PRIMARY)) {
-                            if(event.getClickCount() == 2) {
-                                mainModel.showInfoElement(row.getItem());
-                            }
-                        }
-                    });
-                    final ContextMenu rowMenu = new ContextMenu();
-                    MenuItem editItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.update"));
-                    MenuItem removeItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.remove.remove_id"));
-                    MenuItem removeGreaterItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.remove.remove_greater"));
-                    MenuItem countItem = new MenuItem(getResourceBundle().getString("main_menu.command_button.count_less"));
-                    editItem.setOnAction(event -> {
-                        try {
-                            UpdateController controller = showPopUpStage(PathToViews.UPDATE_VIEW,
-                                    param -> new UpdateController(mainModel.getClientSocketWorker(),
-                                            mainModel.getSession(),
-                                            mainModel),
-                                    getResourceBundle().getString("update_menu.title"),
-                                    getResourceBundle());
-                            controller.setFields(row.getItem().getId(),
-                                    row.getItem().getName(),
-                                    row.getItem().getCoordinates().getX(),
-                                    row.getItem().getCoordinates().getY(),
-                                    row.getItem().getNumberOfParticipants(),
-                                    row.getItem().getGenre(),
-                                    row.getItem().getDescription(),
-                                    (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    removeItem.setOnAction(event -> {
-                        try {
-                            RemoveByIdController controller = showPopUpStage(PathToViews.REMOVE_BY_ID_VIEW,
-                                    param -> new RemoveByIdController(mainModel.getClientSocketWorker(),
-                                            mainModel.getSession(),
-                                            mainModel),
-                                    getResourceBundle().getString("remove_by_id.title"),
-                                    getResourceBundle());
-                            controller.setField(row.getItem().getId());
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    removeGreaterItem.setOnAction(event -> {
-                        try {
-                            RemoveGreaterController controller = showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
-                                    param -> new RemoveGreaterController(mainModel.getClientSocketWorker(),
-                                            mainModel.getSession(),
-                                            mainModel),
-                                    getResourceBundle().getString("remove_greater.title"),
-                                    getResourceBundle());
-                            controller.setFields(row.getItem().getName(),
-                                    row.getItem().getCoordinates().getX(),
-                                    row.getItem().getCoordinates().getY(),
-                                    row.getItem().getNumberOfParticipants(),
-                                    row.getItem().getGenre(),
-                                    row.getItem().getDescription(),
-                                    (row.getItem().getStudio() == null) ? null : row.getItem().getStudio().getAddress());
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    countItem.setOnAction(event -> {
-                        try {
-                            CountController controller = showPopUpStage(PathToViews.COUNT_VIEW,
-                                    param -> new CountController(mainModel.getClientSocketWorker(),
-                                            mainModel.getSession()),
-                                    getResourceBundle().getString("count_less.title"),
-                                    getResourceBundle());
-                            controller.setField(row.getItem().getNumberOfParticipants());
-                        } catch (ExceptionWithAlert e) {
-                            e.showAlert();
-                        }
-                    });
-                    rowMenu.getItems().addAll(editItem, removeItem, removeGreaterItem, countItem);
-                    row.contextMenuProperty().bind(
-                            Bindings.when(row.emptyProperty())
-                                    .then((ContextMenu) null)
-                                    .otherwise(rowMenu));
-                    getCurrentStage().getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/context.css")).toExternalForm());
-                    return row;
-                });
-    }
-
-    private void initializeTable() {
-        creationDateColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getCreationDate().format(dateTimeFormatter)));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        xColumn.setCellValueFactory(musicBand -> new SimpleDoubleProperty(musicBand.getValue().getCoordinates().getX()).asObject());
-        yColumn.setCellValueFactory(musicBand -> new SimpleFloatProperty(musicBand.getValue().getCoordinates().getY()).asObject());
-        numberOfParticipantsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfParticipants"));
-        descriptionColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getDescription() != null
-                ? musicBand.getValue().getDescription()
-                : "-"));
-        genreColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getGenre() != null
-                ? musicBand.getValue().getGenre().toString()
-                : "-"));
-        studioColumn.setCellValueFactory(musicBand -> new SimpleStringProperty(musicBand.getValue().getStudio() != null
-                ? musicBand.getValue().getStudio().getAddress()
-                : "-"));
-        mainModel.setToolTip(nameColumn);
-        mainModel.setToolTip(descriptionColumn);
-        mainModel.setToolTip(genreColumn);
-        mainModel.setToolTip(studioColumn);
-        initializeContextMenu();
-        tableView.getSortOrder().add(idColumn);
-    }
-
-    public void updateTable(Set<MusicBand> collection, List<Long> usersIDs) {
-        List<Long> currentIDs = musicBandsList.stream().map(MusicBand::getId).toList();
-        List<Long> newIDs = collection.stream().map(MusicBand::getId).toList();
-        mainModel.addNewElements(collection, usersIDs, currentIDs, newIDs);
-        mainModel.removeElements(currentIDs, newIDs);
-        mainModel.updateElements(collection, usersIDs);
-        tableView.sort();
-    }
-
-    // working with filters
-    public void applyFilters() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-                .ofLocalizedDate(FormatStyle.SHORT)
-                .withLocale(getResourceBundle().getLocale());
-        FilteredList<MusicBand> filtered = new FilteredList<>(musicBandsList, t -> true);
-        idFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Long.toString(musicBand.getId()).startsWith(newValue)));
-        nameFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getName().toLowerCase().contains(newValue.toLowerCase())));
-        xFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Double.toString(musicBand.getCoordinates().getX()).startsWith(newValue)));
-        yFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> Float.toString(musicBand.getCoordinates().getY()).startsWith(newValue)));
-        dateFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> musicBand.getCreationDate().format(dateTimeFormatter).startsWith(newValue)));
-        numberFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.
-                setPredicate(musicBand -> Long.toString(musicBand.getNumberOfParticipants()).startsWith(newValue)));
-        genreFilter.setOnAction(event -> filtered.setPredicate(musicBand -> musicBand.getGenre() == genreFilter.getValue()));
-        descriptionFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered
-                .setPredicate(musicBand -> ((musicBand.getDescription() == null) ? "-" : musicBand.getDescription().toLowerCase()).contains(newValue.toLowerCase())));
-        addressFilter.textProperty().addListener((observable, oldValue, newValue) -> filtered.setPredicate(musicBand -> ((musicBand.getStudio() == null) ? "-" : musicBand.getStudio().getAddress()).toLowerCase().contains(newValue.toLowerCase())));
-        SortedList<MusicBand> sorted = new SortedList<>(filtered);
-        sorted.comparatorProperty().bind(tableView.comparatorProperty());
-        tableView.setItems(sorted);
-    }
-
-    @FXML
-    public void clearFilterAction() {
-        dateFilter.clear();
-        idFilter.clear();
-        nameFilter.clear();
-        xFilter.clear();
-        yFilter.clear();
-        numberFilter.clear();
-        descriptionFilter.clear();
-        genreFilter.getSelectionModel().clearSelection();
-        addressFilter.clear();
-        applyFilters();
-    }
-
-    // working with visual part
-    public void removeFromVisual(MusicBand musicBand) {
-        Canvas canvas = mainModel.getVisualBands().get(musicBand);
-        bandsPane.getChildren().remove(canvas);
-    }
-
-
-    public void addToVisual(MusicBand musicBand, boolean alien) {
-        Color color;
-        if (alien) {
-            color = Color.web("4143C4FF");
-        } else {
-            color = Color.web("5CD20EFF");
-        }
-        Canvas canvas = mainModel.generateBandCanvas(color, musicBand);
-        FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(1500));
-        fade.setFromValue(0);
-        fade.setToValue(10);
-        fade.setNode(canvas);
-        fade.play();
-        bandsPane.getChildren().add(canvas);
-    }
-
-    public void reloadVisual() {
-        ObservableList<Node> nodes = FXCollections.observableArrayList(bandsPane.getChildren());
-        bandsPane.getChildren().clear();
-        for (Node node : nodes) {
-            FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.millis(1500));
-            fade.setFromValue(0);
-            fade.setToValue(10);
-            fade.setNode(node);
-            fade.play();
-            bandsPane.getChildren().add(node);
-        }
-    }
-
-    private LanguagesEnum getLanguage(String s) {
-        if ("".equals(s)) {
-            return LanguagesEnum.ENGLISH;
-        } else if ("sk".equals(s)) {
-            return LanguagesEnum.SLOVAK;
-        } else if ("lt".equals(s)) {
-            return LanguagesEnum.LITHUANIAN;
-        } else {
-            return LanguagesEnum.SPANISH;
+    private void loadUI(PathToVisuals pathToViews, Pane targetPane) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pathToViews.getPath()));
+            loader.setResources(getResourceBundle());
+            if (pathToViews.equals(PathToVisuals.VISUALIZATION_VIEW)) {
+                loader.setControllerFactory(param -> new VisualizationController(this));
+                switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_table"));
+            } else if (pathToViews.equals(PathToVisuals.TABLE_VIEW)) {
+                loader.setControllerFactory(param -> new TableController(this));
+                switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_visual"));
+            }
+            currentVisual = pathToViews;
+            Parent parent = loader.load();
+            currentDataController = loader.getController();
+            mainModel.initializeCollection();
+            currentDataController.initializeElements(mainModel.getBandSet(), mainModel.getUsersIDs());
+            targetPane.getChildren().clear();
+            targetPane.getChildren().add(parent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ExceptionWithAlert e) {
+            e.showAlert();
         }
     }
 }

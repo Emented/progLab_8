@@ -5,6 +5,7 @@ import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.LoginModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
+import emented.lab8FX.client.util.PathToVisuals;
 import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,7 +40,7 @@ public class LoginController extends AbstractController implements Initializable
         try {
             Session session = loginModel.processLogin(usernameField.getText(),
                     passwordField.getText());
-            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(loginModel.getClientSocketWorker(), session), getResourceBundle());
+            switchScene(PathToViews.MAIN_VIEW, param -> new MainController(loginModel.getClientSocketWorker(), session, PathToVisuals.TABLE_VIEW), getResourceBundle());
         } catch (ExceptionWithAlert e) {
             e.showAlert();
             clearFields(textFields);

@@ -4,6 +4,7 @@ import emented.lab8FX.client.controllers.InfoController;
 import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.abstractions.AbstractResponse;
@@ -28,7 +29,10 @@ public class MainModel extends AbstractModel {
     private final static int UPDATE_TIME = 5000;
     private final Session session;
     private final MainController currentController;
-    private final HashMap<MusicBand, Canvas> visualBands = new HashMap<>();
+
+    private final Set<MusicBand> bandSet = new HashSet<>();
+
+    private final List<Long> usersIDs = new ArrayList<>();
 
     public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
         super(clientSocketWorker, currentStage);
@@ -54,8 +58,12 @@ public class MainModel extends AbstractModel {
         return session;
     }
 
-    public HashMap<MusicBand, Canvas> getVisualBands() {
-        return visualBands;
+    public Set<MusicBand> getBandSet() {
+        return bandSet;
+    }
+
+    public List<Long> getUsersIDs() {
+        return usersIDs;
     }
 
     public void setToolTip(TableColumn<MusicBand, String> tableColumn) {
@@ -76,7 +84,34 @@ public class MainModel extends AbstractModel {
         try {
             AbstractResponse response = getClientSocketWorker().proceedTransaction(new CollectionRequest(session.getUsername(), session.getPassword(), getClientInfo()));
             if (response.getType().equals(CollectionResponse.class) && response.isSuccess()) {
-                currentController.updateTable(((CollectionResponse) response).getCollection(), ((CollectionResponse) response).getUsersIds());
+                Set<MusicBand> newCollection = ((CollectionResponse) response).getCollection();
+                List<Long> newIDs = ((CollectionResponse) response).getUsersIds();
+                currentController.getCurrentDataController().updateElements(getElementsToAdd(newCollection),
+                        getElementsToRemove(newCollection),
+                        getElementsToUpdate(newCollection),
+                        newIDs);
+                bandSet.clear();
+                bandSet.addAll(newCollection);
+                usersIDs.clear();
+                usersIDs.addAll(newIDs);
+            }
+        } catch (IOException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+        }
+    }
+
+    public void initializeCollection() throws ExceptionWithAlert {
+        try {
+            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CollectionRequest(session.getUsername(), session.getPassword(), getClientInfo()));
+            if (response.getType().equals(CollectionResponse.class) && response.isSuccess()) {
+                Set<MusicBand> newCollection = ((CollectionResponse) response).getCollection();
+                List<Long> newIDs = ((CollectionResponse) response).getUsersIds();
+                bandSet.clear();
+                bandSet.addAll(newCollection);
+                usersIDs.clear();
+                usersIDs.addAll(newIDs);
             }
         } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
@@ -150,10 +185,7 @@ public class MainModel extends AbstractModel {
             canvas.setScaleX(1);
             canvas.setScaleY(1);
         });
-        canvas.setOnMouseClicked(event -> {
-            showInfoElement(musicBand);
-        });
-        visualBands.put(musicBand, canvas);
+        canvas.setOnMouseClicked(event -> showInfoElement(musicBand));
         return canvas;
     }
 
@@ -175,45 +207,43 @@ public class MainModel extends AbstractModel {
         return canvas;
     }
 
-    public void updateElements(Set<MusicBand> collection, List<Long> usersIDs) {
-        List<Long> currentIDs;
-        currentIDs = currentController.getMusicBandsList().stream().map(MusicBand::getId).toList();
-        for (Long id : currentIDs) {
-            MusicBand m = collection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-            MusicBand n = currentController.getMusicBandsList().stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+    public List<MusicBand> getElementsToUpdate(Set<MusicBand> newCollection) {
+        List<Long> newIDs = newCollection.stream().map(MusicBand::getId).toList();
+        List<MusicBand> elementsToUpdate = new ArrayList<>();
+        for (Long id : newIDs) {
+            MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+            MusicBand n = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
             if (!m.equals(n)) {
-                currentController.getMusicBandsList().remove(n);
-                currentController.getMusicBandsList().add(m);
-                Platform.runLater(() -> {
-                    currentController.removeFromVisual(n);
-                    currentController.addToVisual(m, !usersIDs.contains(id));
-                });
+                elementsToUpdate.add(m);
             }
         }
+        return elementsToUpdate;
     }
 
-    public void removeElements(List<Long> currentIDs, List<Long> newIDs) {
-        for (Long id : currentIDs) {
-            if (!newIDs.contains(id)) {
-                MusicBand m = currentController.getMusicBandsList().stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-                currentController.getMusicBandsList().remove(m);
-                Platform.runLater(() -> currentController.removeFromVisual(m));
-            }
-        }
-    }
-
-    public void addNewElements(Set<MusicBand> collection, List<Long> usersIDs, List<Long> currentIDs, List<Long> newIDs) {
+    public List<MusicBand> getElementsToAdd(Set<MusicBand> newCollection) {
+        List<Long> currentIDs = bandSet.stream().map(MusicBand::getId).toList();
+        List<Long> newIDs = newCollection.stream().map(MusicBand::getId).toList();
+        List<MusicBand> elementsToAdd = new ArrayList<>();
         for (Long id : newIDs) {
             if (!currentIDs.contains(id)) {
-                MusicBand m = collection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-                currentController.getMusicBandsList().add(m);
-                if (usersIDs.contains(id)) {
-                    Platform.runLater(() -> currentController.addToVisual(m, false));
-                } else {
-                    Platform.runLater(() -> currentController.addToVisual(m, true));
-                }
+                MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+                elementsToAdd.add(m);
             }
         }
+        return elementsToAdd;
+    }
+
+    public List<MusicBand> getElementsToRemove(Set<MusicBand> newCollection) {
+        List<Long> currentIDs = bandSet.stream().map(MusicBand::getId).toList();
+        List<Long> newIDs = newCollection.stream().map(MusicBand::getId).toList();
+        List<MusicBand> elementsToRemove = new ArrayList<>();
+        for (Long id : currentIDs) {
+            if (!newIDs.contains(id)) {
+                MusicBand m = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+                elementsToRemove.add(m);
+            }
+        }
+        return elementsToRemove;
     }
 
     public void showInfoElement(MusicBand musicBand) {
@@ -228,4 +258,15 @@ public class MainModel extends AbstractModel {
 
     }
 
+    public LanguagesEnum getLanguage(String s) {
+        if ("".equals(s)) {
+            return LanguagesEnum.ENGLISH;
+        } else if ("sk".equals(s)) {
+            return LanguagesEnum.SLOVAK;
+        } else if ("lt".equals(s)) {
+            return LanguagesEnum.LITHUANIAN;
+        } else {
+            return LanguagesEnum.SPANISH;
+        }
+    }
 }
