@@ -104,7 +104,7 @@ public abstract class AbstractController {
     public void addRegex(TextField... textFields) {
         for (TextField t : textFields) {
             t.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
-                if (!"9876543210-".contains(keyEvent.getCharacter())) {
+                if (!"9876543210-.,".contains(keyEvent.getCharacter())) {
                     keyEvent.consume();
                 }
             });
