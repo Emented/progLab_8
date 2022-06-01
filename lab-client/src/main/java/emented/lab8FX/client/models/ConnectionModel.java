@@ -12,6 +12,7 @@ import emented.lab8FX.common.util.requests.ConnectionRequest;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,8 +44,12 @@ public class ConnectionModel extends AbstractModel {
             if (response.isSuccess()) {
                 currentController.switchScene(PathToViews.REGISTRATION_VIEW, comp -> new RegistrationController(getClientSocketWorker()), currentController.getResourceBundle());
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (SocketTimeoutException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
+        } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
         }
     }
 }

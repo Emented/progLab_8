@@ -4,6 +4,7 @@ import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.ConnectionModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -39,8 +40,14 @@ public class ConnectionController extends AbstractController implements Initiali
             connectionModel.connect(addressField.getText(),
                     portField.getText());
         } catch (ExceptionWithAlert e) {
-            e.showAlert();
-            clearFields(textFields);
+            if (e.isFatal()) {
+                e.showAlert();
+                connectionModel.getClientSocketWorker().closeSocket();
+                Platform.exit();
+            } else {
+                e.showAlert();
+                clearFields(textFields);
+            }
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
         }

@@ -7,6 +7,7 @@ import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.PathToVisuals;
 import emented.lab8FX.client.util.Session;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
@@ -42,8 +43,14 @@ public class LoginController extends AbstractController implements Initializable
                     passwordField.getText());
             switchScene(PathToViews.MAIN_VIEW, param -> new MainController(loginModel.getClientSocketWorker(), session, PathToVisuals.TABLE_VIEW), getResourceBundle());
         } catch (ExceptionWithAlert e) {
-            e.showAlert();
-            clearFields(textFields);
+            if (e.isFatal()) {
+                e.showAlert();
+                loginModel.getClientSocketWorker().closeSocket();
+                Platform.exit();
+            } else {
+                e.showAlert();
+                clearFields(textFields);
+            }
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
         }

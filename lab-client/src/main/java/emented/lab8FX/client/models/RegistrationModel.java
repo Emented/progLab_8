@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +40,8 @@ public class RegistrationModel extends AbstractModel {
             } else {
                 throw new ExceptionWithAlert(response.getMessage());
             }
+        } catch (SocketTimeoutException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
         } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
