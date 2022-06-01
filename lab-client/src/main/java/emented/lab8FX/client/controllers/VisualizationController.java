@@ -20,10 +20,9 @@ import java.util.Set;
 
 public class VisualizationController extends AbstractDataController implements Initializable {
 
+    private final HashMap<MusicBand, Canvas> visualBands = new HashMap<>();
     @FXML
     public Pane bandsPane;
-
-    private final HashMap<MusicBand, Canvas> visualBands = new HashMap<>();
 
     public VisualizationController(MainController mainController) {
         super(mainController);

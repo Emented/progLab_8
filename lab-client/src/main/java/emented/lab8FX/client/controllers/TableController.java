@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 public class TableController extends AbstractDataController implements Initializable {
 
+    private final ObservableList<MusicBand> musicBandsList = FXCollections.observableArrayList();
     @FXML
     public TextField dateFilter;
     @FXML
@@ -71,10 +72,7 @@ public class TableController extends AbstractDataController implements Initializ
     private TableColumn<MusicBand, String> genreColumn;
     @FXML
     private TableColumn<MusicBand, String> studioColumn;
-
     private DateTimeFormatter dateTimeFormatter;
-
-    private final ObservableList<MusicBand> musicBandsList = FXCollections.observableArrayList();
 
 
     public TableController(MainController mainController) {
@@ -108,8 +106,8 @@ public class TableController extends AbstractDataController implements Initializ
                 .withLocale(getResourceBundle().getLocale());
         genreFilter.setItems(FXCollections.observableArrayList(Stream.of(MusicGenre.values()).collect(Collectors.toList())));
         genreFilter.setOnMouseClicked(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
-                if(event.getClickCount() == 2) {
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                if (event.getClickCount() == 2) {
                     genreFilter.getSelectionModel().clearSelection();
                     applyFilters();
                 }
@@ -149,8 +147,8 @@ public class TableController extends AbstractDataController implements Initializ
                 tableView -> {
                     final TableRow<MusicBand> row = new TableRow<>();
                     row.setOnMouseClicked(event -> {
-                        if(event.getButton().equals(MouseButton.PRIMARY)) {
-                            if(event.getClickCount() == 2) {
+                        if (event.getButton().equals(MouseButton.PRIMARY)) {
+                            if (event.getClickCount() == 2) {
                                 getMainController().getMainModel().showInfoElement(row.getItem());
                             }
                         }

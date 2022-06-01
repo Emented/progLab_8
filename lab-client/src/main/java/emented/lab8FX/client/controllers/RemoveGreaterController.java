@@ -1,17 +1,14 @@
 package emented.lab8FX.client.controllers;
 
-import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.RemoveGreaterModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 

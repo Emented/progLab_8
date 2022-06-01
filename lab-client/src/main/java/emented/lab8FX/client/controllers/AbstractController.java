@@ -21,12 +21,15 @@ import java.util.ResourceBundle;
 
 public abstract class AbstractController {
     private Stage currentStage;
+    private ResourceBundle resourceBundle;
 
     public Stage getCurrentStage() {
         return currentStage;
     }
 
-    private ResourceBundle resourceBundle;
+    public void setCurrentStage(Stage currentStage) {
+        this.currentStage = currentStage;
+    }
 
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
@@ -34,10 +37,6 @@ public abstract class AbstractController {
 
     public void setResourceBundle(ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
-    }
-
-    public void setCurrentStage(Stage currentStage) {
-        this.currentStage = currentStage;
     }
 
     public <T extends AbstractController> void switchScene(PathToViews pathToViews,

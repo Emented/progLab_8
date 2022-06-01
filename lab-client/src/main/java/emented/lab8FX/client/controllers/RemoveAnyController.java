@@ -1,15 +1,12 @@
 package emented.lab8FX.client.controllers;
 
-import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.RemoveAnyModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import java.net.URL;

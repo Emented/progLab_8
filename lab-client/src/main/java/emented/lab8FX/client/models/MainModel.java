@@ -1,7 +1,5 @@
 package emented.lab8FX.client.models;
 
-import com.jfoenix.controls.JFXAlert;
-import com.sun.javafx.tk.Toolkit;
 import emented.lab8FX.client.controllers.InfoController;
 import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
@@ -29,7 +27,10 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,7 +41,7 @@ public class MainModel extends AbstractModel {
     private final MainController currentController;
     private final Set<MusicBand> bandSet = new HashSet<>();
     private final List<Long> usersIDs = new ArrayList<>();
-    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
+    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(3);    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
         @Override
         protected Task<Void> createTask() {
             Task<Void> task = new Task<>() {
@@ -63,8 +64,6 @@ public class MainModel extends AbstractModel {
             return task;
         }
     };
-    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(3);
-
     public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
         super(clientSocketWorker, currentStage);
         this.currentController = mainController;
@@ -333,4 +332,6 @@ public class MainModel extends AbstractModel {
             return LanguagesEnum.SPANISH;
         }
     }
+
+
 }

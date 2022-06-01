@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class  ConnectionValidator {
+public final class ConnectionValidator {
 
     private ConnectionValidator() {
     }

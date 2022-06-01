@@ -9,17 +9,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainController extends AbstractController implements Initializable {
 
+    private final MainModel mainModel;
     @FXML
     public Button switchButton;
     @FXML
@@ -30,9 +34,6 @@ public class MainController extends AbstractController implements Initializable 
     private Button userInfoButton;
     @FXML
     private Label connectionLabel;
-
-    private final MainModel mainModel;
-
     private PathToVisuals currentVisual;
     private AbstractDataController currentDataController;
 
@@ -95,8 +96,8 @@ public class MainController extends AbstractController implements Initializable 
         try {
             showPopUpStage(PathToViews.ADD_VIEW,
                     param -> new AddController(mainModel.getClientSocketWorker(),
-                    mainModel.getSession(),
-                    mainModel),
+                            mainModel.getSession(),
+                            mainModel),
                     getResourceBundle().getString("add_menu.title"),
                     getResourceBundle());
         } catch (ExceptionWithAlert e) {
@@ -129,7 +130,7 @@ public class MainController extends AbstractController implements Initializable 
         try {
             showPopUpStage(PathToViews.COUNT_VIEW,
                     param -> new CountController(mainModel.getClientSocketWorker(),
-                    mainModel.getSession(), mainModel),
+                            mainModel.getSession(), mainModel),
                     getResourceBundle().getString("count_less.title"),
                     getResourceBundle());
             mainModel.getNewCollection();
@@ -177,7 +178,7 @@ public class MainController extends AbstractController implements Initializable 
         try {
             showPopUpStage(PathToViews.REMOVE_GREATER_VIEW,
                     param -> new RemoveGreaterController(mainModel.getClientSocketWorker(),
-                    mainModel.getSession(),
+                            mainModel.getSession(),
                             mainModel),
                     getResourceBundle().getString("remove_greater.title"),
                     getResourceBundle());

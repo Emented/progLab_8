@@ -8,13 +8,12 @@ import emented.lab8FX.common.util.Serializer;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.Objects;
 
 public class ClientSocketWorker {
 
     private final int defaultPort = 228;
     private final int timeToResponse = 4000;
-    private  DatagramSocket datagramSocket;
+    private final DatagramSocket datagramSocket;
     private int port;
     private String address = "localhost";
     private InetAddress serverAddress;
