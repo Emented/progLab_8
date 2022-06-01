@@ -3,7 +3,6 @@ package emented.lab8FX.client.controllers;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.util.*;
-import emented.lab8FX.common.entities.MusicBand;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -59,7 +58,7 @@ public class MainController extends AbstractController implements Initializable 
                 e.showAlert();
             }
         });
-        loadUI(currentVisual, visualizationPane);
+        loadDataVisualization(currentVisual, visualizationPane);
         mainModel.runUpdateLoop();
     }
 
@@ -74,9 +73,9 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     public void switchView() {
         if (currentVisual.equals(PathToVisuals.VISUALIZATION_VIEW)) {
-            loadUI(PathToVisuals.TABLE_VIEW, visualizationPane);
+            loadDataVisualization(PathToVisuals.TABLE_VIEW, visualizationPane);
         } else {
-            loadUI(PathToVisuals.VISUALIZATION_VIEW, visualizationPane);
+            loadDataVisualization(PathToVisuals.VISUALIZATION_VIEW, visualizationPane);
         }
     }
 
@@ -218,18 +217,18 @@ public class MainController extends AbstractController implements Initializable 
         }
     }
 
-    private void loadUI(PathToVisuals pathToViews, Pane targetPane) {
+    private void loadDataVisualization(PathToVisuals pathToVisuals, Pane targetPane) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pathToViews.getPath()));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pathToVisuals.getPath()));
             loader.setResources(getResourceBundle());
-            if (pathToViews.equals(PathToVisuals.VISUALIZATION_VIEW)) {
+            if (pathToVisuals.equals(PathToVisuals.VISUALIZATION_VIEW)) {
                 loader.setControllerFactory(param -> new VisualizationController(this));
                 switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_table"));
-            } else if (pathToViews.equals(PathToVisuals.TABLE_VIEW)) {
+            } else if (pathToVisuals.equals(PathToVisuals.TABLE_VIEW)) {
                 loader.setControllerFactory(param -> new TableController(this));
                 switchButton.setText(getResourceBundle().getString("main_menu.button.switch_to_visual"));
             }
-            currentVisual = pathToViews;
+            currentVisual = pathToVisuals;
             Parent parent = loader.load();
             currentDataController = loader.getController();
             mainModel.initializeCollection();
