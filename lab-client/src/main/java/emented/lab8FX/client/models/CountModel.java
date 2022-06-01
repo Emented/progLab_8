@@ -27,23 +27,15 @@ public class CountModel extends AbstractModel {
         this.currentController = currentController;
     }
 
-    public Alert processCount(String number) throws ExceptionWithAlert, FieldsValidationException {
-        try {
-            List<String> errorList = NumberValidator.validateNumber(number);
-            if (errorList.stream().anyMatch(Objects::nonNull)) {
-                throw new FieldsValidationException(errorList);
-            }
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("count_less_than_number_of_participants",
-                    NumberValidator.getValidatedNumberOfParticipants(number),
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return getResponseInfo(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+    public void processCount(String number) throws FieldsValidationException {
+        List<String> errorList = NumberValidator.validateNumber(number);
+        if (errorList.stream().anyMatch(Objects::nonNull)) {
+            throw new FieldsValidationException(errorList);
         }
+        currentController.getMainModel().getThreadPoolExecutor().execute(currentController.getMainModel().generateTask(new CommandRequest("count_less_than_number_of_participants",
+                NumberValidator.getValidatedNumberOfParticipants(number),
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), false));
     }
 }

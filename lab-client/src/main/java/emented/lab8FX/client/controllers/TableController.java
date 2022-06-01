@@ -216,7 +216,7 @@ public class TableController extends AbstractDataController implements Initializ
                         try {
                             CountController controller = getMainController().showPopUpStage(PathToViews.COUNT_VIEW,
                                     param -> new CountController(getMainController().getMainModel().getClientSocketWorker(),
-                                            getMainController().getMainModel().getSession()),
+                                            getMainController().getMainModel().getSession(), getMainController().getMainModel()),
                                     getResourceBundle().getString("count_less.title"),
                                     getResourceBundle());
                             controller.setField(row.getItem().getNumberOfParticipants());

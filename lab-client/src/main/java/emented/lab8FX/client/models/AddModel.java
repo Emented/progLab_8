@@ -29,45 +29,29 @@ public class AddModel extends AbstractModel {
         this.currentController = currentController;
     }
 
-    public Alert processAdd(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException, ExceptionWithAlert {
-        try {
-            List<String> errorList = BandValidator.validateBand(name, x, y, number);
-            if (errorList.stream().anyMatch(Objects::nonNull)) {
-                throw new FieldsValidationException(errorList);
-            }
-            BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("add",
-                    generator.getMusicBand(),
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return getResponseInfo(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+    public void processAdd(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException {
+        List<String> errorList = BandValidator.validateBand(name, x, y, number);
+        if (errorList.stream().anyMatch(Objects::nonNull)) {
+            throw new FieldsValidationException(errorList);
         }
+        BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
+        currentController.getMainModel().getThreadPoolExecutor().execute(currentController.getMainModel().generateTask(new CommandRequest("add",
+                generator.getMusicBand(),
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), true));
     }
 
-    public Alert processAddIfMax(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException, ExceptionWithAlert {
-        try {
-            List<String> errorList = BandValidator.validateBand(name, x, y, number);
-            if (errorList.stream().anyMatch(Objects::nonNull)) {
-                throw new FieldsValidationException(errorList);
-            }
-            BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("add_if_max",
-                    generator.getMusicBand(),
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return getResponseInfo(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+    public void processAddIfMax(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException {
+        List<String> errorList = BandValidator.validateBand(name, x, y, number);
+        if (errorList.stream().anyMatch(Objects::nonNull)) {
+            throw new FieldsValidationException(errorList);
         }
+        BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
+        currentController.getMainModel().getThreadPoolExecutor().execute(currentController.getMainModel().generateTask(new CommandRequest("add_if_max",
+                generator.getMusicBand(),
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), true));
     }
 }

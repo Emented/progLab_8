@@ -44,7 +44,7 @@ public class BandGenerator {
     }
 
     private Studio getAddress(String address) {
-        if ("".equals(address)) {
+        if ("".equals(address) || address == null) {
             return null;
         }
         return new Studio(address);

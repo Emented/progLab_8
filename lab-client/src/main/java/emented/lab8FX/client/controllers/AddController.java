@@ -7,6 +7,7 @@ import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,30 +54,25 @@ public class AddController extends AbstractController implements Initializable {
         addRegex(xField, yField, numberField);
     }
 
+    public MainModel getMainModel() {
+        return mainModel;
+    }
 
     @FXML
     public void addAction() {
         List<TextField> textFields = Arrays.asList(nameField, xField, yField, numberField, descriptionField, addressField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = addModel.processAdd(nameField.getText(),
+            addModel.processAdd(nameField.getText(),
                     xField.getText(),
                     yField.getText(),
                     numberField.getText(),
                     genreBox.getValue(),
                     descriptionField.getText(),
                     addressField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 
@@ -85,24 +81,16 @@ public class AddController extends AbstractController implements Initializable {
         List<TextField> textFields = Arrays.asList(nameField, xField, yField, numberField, descriptionField, addressField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = addModel.processAddIfMax(nameField.getText(),
+            addModel.processAddIfMax(nameField.getText(),
                     xField.getText(),
                     yField.getText(),
                     numberField.getText(),
                     genreBox.getValue(),
                     descriptionField.getText(),
                     addressField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 

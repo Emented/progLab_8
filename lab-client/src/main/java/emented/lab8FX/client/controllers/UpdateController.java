@@ -48,6 +48,10 @@ public class UpdateController extends AbstractController implements Initializabl
         this.mainModel = mainModel;
     }
 
+    public MainModel getMainModel() {
+        return mainModel;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setResourceBundle(resources);
@@ -71,7 +75,7 @@ public class UpdateController extends AbstractController implements Initializabl
         List<TextField> textFields = Arrays.asList(idField, nameField, xField, yField, numberField, descriptionField, addressField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = updateModel.processUpdate(idField.getText(),
+            updateModel.processUpdate(idField.getText(),
                     nameField.getText(),
                     xField.getText(),
                     yField.getText(),
@@ -79,17 +83,9 @@ public class UpdateController extends AbstractController implements Initializabl
                     genreBox.getValue(),
                     descriptionField.getText(),
                     addressField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 
@@ -98,16 +94,9 @@ public class UpdateController extends AbstractController implements Initializabl
         List<TextField> textFields = List.of(idField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = updateModel.checkId(idField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-            } else {
-                alert.showAndWait();
-            }
+            updateModel.checkId(idField.getText());
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 

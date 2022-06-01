@@ -3,6 +3,7 @@ package emented.lab8FX.client.controllers;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
 import emented.lab8FX.client.models.CountModel;
+import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import javafx.fxml.FXML;
@@ -17,11 +18,17 @@ import java.util.ResourceBundle;
 public class CountController extends AbstractController implements Initializable {
 
     private final CountModel countModel;
+    private final MainModel mainModel;
     @FXML
     public TextField numberField;
 
-    public CountController(ClientSocketWorker clientSocketWorker, Session session) {
+    public CountController(ClientSocketWorker clientSocketWorker, Session session, MainModel mainModel) {
         countModel = new CountModel(clientSocketWorker, getCurrentStage(), session, this);
+        this.mainModel = mainModel;
+    }
+
+    public MainModel getMainModel() {
+        return mainModel;
     }
 
     @Override
@@ -39,16 +46,9 @@ public class CountController extends AbstractController implements Initializable
         List<TextField> textFields = List.of(numberField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = countModel.processCount(numberField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-            } else {
-                alert.showAndWait();
-            }
+            countModel.processCount(numberField.getText());
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 }

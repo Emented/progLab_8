@@ -1,5 +1,7 @@
 package emented.lab8FX.client.models;
 
+import com.jfoenix.controls.JFXAlert;
+import com.sun.javafx.tk.Toolkit;
 import emented.lab8FX.client.controllers.InfoController;
 import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
@@ -7,12 +9,15 @@ import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
+import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.util.requests.CollectionRequest;
 import emented.lab8FX.common.util.requests.CommandRequest;
 import emented.lab8FX.common.util.responses.CollectionResponse;
 import javafx.application.Platform;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TableCell;
@@ -20,19 +25,45 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainModel extends AbstractModel {
 
     private final static int UPDATE_TIME = 5000;
     private final Session session;
     private final MainController currentController;
-
     private final Set<MusicBand> bandSet = new HashSet<>();
-
     private final List<Long> usersIDs = new ArrayList<>();
+    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
+        @Override
+        protected Task<Void> createTask() {
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    getNewCollection();
+                    return null;
+                }
+            };
+            task.setOnFailed(event -> {
+                ExceptionWithAlert exceptionWithAlert = (ExceptionWithAlert) task.getException();
+                if (exceptionWithAlert.isFatal()) {
+                    exceptionWithAlert.showAlert();
+                    prepareForExit();
+                    Platform.exit();
+                } else {
+                    exceptionWithAlert.showAlert();
+                }
+            });
+            return task;
+        }
+    };
+    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(3);
 
     public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
         super(clientSocketWorker, currentStage);
@@ -41,17 +72,9 @@ public class MainModel extends AbstractModel {
     }
 
     public void runUpdateLoop() {
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    getNewCollection();
-                } catch (ExceptionWithAlert e) {
-                    Platform.runLater(e::showAlert);
-                }
-            }
-        }, 0, UPDATE_TIME);
+
+        scheduledService.setPeriod(Duration.millis(UPDATE_TIME));
+        scheduledService.start();
     }
 
     public Session getSession() {
@@ -64,6 +87,10 @@ public class MainModel extends AbstractModel {
 
     public List<Long> getUsersIDs() {
         return usersIDs;
+    }
+
+    public ExecutorService getThreadPoolExecutor() {
+        return threadPoolExecutor;
     }
 
     public void setToolTip(TableColumn<MusicBand, String> tableColumn) {
@@ -95,6 +122,8 @@ public class MainModel extends AbstractModel {
                 usersIDs.clear();
                 usersIDs.addAll(newIDs);
             }
+        } catch (SocketTimeoutException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
         } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
@@ -113,6 +142,8 @@ public class MainModel extends AbstractModel {
                 usersIDs.clear();
                 usersIDs.addAll(newIDs);
             }
+        } catch (SocketTimeoutException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
         } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {
@@ -120,50 +151,31 @@ public class MainModel extends AbstractModel {
         }
     }
 
-    public String processInfoAction() throws ExceptionWithAlert {
-        try {
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("info",
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return response.toString();
-        } catch (IOException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
-        }
+    public void processInfoAction() {
+        threadPoolExecutor.execute(generateTask(new CommandRequest("info",
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), false));
     }
 
-    public String processHistoryAction() throws ExceptionWithAlert {
-        try {
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("history",
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return response.toString();
-        } catch (IOException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
-        }
+    public void processHistoryAction() {
+        threadPoolExecutor.execute(generateTask(new CommandRequest("history",
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), false));
     }
 
-    public String processClearAction() throws ExceptionWithAlert {
-        try {
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("clear",
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return response.toString();
-        } catch (IOException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
-        }
+    public void processClearAction() {
+        threadPoolExecutor.execute(generateTask(new CommandRequest("clear",
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), true));
     }
 
     public void prepareForExit() {
         getClientSocketWorker().closeSocket();
+        threadPoolExecutor.shutdown();
+        scheduledService.cancel();
     }
 
     public Canvas generateBandCanvas(Color color, MusicBand musicBand) {
@@ -208,13 +220,16 @@ public class MainModel extends AbstractModel {
     }
 
     public List<MusicBand> getElementsToUpdate(Set<MusicBand> newCollection) {
+        List<Long> currentIDs = bandSet.stream().map(MusicBand::getId).toList();
         List<Long> newIDs = newCollection.stream().map(MusicBand::getId).toList();
         List<MusicBand> elementsToUpdate = new ArrayList<>();
         for (Long id : newIDs) {
-            MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-            MusicBand n = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-            if (!m.equals(n)) {
-                elementsToUpdate.add(m);
+            if (currentIDs.contains(id)) {
+                MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+                MusicBand n = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+                if (!m.equals(n)) {
+                    elementsToUpdate.add(m);
+                }
             }
         }
         return elementsToUpdate;
@@ -256,6 +271,55 @@ public class MainModel extends AbstractModel {
             e.showAlert();
         }
 
+    }
+
+    public Task<AbstractResponse> generateTask(AbstractRequest commandRequest, boolean isUpdateNeeded) {
+        Task<AbstractResponse> task = new Task<>() {
+            @Override
+            protected AbstractResponse call() throws Exception {
+                try {
+                    return getClientSocketWorker().proceedTransaction(commandRequest);
+                } catch (SocketTimeoutException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
+                } catch (IOException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
+                } catch (ClassNotFoundException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+                }
+            }
+        };
+        task.setOnFailed(event -> {
+            ExceptionWithAlert exceptionWithAlert = (ExceptionWithAlert) task.getException();
+            if (exceptionWithAlert.isFatal()) {
+                exceptionWithAlert.showAlert();
+                prepareForExit();
+                Platform.exit();
+            } else {
+                exceptionWithAlert.showAlert();
+            }
+        });
+        task.setOnSucceeded(event -> {
+            AbstractResponse response = task.getValue();
+            if (response.isSuccess()) {
+                currentController.showInfoAlert(response.getMessage());
+                if (isUpdateNeeded) {
+                    try {
+                        getNewCollection();
+                    } catch (ExceptionWithAlert e) {
+                        if (e.isFatal()) {
+                            e.showAlert();
+                            prepareForExit();
+                            Platform.exit();
+                        } else {
+                            e.showAlert();
+                        }
+                    }
+                }
+            } else {
+                currentController.showErrorAlert(response.getMessage());
+            }
+        });
+        return task;
     }
 
     public LanguagesEnum getLanguage(String s) {

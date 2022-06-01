@@ -6,6 +6,7 @@ import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.RemoveAnyModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -33,23 +34,19 @@ public class RemoveAnyController extends AbstractController implements Initializ
         addRegex(numberField);
     }
 
+    public MainModel getMainModel() {
+        return mainModel;
+    }
+
     @FXML
     public void removeAction() {
         List<TextField> textFields = List.of(numberField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = removeAnyModel.processRemove(numberField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            removeAnyModel.processRemove(numberField.getText());
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 }

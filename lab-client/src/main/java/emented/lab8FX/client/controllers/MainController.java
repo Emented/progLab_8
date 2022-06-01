@@ -107,10 +107,7 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     public void clearAction() {
         try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    mainModel.processClearAction());
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            mainModel.processClearAction();
             mainModel.getNewCollection();
         } catch (ExceptionWithAlert e) {
             e.showAlert();
@@ -119,26 +116,12 @@ public class MainController extends AbstractController implements Initializable 
 
     @FXML
     public void infoAction() {
-        try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    mainModel.processInfoAction());
-            alert.setHeaderText(null);
-            alert.showAndWait();
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
-        }
+        mainModel.processInfoAction();
     }
 
     @FXML
     public void historyAction() {
-        try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    mainModel.processHistoryAction());
-            alert.setHeaderText(null);
-            alert.showAndWait();
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
-        }
+        mainModel.processHistoryAction();
     }
 
     @FXML
@@ -146,7 +129,7 @@ public class MainController extends AbstractController implements Initializable 
         try {
             showPopUpStage(PathToViews.COUNT_VIEW,
                     param -> new CountController(mainModel.getClientSocketWorker(),
-                    mainModel.getSession()),
+                    mainModel.getSession(), mainModel),
                     getResourceBundle().getString("count_less.title"),
                     getResourceBundle());
             mainModel.getNewCollection();
@@ -219,7 +202,8 @@ public class MainController extends AbstractController implements Initializable 
 
     private void loadDataVisualization(PathToVisuals pathToVisuals, Pane targetPane) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pathToVisuals.getPath()));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(pathToVisuals.getPath()));
             loader.setResources(getResourceBundle());
             if (pathToVisuals.equals(PathToVisuals.VISUALIZATION_VIEW)) {
                 loader.setControllerFactory(param -> new VisualizationController(this));
@@ -238,7 +222,13 @@ public class MainController extends AbstractController implements Initializable 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ExceptionWithAlert e) {
-            e.showAlert();
+            if (e.isFatal()) {
+                e.showAlert();
+                mainModel.prepareForExit();
+                Platform.exit();
+            } else {
+                e.showAlert();
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import emented.lab8FX.client.models.RemoveGreaterModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.entities.enums.MusicGenre;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,6 +46,10 @@ public class RemoveGreaterController extends AbstractController implements Initi
         this.mainModel = mainModel;
     }
 
+    public MainModel getMainModel() {
+        return mainModel;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setResourceBundle(resources);
@@ -67,24 +72,16 @@ public class RemoveGreaterController extends AbstractController implements Initi
         List<TextField> textFields = Arrays.asList(nameField, xField, yField, numberField, descriptionField, addressField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = removeGreaterModel.processRemove(nameField.getText(),
+            removeGreaterModel.processRemove(nameField.getText(),
                     xField.getText(),
                     yField.getText(),
                     numberField.getText(),
                     genreBox.getValue(),
                     descriptionField.getText(),
                     addressField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 

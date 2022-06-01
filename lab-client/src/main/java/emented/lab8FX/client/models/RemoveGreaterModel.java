@@ -29,25 +29,17 @@ public class RemoveGreaterModel extends AbstractModel {
         this.currentController = currentController;
     }
 
-    public Alert processRemove(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException, ExceptionWithAlert {
-        try {
-            List<String> errorList = BandValidator.validateBand(name, x, y, number);
-            if (errorList.stream().anyMatch(Objects::nonNull)) {
-                throw new FieldsValidationException(errorList);
-            }
-            BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CommandRequest("remove_greater",
-                    generator.getMusicBand(),
-                    session.getUsername(),
-                    session.getPassword(),
-                    getClientInfo()));
-            return getResponseInfo(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+    public void processRemove(String name, String x, String y, String number, MusicGenre genre, String description, String address) throws FieldsValidationException {
+        List<String> errorList = BandValidator.validateBand(name, x, y, number);
+        if (errorList.stream().anyMatch(Objects::nonNull)) {
+            throw new FieldsValidationException(errorList);
         }
+        BandGenerator generator = new BandGenerator(name, x, y, number, genre, description, address);
+        currentController.getMainModel().getThreadPoolExecutor().execute(currentController.getMainModel().generateTask(new CommandRequest("remove_greater",
+                generator.getMusicBand(),
+                session.getUsername(),
+                session.getPassword(),
+                getClientInfo()), true));
     }
 
 }

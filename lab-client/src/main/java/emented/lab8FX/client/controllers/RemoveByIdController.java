@@ -6,6 +6,7 @@ import emented.lab8FX.client.models.MainModel;
 import emented.lab8FX.client.models.RemoveByIdModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.Session;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -34,6 +35,10 @@ public class RemoveByIdController extends AbstractController implements Initiali
         addRegex(idField);
     }
 
+    public MainModel getMainModel() {
+        return mainModel;
+    }
+
     public void setField(Long id) {
         idField.setText(id.toString());
     }
@@ -43,18 +48,10 @@ public class RemoveByIdController extends AbstractController implements Initiali
         List<TextField> textFields = List.of(idField);
         removeFieldsColoring(textFields);
         try {
-            Alert alert = removeByIdModel.processRemove(idField.getText());
-            if (alert.getAlertType().equals(Alert.AlertType.INFORMATION)) {
-                alert.showAndWait();
-                mainModel.getNewCollection();
-                getCurrentStage().close();
-            } else {
-                alert.showAndWait();
-            }
+            removeByIdModel.processRemove(idField.getText());
+            getCurrentStage().close();
         } catch (FieldsValidationException e) {
             showFieldsErrors(e.getErrorList(), textFields);
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
         }
     }
 }

@@ -13,8 +13,8 @@ public class Studio implements Serializable, Comparable<Studio> {
      */
     private String address; //Поле не может быть null
 
-    public Studio(String adress) {
-        this.address = adress;
+    public Studio(String address) {
+        this.address = address;
     }
 
     /**
