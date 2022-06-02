@@ -219,13 +219,12 @@ public class MainModel extends AbstractModel {
     }
 
     public List<MusicBand> getElementsToUpdate(Set<MusicBand> newCollection) {
-        List<Long> currentIDs = bandSet.stream().map(MusicBand::getId).toList();
         List<Long> newIDs = newCollection.stream().map(MusicBand::getId).toList();
         List<MusicBand> elementsToUpdate = new ArrayList<>();
         for (Long id : newIDs) {
-            if (currentIDs.contains(id)) {
-                MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-                MusicBand n = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
+            MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).findFirst().orElse(null);
+            MusicBand n = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).findFirst().orElse(null);
+            if (m != null && n != null) {
                 if (!m.equals(n)) {
                     elementsToUpdate.add(m);
                 }
@@ -240,8 +239,7 @@ public class MainModel extends AbstractModel {
         List<MusicBand> elementsToAdd = new ArrayList<>();
         for (Long id : newIDs) {
             if (!currentIDs.contains(id)) {
-                MusicBand m = newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-                elementsToAdd.add(m);
+                newCollection.stream().filter(musicBand -> musicBand.getId().equals(id)).findFirst().ifPresent(elementsToAdd::add);
             }
         }
         return elementsToAdd;
@@ -253,8 +251,7 @@ public class MainModel extends AbstractModel {
         List<MusicBand> elementsToRemove = new ArrayList<>();
         for (Long id : currentIDs) {
             if (!newIDs.contains(id)) {
-                MusicBand m = bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-                elementsToRemove.add(m);
+                bandSet.stream().filter(musicBand -> musicBand.getId().equals(id)).findFirst().ifPresent(elementsToRemove::add);
             }
         }
         return elementsToRemove;
