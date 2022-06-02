@@ -3,6 +3,7 @@ package emented.lab8FX.client.models;
 import emented.lab8FX.client.controllers.InfoController;
 import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
+import emented.lab8FX.client.exceptions.NoResponseException;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.client.util.PathToViews;
@@ -107,8 +108,9 @@ public class MainModel extends AbstractModel {
     }
 
     public void getNewCollection() throws ExceptionWithAlert {
-        try {
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CollectionRequest(session.getUsername(), session.getPassword(), getClientInfo()));
+        Task<AbstractResponse> task = generateUpdateTask();
+        task.setOnSucceeded(event -> {
+            AbstractResponse response = task.getValue();
             if (response.getType().equals(CollectionResponse.class) && response.isSuccess()) {
                 Set<MusicBand> newCollection = ((CollectionResponse) response).getCollection();
                 List<Long> newIDs = ((CollectionResponse) response).getUsersIds();
@@ -120,19 +122,16 @@ public class MainModel extends AbstractModel {
                 bandSet.addAll(newCollection);
                 usersIDs.clear();
                 usersIDs.addAll(newIDs);
+                currentController.getConnectionLabel().setText(currentController.getConnectionText());
             }
-        } catch (SocketTimeoutException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
-        } catch (IOException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
-        }
+        });
+        threadPoolExecutor.execute(task);
     }
 
     public void initializeCollection() throws ExceptionWithAlert {
-        try {
-            AbstractResponse response = getClientSocketWorker().proceedTransaction(new CollectionRequest(session.getUsername(), session.getPassword(), getClientInfo()));
+        Task<AbstractResponse> task = generateUpdateTask();
+        task.setOnSucceeded(event -> {
+            AbstractResponse response = task.getValue();
             if (response.getType().equals(CollectionResponse.class) && response.isSuccess()) {
                 Set<MusicBand> newCollection = ((CollectionResponse) response).getCollection();
                 List<Long> newIDs = ((CollectionResponse) response).getUsersIds();
@@ -140,14 +139,10 @@ public class MainModel extends AbstractModel {
                 bandSet.addAll(newCollection);
                 usersIDs.clear();
                 usersIDs.addAll(newIDs);
+                currentController.getConnectionLabel().setText(currentController.getConnectionText());
             }
-        } catch (SocketTimeoutException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
-        } catch (IOException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
-        } catch (ClassNotFoundException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
-        }
+        });
+        threadPoolExecutor.execute(task);
     }
 
     public void processInfoAction() {
@@ -275,8 +270,10 @@ public class MainModel extends AbstractModel {
             protected AbstractResponse call() throws Exception {
                 try {
                     return getClientSocketWorker().proceedTransaction(commandRequest);
+                } catch (NoResponseException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.idMismatch"), true);
                 } catch (SocketTimeoutException e) {
-                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"));
                 } catch (IOException e) {
                     throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
                 } catch (ClassNotFoundException e) {
@@ -313,6 +310,36 @@ public class MainModel extends AbstractModel {
                 }
             } else {
                 currentController.showErrorAlert(response.getMessage());
+            }
+        });
+        return task;
+    }
+
+    public Task<AbstractResponse> generateUpdateTask() {
+        Task<AbstractResponse> task = new Task<>() {
+            @Override
+            protected AbstractResponse call() throws Exception {
+                try {
+                    return getClientSocketWorker().proceedTransaction(new CollectionRequest(session.getUsername(), session.getPassword(), getClientInfo()));
+                } catch (NoResponseException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.idMismatch"), true);
+                } catch (SocketTimeoutException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"));
+                } catch (IOException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
+                } catch (ClassNotFoundException e) {
+                    throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.response"));
+                }
+            }
+        };
+        task.setOnFailed(event -> {
+            ExceptionWithAlert exceptionWithAlert = (ExceptionWithAlert) task.getException();
+            if (exceptionWithAlert.isFatal()) {
+                exceptionWithAlert.showAlert();
+                prepareForExit();
+                Platform.exit();
+            } else {
+                currentController.getConnectionLabel().setText(currentController.getResourceBundle().getString("update_exception.failed"));
             }
         });
         return task;

@@ -35,6 +35,8 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private Label connectionLabel;
     private PathToVisuals currentVisual;
+
+    private String connectionText;
     private AbstractDataController currentDataController;
 
     public MainController(ClientSocketWorker clientSocketWorker, Session session, PathToVisuals currentVisual) {
@@ -46,7 +48,7 @@ public class MainController extends AbstractController implements Initializable 
     public void initialize(URL location, ResourceBundle resources) {
         setResourceBundle(resources);
         userInfoButton.setText(mainModel.getSession().getUsername());
-        connectionLabel.setText(getResourceBundle().getString("main_menu.text.connection") + " " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort());
+        connectionText = getResourceBundle().getString("main_menu.text.connection") + " " + mainModel.getClientSocketWorker().getAddress() + ":" + mainModel.getClientSocketWorker().getPort();
         languageBox.setItems(FXCollections.observableArrayList(Stream.of(LanguagesEnum.values()).collect(Collectors.toList())));
         languageBox.setValue(mainModel.getLanguage(getResourceBundle().getLocale().getLanguage()));
         languageBox.getSelectionModel().selectedItemProperty().addListener((m, oldValue, newValue) -> {
@@ -65,6 +67,14 @@ public class MainController extends AbstractController implements Initializable 
 
     public MainModel getMainModel() {
         return mainModel;
+    }
+
+    public Label getConnectionLabel() {
+        return connectionLabel;
+    }
+
+    public String getConnectionText() {
+        return connectionText;
     }
 
     public AbstractDataController getCurrentDataController() {

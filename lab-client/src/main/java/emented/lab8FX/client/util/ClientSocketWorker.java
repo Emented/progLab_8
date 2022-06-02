@@ -1,5 +1,6 @@
 package emented.lab8FX.client.util;
 
+import emented.lab8FX.client.exceptions.NoResponseException;
 import emented.lab8FX.common.abstractions.AbstractRequest;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.DeSerializer;
@@ -8,6 +9,7 @@ import emented.lab8FX.common.util.Serializer;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 public class ClientSocketWorker {
 
@@ -17,6 +19,8 @@ public class ClientSocketWorker {
     private int port;
     private String address = "localhost";
     private InetAddress serverAddress;
+
+    private Long currentRequestId = 1L;
 
     public ClientSocketWorker() throws UnknownHostException, SocketException {
         port = defaultPort;
@@ -58,9 +62,24 @@ public class ClientSocketWorker {
         return DeSerializer.deSerializeResponse(bytesFromServer);
     }
 
-    public synchronized AbstractResponse proceedTransaction(AbstractRequest request) throws ClassNotFoundException, IOException {
+    public synchronized AbstractResponse proceedTransaction(AbstractRequest request) throws ClassNotFoundException, IOException, NoResponseException {
+        request.setRequestId(currentRequestId);
         sendRequest(request);
-        return receiveResponse();
+        AbstractResponse response = receiveResponse();
+        if (!Objects.equals(response.getResponseId(), currentRequestId)) {
+            for (int i = 0; i < 5; i++) {
+                response = receiveResponse();
+                if (Objects.equals(response.getResponseId(), currentRequestId)) {
+                    currentRequestId++;
+                    return response;
+                }
+            }
+        } else {
+            currentRequestId++;
+            return response;
+        }
+        currentRequestId++;
+        throw new NoResponseException();
     }
 
 

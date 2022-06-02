@@ -4,6 +4,7 @@ import emented.lab8FX.client.controllers.ConnectionController;
 import emented.lab8FX.client.controllers.RegistrationController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.FieldsValidationException;
+import emented.lab8FX.client.exceptions.NoResponseException;
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.validators.ConnectionValidator;
@@ -44,8 +45,10 @@ public class ConnectionModel extends AbstractModel {
             if (response.isSuccess()) {
                 currentController.switchScene(PathToViews.REGISTRATION_VIEW, comp -> new RegistrationController(getClientSocketWorker()), currentController.getResourceBundle());
             }
+        } catch (NoResponseException e) {
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.idMismatch"), true);
         } catch (SocketTimeoutException e) {
-            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"), true);
+            throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.time"));
         } catch (IOException e) {
             throw new ExceptionWithAlert(currentController.getResourceBundle().getString("connection_exception.connection"));
         } catch (ClassNotFoundException e) {

@@ -40,7 +40,11 @@ public class RequestThread implements Runnable {
                 if (acceptedRequest != null) {
                     CompletableFuture
                             .supplyAsync(acceptedRequest::getRequest)
-                            .thenApplyAsync(this::proceedRequest, cachedService)
+                            .thenApplyAsync(request -> {
+                                AbstractResponse response = proceedRequest(request);
+                                response.setResponseId(request.getRequestId());
+                                return response;
+                            }, cachedService)
                             .thenAcceptAsync(response -> {
                                 try {
                                     serverSocketWorker.sendResponse(response, acceptedRequest.getSocketAddress());

@@ -8,6 +8,8 @@ public class AbstractResponse implements Serializable {
 
     private final String message;
 
+    private Long responseId;
+
     public AbstractResponse(boolean isSuccess, String message) {
         this.isSuccess = isSuccess;
         this.message = message;
@@ -19,6 +21,14 @@ public class AbstractResponse implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    public Long getResponseId() {
+        return responseId;
+    }
+
+    public void setResponseId(Long responseId) {
+        this.responseId = responseId;
     }
 
     public Class<?> getType() {

@@ -80,18 +80,4 @@ public class VisualizationController extends AbstractDataController implements I
         fade.play();
         bandsPane.getChildren().add(canvas);
     }
-
-    public void reloadVisual() {
-        ObservableList<Node> nodes = FXCollections.observableArrayList(bandsPane.getChildren());
-        bandsPane.getChildren().clear();
-        for (Node node : nodes) {
-            FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.millis(1500));
-            fade.setFromValue(0);
-            fade.setToValue(10);
-            fade.setNode(node);
-            fade.play();
-            bandsPane.getChildren().add(node);
-        }
-    }
 }

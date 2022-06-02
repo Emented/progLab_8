@@ -9,6 +9,8 @@ public class AbstractRequest implements Serializable {
 
     private final LocalTime currentTime;
 
+    private Long requestId;
+
     public AbstractRequest(String clientInfo) {
         this.clientInfo = clientInfo;
         currentTime = LocalTime.now();
@@ -16,6 +18,14 @@ public class AbstractRequest implements Serializable {
 
     public String getClientInfo() {
         return clientInfo;
+    }
+
+    public Long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
     }
 
     public LocalTime getCurrentTime() {
