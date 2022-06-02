@@ -117,12 +117,8 @@ public class MainController extends AbstractController implements Initializable 
 
     @FXML
     public void clearAction() {
-        try {
-            mainModel.processClearAction();
-            mainModel.getNewCollection();
-        } catch (ExceptionWithAlert e) {
-            e.showAlert();
-        }
+        mainModel.processClearAction();
+        mainModel.getNewCollection();
     }
 
     @FXML
@@ -227,7 +223,6 @@ public class MainController extends AbstractController implements Initializable 
             Parent parent = loader.load();
             currentDataController = loader.getController();
             mainModel.initializeCollection();
-            currentDataController.initializeElements(mainModel.getBandSet(), mainModel.getUsersIDs());
             targetPane.getChildren().clear();
             targetPane.getChildren().add(parent);
         } catch (IOException e) {

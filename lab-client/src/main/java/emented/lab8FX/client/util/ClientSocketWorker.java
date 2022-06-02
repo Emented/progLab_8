@@ -45,14 +45,14 @@ public class ClientSocketWorker {
         serverAddress = InetAddress.getByName(address);
     }
 
-    public void sendRequest(AbstractRequest request) throws IOException {
+    private void sendRequest(AbstractRequest request) throws IOException {
         ByteBuffer byteBuffer = Serializer.serializeRequest(request);
         byte[] bufferToSend = byteBuffer.array();
         DatagramPacket datagramPacket = new DatagramPacket(bufferToSend, bufferToSend.length, serverAddress, port);
         datagramSocket.send(datagramPacket);
     }
 
-    public AbstractResponse receiveResponse() throws ClassNotFoundException, IOException {
+    private AbstractResponse receiveResponse() throws ClassNotFoundException, IOException {
         datagramSocket.setSoTimeout(timeToResponse);
         int receivedSize = datagramSocket.getReceiveBufferSize();
         byte[] byteBuf = new byte[receivedSize];
@@ -63,22 +63,19 @@ public class ClientSocketWorker {
     }
 
     public synchronized AbstractResponse proceedTransaction(AbstractRequest request) throws ClassNotFoundException, IOException, NoResponseException {
-        request.setRequestId(currentRequestId);
+        request.setRequestId(currentRequestId++);
         sendRequest(request);
         AbstractResponse response = receiveResponse();
-        if (!Objects.equals(response.getResponseId(), currentRequestId)) {
+        if (!Objects.equals(response.getResponseId(), currentRequestId - 1)) {
             for (int i = 0; i < 5; i++) {
                 response = receiveResponse();
-                if (Objects.equals(response.getResponseId(), currentRequestId)) {
-                    currentRequestId++;
+                if (Objects.equals(response.getResponseId(), currentRequestId - 1)) {
                     return response;
                 }
             }
         } else {
-            currentRequestId++;
             return response;
         }
-        currentRequestId++;
         throw new NoResponseException();
     }
 

@@ -42,27 +42,17 @@ public class MainModel extends AbstractModel {
     private final MainController currentController;
     private final Set<MusicBand> bandSet = new HashSet<>();
     private final List<Long> usersIDs = new ArrayList<>();
-    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(3);    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
+    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(4);
+    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
         @Override
         protected Task<Void> createTask() {
-            Task<Void> task = new Task<>() {
+            return new Task<>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
                     getNewCollection();
                     return null;
                 }
             };
-            task.setOnFailed(event -> {
-                ExceptionWithAlert exceptionWithAlert = (ExceptionWithAlert) task.getException();
-                if (exceptionWithAlert.isFatal()) {
-                    exceptionWithAlert.showAlert();
-                    prepareForExit();
-                    Platform.exit();
-                } else {
-                    exceptionWithAlert.showAlert();
-                }
-            });
-            return task;
         }
     };
     public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
@@ -72,21 +62,12 @@ public class MainModel extends AbstractModel {
     }
 
     public void runUpdateLoop() {
-
         scheduledService.setPeriod(Duration.millis(UPDATE_TIME));
         scheduledService.start();
     }
 
     public Session getSession() {
         return session;
-    }
-
-    public Set<MusicBand> getBandSet() {
-        return bandSet;
-    }
-
-    public List<Long> getUsersIDs() {
-        return usersIDs;
     }
 
     public ExecutorService getThreadPoolExecutor() {
@@ -107,7 +88,7 @@ public class MainModel extends AbstractModel {
                 });
     }
 
-    public void getNewCollection() throws ExceptionWithAlert {
+    public void getNewCollection() {
         Task<AbstractResponse> task = generateUpdateTask();
         task.setOnSucceeded(event -> {
             AbstractResponse response = task.getValue();
@@ -139,6 +120,7 @@ public class MainModel extends AbstractModel {
                 bandSet.addAll(newCollection);
                 usersIDs.clear();
                 usersIDs.addAll(newIDs);
+                currentController.getCurrentDataController().initializeElements(bandSet, usersIDs);
                 currentController.getConnectionLabel().setText(currentController.getConnectionText());
             }
         });
@@ -296,17 +278,7 @@ public class MainModel extends AbstractModel {
             if (response.isSuccess()) {
                 currentController.showInfoAlert(response.getMessage());
                 if (isUpdateNeeded) {
-                    try {
-                        getNewCollection();
-                    } catch (ExceptionWithAlert e) {
-                        if (e.isFatal()) {
-                            e.showAlert();
-                            prepareForExit();
-                            Platform.exit();
-                        } else {
-                            e.showAlert();
-                        }
-                    }
+                    getNewCollection();
                 }
             } else {
                 currentController.showErrorAlert(response.getMessage());
@@ -356,6 +328,4 @@ public class MainModel extends AbstractModel {
             return LanguagesEnum.SPANISH;
         }
     }
-
-
 }

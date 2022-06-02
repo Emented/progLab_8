@@ -99,12 +99,9 @@ public class CommandManager {
             if (!dbManager.validateUser(commandRequest.getUsername(), commandRequest.getPassword())) {
                 return new CollectionResponse(false, "Login and password mismatch", null, null);
             }
-            Thread.sleep(10000);
             return new CollectionResponse(true, "Ok", collectionManager.getMusicBands(), dbManager.getIdsOfUsersElements(commandRequest.getUsername()));
         } catch (DatabaseException e) {
             return new CollectionResponse(false, e.getMessage(), null, null);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 }
