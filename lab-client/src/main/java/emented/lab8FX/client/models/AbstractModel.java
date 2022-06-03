@@ -1,6 +1,7 @@
 package emented.lab8FX.client.models;
 
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.common.abstractions.AbstractResponse;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -16,16 +17,16 @@ public abstract class AbstractModel {
         this.currentStage = currentStage;
         this.clientInfo = clientSocketWorker.getAddress() + ":" + clientSocketWorker.getPort();
     }
-
-    public Alert getResponseInfo(AbstractResponse response) {
-        Alert alert;
-        if (response.isSuccess()) {
-            alert = new Alert(Alert.AlertType.INFORMATION, response.toString());
+    public LanguagesEnum getLanguage(String s) {
+        if ("".equals(s)) {
+            return LanguagesEnum.ENGLISH;
+        } else if ("sk".equals(s)) {
+            return LanguagesEnum.SLOVAK;
+        } else if ("lt".equals(s)) {
+            return LanguagesEnum.LITHUANIAN;
         } else {
-            alert = new Alert(Alert.AlertType.ERROR, response.toString());
+            return LanguagesEnum.SPANISH;
         }
-        alert.setHeaderText(null);
-        return alert;
     }
 
     public ClientSocketWorker getClientSocketWorker() {

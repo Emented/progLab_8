@@ -149,9 +149,9 @@ public class MainModel extends AbstractModel {
     }
 
     public void prepareForExit() {
-        getClientSocketWorker().closeSocket();
         threadPoolExecutor.shutdown();
         scheduledService.cancel();
+        getClientSocketWorker().closeSocket();
     }
 
     public Canvas generateBandCanvas(Color color, MusicBand musicBand) {
@@ -315,17 +315,5 @@ public class MainModel extends AbstractModel {
             }
         });
         return task;
-    }
-
-    public LanguagesEnum getLanguage(String s) {
-        if ("".equals(s)) {
-            return LanguagesEnum.ENGLISH;
-        } else if ("sk".equals(s)) {
-            return LanguagesEnum.SLOVAK;
-        } else if ("lt".equals(s)) {
-            return LanguagesEnum.LITHUANIAN;
-        } else {
-            return LanguagesEnum.SPANISH;
-        }
     }
 }
