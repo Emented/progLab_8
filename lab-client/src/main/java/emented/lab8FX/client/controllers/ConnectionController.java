@@ -1,65 +1,76 @@
 package emented.lab8FX.client.controllers;
 
+import emented.lab8FX.client.exceptions.ExceptionWithAlert;
+import emented.lab8FX.client.exceptions.FieldsValidationException;
+import emented.lab8FX.client.models.ConnectionModel;
 import emented.lab8FX.client.util.ClientSocketWorker;
+import emented.lab8FX.client.util.LanguagesEnum;
+import emented.lab8FX.client.util.PathToViews;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
-public class ConnectionController {
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-    @FXML
-    private Button connectButton;
+public class ConnectionController extends AbstractController implements Initializable {
 
+    private final ConnectionModel connectionModel;
     @FXML
     private TextField addressField;
     @FXML
     private TextField portField;
+    @FXML
+    public ChoiceBox<LanguagesEnum> languageBox;
+
+    public ConnectionController(ClientSocketWorker clientSocketWorker) {
+        connectionModel = new ConnectionModel(clientSocketWorker, getCurrentStage(), this);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setResourceBundle(resources);
+        addRegex(portField);
+        languageBox.setItems(FXCollections.observableArrayList(Stream.of(LanguagesEnum.values()).collect(Collectors.toList())));
+        languageBox.setValue(connectionModel.getLanguage(getResourceBundle().getLocale().getLanguage()));
+        languageBox.getSelectionModel().selectedItemProperty().addListener((m, oldValue, newValue) -> {
+            try {
+                setResourceBundle(ResourceBundle.getBundle("localization.locale", new Locale(newValue.getLanguageName())));
+                switchScene(PathToViews.CONNECTION_VIEW,
+                        param -> new ConnectionController(connectionModel.getClientSocketWorker()), getResourceBundle());
+                languageBox.setValue(newValue);
+            } catch (ExceptionWithAlert e) {
+                e.showAlert();
+            }
+        });
+    }
 
     @FXML
     private void connectAction() {
+        List<TextField> textFields = Arrays.asList(addressField, portField);
+        removeFieldsColoring(textFields);
         try {
-            ClientSocketWorker clientSocketWorker = new ClientSocketWorker();
-            String address = addressField.getText();
-            String port = portField.getText();
-            if (!address.equals("")) {
-                clientSocketWorker.setAddress(address);
+            connectionModel.connect(addressField.getText(),
+                    portField.getText());
+        } catch (ExceptionWithAlert e) {
+            if (e.isFatal()) {
+                e.showAlert();
+                connectionModel.getClientSocketWorker().closeSocket();
+                Platform.exit();
+            } else {
+                e.showAlert();
+                clearFields(textFields);
             }
-            if (!port.equals("")) {
-                int portNum = Integer.parseInt(port);
-                if (portNum > 0 && portNum <= 65535) {
-                    clientSocketWorker.setPort(portNum);
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/registration.fxml"));
-            fxmlLoader.setControllerFactory(controllerClass -> new RegistrationController(clientSocketWorker));
-            Parent parent = fxmlLoader.load();
-            Stage currentStage = (Stage) connectButton.getScene().getWindow();
-            Scene scene = new Scene(parent);
-            currentStage.setTitle("Registration menu");
-            currentStage.setScene(scene);
-            currentStage.sizeToScene();
-            currentStage.setMinWidth(450);
-            currentStage.setMinHeight(397);
-        } catch (IllegalArgumentException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong port! It should be a number between 1 and 65535");
-            alert.showAndWait();
-            addressField.clear();
-            portField.clear();
-        } catch (UnknownHostException | SocketException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Some troubles with connection, try again later!");
-            alert.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (FieldsValidationException e) {
+            showFieldsErrors(e.getErrorList(), textFields);
         }
     }
 }

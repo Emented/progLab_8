@@ -1,6 +1,6 @@
 .button
 {
-    -fx-background-color: #d1d1d1;
+    -fx-background-color: #e6e6e6;
 }
 
 .button:hover
@@ -11,4 +11,50 @@
 .button:pressed
 {
     -fx-background-color: #b2b2b2;
+}
+.menu-button
+{
+    -fx-background-color: #e6e6e6;
+}
+
+.menu-button:hover
+{
+    -fx-background-color: #d7d7d7;
+}
+
+.menu-button:pressed
+{
+    -fx-background-color: #b2b2b2;
+}
+
+.menu-item
+{
+    -fx-pref-width: 380;
+    -fx-pref-height: 46;
+    -fx-border-color: black;
+    -fx-border-radius: 2;
+    -fx-background-color: #e6e6e6;
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
+
+.menu-item:hover
+{
+    -fx-background-color: #d7d7d7;
+    -fx-text-fill: black;
+}
+.menu-item:hover .label, .menu-item:focused .label
+{
+    -fx-text-fill: black;
+}
+
+.menu-item:pressed
+{
+    -fx-background-color: #b2b2b2;
+}
+
+.context-menu {
+    -fx-padding: 0em 0em 0em 4px;
+    -fx-background-color: transparent;
 }

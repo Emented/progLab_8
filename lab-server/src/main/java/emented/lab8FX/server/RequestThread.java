@@ -1,8 +1,11 @@
 package emented.lab8FX.server;
 
 
-import emented.lab8FX.common.util.RequestType;
+import emented.lab8FX.common.abstractions.AbstractRequest;
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.util.TextColoring;
+import emented.lab8FX.common.util.requests.*;
+import emented.lab8FX.common.util.responses.ConnectionResponse;
 import emented.lab8FX.server.db.DBSSHConnector;
 import emented.lab8FX.server.interfaces.SocketWorkerInterface;
 import emented.lab8FX.server.util.CommandManager;
@@ -10,12 +13,7 @@ import emented.lab8FX.server.util.RequestWithAddress;
 import emented.lab8FX.server.util.UsersManager;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 
 public class RequestThread implements Runnable {
@@ -43,13 +41,9 @@ public class RequestThread implements Runnable {
                     CompletableFuture
                             .supplyAsync(acceptedRequest::getRequest)
                             .thenApplyAsync(request -> {
-                                if (request.getRequestType().equals(RequestType.COMMAND)) {
-                                    return commandManager.executeClientCommand(request);
-                                } else if (request.getRequestType().equals(RequestType.REGISTER)) {
-                                    return usersManager.registerNewUser(request);
-                                } else {
-                                    return usersManager.loginUser(request);
-                                }
+                                AbstractResponse response = proceedRequest(request);
+                                response.setResponseId(request.getRequestId());
+                                return response;
                             }, cachedService)
                             .thenAcceptAsync(response -> {
                                 try {
@@ -73,6 +67,22 @@ public class RequestThread implements Runnable {
             forkJoinPool.shutdown();
         } catch (IOException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("An error occurred during stopping the server"));
+        }
+    }
+
+    private AbstractResponse proceedRequest(AbstractRequest request) {
+        if (request.getType().equals(CommandRequest.class)) {
+            return commandManager.executeClientCommand((CommandRequest) request);
+        } else if (request.getType().equals(RegisterRequest.class)) {
+            return usersManager.registerNewUser((RegisterRequest) request);
+        } else if (request.getType().equals(LoginRequest.class)) {
+            return usersManager.loginUser((LoginRequest) request);
+        } else if (request.getType().equals(CollectionRequest.class)) {
+            return commandManager.returnCollection((CollectionRequest) request);
+        } else if (request.getType().equals(CheckIdRequest.class)) {
+            return commandManager.checkId((CheckIdRequest) request);
+        } else {
+            return new ConnectionResponse(true, "Connection is ok!");
         }
     }
 }

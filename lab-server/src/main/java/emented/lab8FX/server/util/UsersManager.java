@@ -1,9 +1,9 @@
 package emented.lab8FX.server.util;
 
 import emented.lab8FX.common.exceptions.DatabaseException;
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
-import emented.lab8FX.common.util.TextColoring;
+import emented.lab8FX.common.util.requests.LoginRequest;
+import emented.lab8FX.common.util.requests.RegisterRequest;
+import emented.lab8FX.common.util.responses.AuthResponse;
 import emented.lab8FX.server.db.DBManager;
 
 public class UsersManager {
@@ -14,29 +14,29 @@ public class UsersManager {
         this.dbManager = dbManager;
     }
 
-    public Response registerNewUser(Request request) {
+    public AuthResponse registerNewUser(RegisterRequest request) {
         try {
             if (!dbManager.checkUsersExistence(request.getUsername())) {
                 dbManager.addUser(request.getUsername(), request.getPassword());
-                return new Response(TextColoring.getGreenText("Registration was completed successfully!"));
+                return new AuthResponse(true, "Registration was completed successfully!");
             } else {
-                return new Response(TextColoring.getRedText("This username already exists!"), false);
+                return new AuthResponse(false, "This username already exists!");
             }
         } catch (DatabaseException e) {
-            return new Response(TextColoring.getRedText(e.getMessage()), false);
+            return new AuthResponse(false, e.getMessage());
         }
     }
 
-    public Response loginUser(Request request) {
+    public AuthResponse loginUser(LoginRequest request) {
         try {
             boolean check = dbManager.validateUser(request.getUsername(), request.getPassword());
             if (check) {
-                return new Response(TextColoring.getGreenText("Login successful!"));
+                return new AuthResponse(true, "Login successful!");
             } else {
-                return new Response(TextColoring.getRedText("Wrong login or password!"), false);
+                return new AuthResponse(false, "Wrong login or password!");
             }
         } catch (DatabaseException e) {
-            return new Response(TextColoring.getRedText(e.getMessage()), false);
+            return new AuthResponse(false, e.getMessage());
         }
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="visualPane" prefHeight="657.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emented.lab8FX.client.controllers.VisualizationController">
+   <children>
+      <Line endY="358.0" layoutX="15.0" layoutY="299.0" startY="-299.0" />
+      <Line endX="729.0" layoutX="100.0" layoutY="643.0" startX="-100.0" />
+      <Circle layoutX="15.0" layoutY="643.0" radius="4.0" stroke="BLACK" strokeType="INSIDE" />
+      <Polygon layoutX="15.0" layoutY="60.0" points="-8.0, -43.5, 8.0, -43.5, 0.0, -60.0" stroke="BLACK" strokeType="INSIDE" />
+      <Polygon layoutX="822.0" layoutY="695.0" points="-8.0, -43.5, 8.0, -43.5, 0.0, -60.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" />
+      <Label layoutX="805.0" layoutY="607.0" text="X">
+         <font>
+            <Font name="Verdana Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="28.0" text="Y">
+         <font>
+            <Font name="Verdana Bold" size="22.0" />
+         </font>
+      </Label>
+      <Pane fx:id="bandsPane" prefHeight="657.0" prefWidth="830.0" />
+   </children>
+</Pane>

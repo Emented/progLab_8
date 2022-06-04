@@ -1,20 +1,20 @@
 package emented.lab8FX.server.util;
 
 
-import emented.lab8FX.common.util.Request;
+import emented.lab8FX.common.abstractions.AbstractRequest;
 
 import java.net.SocketAddress;
 
 public class RequestWithAddress {
-    private final Request request;
+    private final AbstractRequest request;
     private final SocketAddress socketAddress;
 
-    public RequestWithAddress(Request request, SocketAddress socketAddress) {
+    public RequestWithAddress(AbstractRequest request, SocketAddress socketAddress) {
         this.request = request;
         this.socketAddress = socketAddress;
     }
 
-    public Request getRequest() {
+    public AbstractRequest getRequest() {
         return request;
     }
 

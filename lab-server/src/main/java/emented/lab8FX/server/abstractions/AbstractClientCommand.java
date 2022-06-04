@@ -1,7 +1,7 @@
 package emented.lab8FX.server.abstractions;
 
-import emented.lab8FX.common.util.Request;
-import emented.lab8FX.common.util.Response;
+import emented.lab8FX.common.util.requests.CommandRequest;
+import emented.lab8FX.common.util.responses.CommandResponse;
 
 public abstract class AbstractClientCommand {
 
@@ -24,7 +24,7 @@ public abstract class AbstractClientCommand {
         this.descriptionOfArgs = "";
     }
 
-    public abstract Response executeClientCommand(Request request);
+    public abstract CommandResponse executeClientCommand(CommandRequest request);
 
     public String getName() {
         return name;

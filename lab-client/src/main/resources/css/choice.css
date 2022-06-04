@@ -1,0 +1,23 @@
+.choice-box .context-menu
+{
+    -fx-background-color: transparent;
+}
+
+.choice-box .menu-item
+{
+    -fx-background-color: #e6e6e6;
+    -fx-border-radius: 2;
+    -fx-border-color: black;
+}
+.choice-box .menu-item:hover
+{
+   -fx-background-color: #b2b2b2;
+}
+.choice-box .menu-item > .label
+{
+   -fx-text-fill: black;
+}
+.choice-box .menu-item:selected
+{
+   -fx-background-color: #d7d7d7;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="tablePain" prefHeight="657.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emented.lab8FX.client.controllers.TableController">
+   <children>
+      <TableView fx:id="tableView" editable="true" layoutY="27.0" prefHeight="630.0" prefWidth="830.0" stylesheets="@../css/table.css">
+         <columns>
+            <TableColumn fx:id="creationDateColumn" editable="false" prefWidth="113.0" resizable="false" text="%main_menu.table.creation_date" />
+            <TableColumn fx:id="idColumn" editable="false" prefWidth="56.0" resizable="false" text="%main_menu.table.id" />
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="85.0" resizable="false" text="%main_menu.table.name" />
+            <TableColumn fx:id="coordinatesColumn" editable="false" prefWidth="85.0" resizable="false" sortable="false" text="%main_menu.table.coordinates">
+               <columns>
+                  <TableColumn editable="false" prefWidth="50.0" resizable="false" text="%main_menu.table.X" fx:id="xColumn" />
+                  <TableColumn fx:id="yColumn" editable="false" prefWidth="50.0" resizable="false" text="%main_menu.table.Y" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="numberOfParticipantsColumn" editable="false" prefWidth="145.0" resizable="false" text="%main_menu.table.number_of_participants" />
+            <TableColumn fx:id="descriptionColumn" editable="false" minWidth="75.0" prefWidth="114.0" resizable="false" text="%main_menu.table.description" />
+            <TableColumn fx:id="genreColumn" editable="false" prefWidth="89.0" resizable="false" text="%main_menu.table.genre" />
+            <TableColumn fx:id="studioColumn" editable="false" prefWidth="112.0" resizable="false" text="%main_menu.table.studio_address" />
+         </columns>
+      </TableView>
+      <HBox prefHeight="27.0" prefWidth="830.0">
+         <children>
+            <TextField fx:id="dateFilter" prefHeight="27.0" prefWidth="114.0" promptText="%main_menu.table_filter.date" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="idFilter" prefHeight="27.0" prefWidth="56.0" promptText="%main_menu.table_filter.id" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="nameFilter" prefHeight="27.0" prefWidth="85.0" promptText="%main_menu.table_filter.name" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField prefHeight="27.0" prefWidth="50.0" promptText="%main_menu.table_filter.X" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;" fx:id="xFilter">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="yFilter" prefHeight="27.0" prefWidth="50.0" promptText="%main_menu.table_filter.Y" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="numberFilter" prefHeight="27.0" prefWidth="145.0" promptText="%main_menu.table_filter.number" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="descriptionFilter" prefHeight="27.0" prefWidth="114.0" promptText="%main_menu.table_filter.description" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 1 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+            </TextField>
+            <ComboBox fx:id="genreFilter" prefHeight="27.0" prefWidth="89.0" style="-fx-background-color: e6e6e6; -fx-background-radius: 0; -fx-border-color: black; -fx-border-width: 0 1 1 1;" stylesheets="@../css/drop_menu.css" />
+            <TextField fx:id="addressFilter" prefHeight="27.0" prefWidth="127.0" promptText="%main_menu.table_filter.address" style="-fx-border-color: black; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-width: 0 0 1 1;">
+               <font>
+                  <Font name="Verdana" size="13.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+   </children>
+</Pane>

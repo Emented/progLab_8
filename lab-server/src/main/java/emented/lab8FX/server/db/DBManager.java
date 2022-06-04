@@ -5,23 +5,17 @@ import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.entities.Studio;
 import emented.lab8FX.common.entities.enums.MusicGenre;
 import emented.lab8FX.common.exceptions.DatabaseException;
-import emented.lab8FX.server.util.StringEncryptor;
 import emented.lab8FX.server.interfaces.DBConnectable;
+import emented.lab8FX.server.util.StringEncryptor;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class DBManager {
 
     private final DBConnectable dbConnector;
-    private final ReentrantLock reentrantLock = new ReentrantLock();
 
     public DBManager(DBConnectable dbConnector) {
         this.dbConnector = dbConnector;

@@ -5,12 +5,7 @@ import emented.lab8FX.common.entities.MusicBand;
 import emented.lab8FX.common.exceptions.CollectionIsEmptyException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 

@@ -1,75 +1,57 @@
-package emented.lab8FX.common.util;
+package emented.lab8FX.common.util.responses;
 
-
+import emented.lab8FX.common.abstractions.AbstractResponse;
 import emented.lab8FX.common.entities.MusicBand;
+import emented.lab8FX.common.util.SizeAnalyzer;
+import emented.lab8FX.common.util.TextColoring;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Response implements Serializable {
+public class CommandResponse extends AbstractResponse {
 
-    private final String messageToResponse;
-    private MusicBand bandToResponse;
-    private Set<MusicBand> yourElementsOfCollection;
-    private Set<MusicBand> alienElementsOfCollection;
-    private boolean success = true;
-    private List<Long> listOfIds;
+    private final MusicBand bandToResponse;
+    private final Set<MusicBand> yourElementsOfCollection;
+    private final Set<MusicBand> alienElementsOfCollection;
+    private final List<Long> listOfIds;
 
-    public Response(String messageToResponse) {
-        this.messageToResponse = messageToResponse;
+    public CommandResponse(boolean isSuccess, String message) {
+        super(isSuccess, message);
+        this.bandToResponse = null;
+        this.yourElementsOfCollection = null;
+        this.alienElementsOfCollection = null;
+        this.listOfIds = null;
     }
 
-    public Response(String messageToResponse, MusicBand bandToResponse) {
-        this.messageToResponse = messageToResponse;
+    public CommandResponse(boolean isSuccess, String message, MusicBand bandToResponse) {
+        super(isSuccess, message);
         this.bandToResponse = bandToResponse;
+        this.yourElementsOfCollection = null;
+        this.alienElementsOfCollection = null;
+        this.listOfIds = null;
     }
 
-    public Response(String messageToResponse, List<Long> listOfIds) {
-        this.messageToResponse = messageToResponse;
+    public CommandResponse(boolean isSuccess, String message, List<Long> listOfIds) {
+        super(isSuccess, message);
+        this.bandToResponse = null;
+        this.yourElementsOfCollection = null;
+        this.alienElementsOfCollection = null;
         this.listOfIds = listOfIds;
     }
 
-    public Response(String messageToResponse, boolean success) {
-        this.messageToResponse = messageToResponse;
-        this.success = success;
-    }
-
-    public Response(String messageToResponse, Set<MusicBand> yourElementsOfCollection, Set<MusicBand> alienElementsOfCollection) {
-        this.messageToResponse = messageToResponse;
+    public CommandResponse(boolean isSuccess, String message, Set<MusicBand> yourElementsOfCollection, Set<MusicBand> alienElementsOfCollection) {
+        super(isSuccess, message);
+        this.bandToResponse = null;
         this.yourElementsOfCollection = yourElementsOfCollection;
         this.alienElementsOfCollection = alienElementsOfCollection;
-    }
-
-    public String getMessageToResponse() {
-        return messageToResponse;
-    }
-
-    public MusicBand getBandToResponse() {
-        return bandToResponse;
-    }
-
-    public Set<MusicBand> getYourElementsOfCollection() {
-        return yourElementsOfCollection;
-    }
-
-    public Set<MusicBand> getAlienElementsOfCollection() {
-        return alienElementsOfCollection;
-    }
-
-    public List<Long> getListOfIds() {
-        return listOfIds;
-    }
-
-    public boolean isSuccess() {
-        return success;
+        this.listOfIds = null;
     }
 
     public String getInfoAboutResponse() {
-        return "Response contains: " + (messageToResponse == null ? "" : "message")
+        return "Response contains: " + (super.getMessage() == null ? "" : "message")
                 + (bandToResponse == null ? "" : ", musicband")
                 + (yourElementsOfCollection == null ? "" : ", collection");
     }
@@ -96,7 +78,7 @@ public class Response implements Serializable {
                 collection.append(m.toString()).append("\n");
             }
             collection = new StringBuilder(collection.substring(0, collection.length() - 1));
-        }  else {
+        } else {
             collection.append(TextColoring.getGreenText("Another users don't have elements in this collection!"));
         }
         if (listOfIds != null) {
@@ -105,7 +87,7 @@ public class Response implements Serializable {
             }
             ids = new StringBuilder(ids.substring(0, ids.length() - 2));
         }
-        return (messageToResponse == null ? "" : messageToResponse)
+        return (super.getMessage() == null ? "" : super.getMessage())
                 + (bandToResponse == null ? "" : "\n" + bandToResponse)
                 + ((yourElementsOfCollection == null && alienElementsOfCollection == null) ? "" : "\n" + collection)
                 + ((listOfIds == null) ? "" : "\n" + ids);

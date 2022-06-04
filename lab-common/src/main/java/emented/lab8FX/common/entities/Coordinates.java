@@ -2,6 +2,7 @@ package emented.lab8FX.common.entities;
 
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Класс, хранящий координаты музыкальной студии
@@ -77,5 +78,17 @@ public class Coordinates implements Serializable {
     @Override
     public String toString() {
         return "X = " + x + ", Y = " + y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Coordinates that)) return false;
+        return Double.compare(that.x, x) == 0 && y.equals(that.y);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

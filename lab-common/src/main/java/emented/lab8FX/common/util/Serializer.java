@@ -1,5 +1,8 @@
 package emented.lab8FX.common.util;
 
+import emented.lab8FX.common.abstractions.AbstractRequest;
+import emented.lab8FX.common.abstractions.AbstractResponse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -10,7 +13,7 @@ public final class Serializer {
     private Serializer() {
     }
 
-    public static ByteBuffer serializeRequest(Request request) throws IOException {
+    public static ByteBuffer serializeRequest(AbstractRequest request) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(request);
@@ -21,7 +24,7 @@ public final class Serializer {
         return bufToSend;
     }
 
-    public static ByteBuffer serializeResponse(Response response) throws IOException {
+    public static ByteBuffer serializeResponse(AbstractResponse response) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(response);

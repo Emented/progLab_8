@@ -10,7 +10,6 @@ import emented.lab8FX.server.interfaces.DBConnectable;
 import emented.lab8FX.server.interfaces.SQLConsumer;
 import emented.lab8FX.server.interfaces.SQLFunction;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,14 +24,11 @@ public class DBSSHConnector implements DBConnectable {
     private final String dbName = "studs";
     private final int dbPort = 5432;
     private final String dbHost = "pg";
-
+    private final int sshPort = 2222;
     private String svLogin;
     private String svPass;
     private String svAddr;
-
-    private final int sshPort = 2222;
     private int forwardingPort;
-
 
 
     public DBSSHConnector() {
@@ -44,10 +40,12 @@ public class DBSSHConnector implements DBConnectable {
             connectSSH();
             initializeDB();
         } catch (SQLException e) {
-            ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!" + e.getMessage()));
+            ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Error occurred during initializing tables!"));
+            e.printStackTrace();
             System.exit(1);
         } catch (JSchException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Troubles during connecting to DB with ssh!"));
+            System.out.println(e.getMessage());
             System.exit(1);
         } catch (IllegalArgumentException e) {
             ServerConfig.getConsoleTextPrinter().printlnText(TextColoring.getRedText("Mistakes in environment variables!"));
