@@ -2,8 +2,6 @@ package emented.lab8FX.client.models;
 
 import emented.lab8FX.client.util.ClientSocketWorker;
 import emented.lab8FX.client.util.LanguagesEnum;
-import emented.lab8FX.common.abstractions.AbstractResponse;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public abstract class AbstractModel {
@@ -17,6 +15,7 @@ public abstract class AbstractModel {
         this.currentStage = currentStage;
         this.clientInfo = clientSocketWorker.getAddress() + ":" + clientSocketWorker.getPort();
     }
+
     public LanguagesEnum getLanguage(String s) {
         if ("".equals(s)) {
             return LanguagesEnum.ENGLISH;

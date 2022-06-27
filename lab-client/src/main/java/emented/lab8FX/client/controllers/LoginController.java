@@ -23,12 +23,11 @@ import java.util.stream.Stream;
 public class LoginController extends AbstractController implements Initializable {
     private final LoginModel loginModel;
     @FXML
+    private ChoiceBox<LanguagesEnum> languageBox;
+    @FXML
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
-
-    @FXML
-    public ChoiceBox<LanguagesEnum> languageBox;
 
     public LoginController(ClientSocketWorker clientSocketWorker) {
         this.loginModel = new LoginModel(clientSocketWorker, getCurrentStage(), this);

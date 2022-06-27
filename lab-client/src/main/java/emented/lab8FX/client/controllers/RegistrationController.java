@@ -23,14 +23,13 @@ import java.util.stream.Stream;
 public class RegistrationController extends AbstractController implements Initializable {
     private final RegistrationModel registrationModel;
     @FXML
+    private ChoiceBox<LanguagesEnum> languageBox;
+    @FXML
     private TextField usernameField;
     @FXML
     private PasswordField firstPasswordField;
     @FXML
     private PasswordField secondPasswordField;
-
-    @FXML
-    public ChoiceBox<LanguagesEnum> languageBox;
 
     public RegistrationController(ClientSocketWorker clientSocketWorker) {
         this.registrationModel = new RegistrationModel(clientSocketWorker, getCurrentStage(), this);

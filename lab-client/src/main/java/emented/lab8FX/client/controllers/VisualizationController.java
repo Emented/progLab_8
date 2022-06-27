@@ -2,11 +2,8 @@ package emented.lab8FX.client.controllers;
 
 import emented.lab8FX.common.entities.MusicBand;
 import javafx.animation.FadeTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -38,10 +35,13 @@ public class VisualizationController extends AbstractDataController implements I
         }
         List<Long> idsToUpdate = elementsToUpdate.stream().map(MusicBand::getId).toList();
         for (Long id : idsToUpdate) {
-            MusicBand m = elementsToUpdate.stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-            MusicBand n = visualBands.keySet().stream().filter(musicBand -> musicBand.getId().equals(id)).toList().get(0);
-            removeFromVisual(n);
-            addToVisual(m, !usersIDs.contains(m.getId()));
+            visualBands.keySet().stream()
+                    .filter(musicBand -> musicBand.getId().equals(id))
+                    .findFirst().ifPresent(this::removeFromVisual);
+            elementsToUpdate.stream()
+                    .filter(musicBand -> musicBand.getId().equals(id))
+                    .findFirst()
+                    .ifPresent(musicBand -> addToVisual(musicBand, !usersIDs.contains(musicBand.getId())));
         }
     }
 
@@ -60,6 +60,7 @@ public class VisualizationController extends AbstractDataController implements I
     public void removeFromVisual(MusicBand musicBand) {
         Canvas canvas = visualBands.get(musicBand);
         bandsPane.getChildren().remove(canvas);
+        visualBands.remove(musicBand);
     }
 
 

@@ -36,10 +36,13 @@ public class HistoryCommand extends AbstractClientCommand {
             } else {
                 sb.append("History is empty");
             }
+            Thread.sleep(10000);
             sb = new StringBuilder(sb.substring(0, sb.length() - 1));
             return new CommandResponse(true, sb.toString());
         } catch (DatabaseException e) {
             return new CommandResponse(false, e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
