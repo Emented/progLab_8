@@ -55,7 +55,6 @@ public abstract class AbstractController {
             getCurrentStage().sizeToScene();
             getCurrentStage().centerOnScreen();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new ExceptionWithAlert(getResourceBundle().getString("switch_exception.scene"));
         }
     }

@@ -5,7 +5,6 @@ import emented.lab8FX.client.controllers.MainController;
 import emented.lab8FX.client.exceptions.ExceptionWithAlert;
 import emented.lab8FX.client.exceptions.NoResponseException;
 import emented.lab8FX.client.util.ClientSocketWorker;
-import emented.lab8FX.client.util.LanguagesEnum;
 import emented.lab8FX.client.util.PathToViews;
 import emented.lab8FX.client.util.Session;
 import emented.lab8FX.common.abstractions.AbstractRequest;
@@ -43,7 +42,11 @@ public class MainModel extends AbstractModel {
     private final Set<MusicBand> bandSet = new HashSet<>();
     private final List<Long> usersIDs = new ArrayList<>();
     private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(4);
-    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
+    public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
+        super(clientSocketWorker, currentStage);
+        this.currentController = mainController;
+        this.session = session;
+    }    private final ScheduledService<Void> scheduledService = new ScheduledService<>() {
         @Override
         protected Task<Void> createTask() {
             return new Task<>() {
@@ -55,11 +58,6 @@ public class MainModel extends AbstractModel {
             };
         }
     };
-    public MainModel(ClientSocketWorker clientSocketWorker, Stage currentStage, Session session, MainController mainController) {
-        super(clientSocketWorker, currentStage);
-        this.currentController = mainController;
-        this.session = session;
-    }
 
     public void runUpdateLoop() {
         scheduledService.setPeriod(Duration.millis(UPDATE_TIME));
@@ -316,4 +314,6 @@ public class MainModel extends AbstractModel {
         });
         return task;
     }
+
+
 }

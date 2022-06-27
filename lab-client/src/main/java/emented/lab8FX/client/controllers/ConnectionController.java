@@ -25,11 +25,11 @@ public class ConnectionController extends AbstractController implements Initiali
 
     private final ConnectionModel connectionModel;
     @FXML
+    private ChoiceBox<LanguagesEnum> languageBox;
+    @FXML
     private TextField addressField;
     @FXML
     private TextField portField;
-    @FXML
-    public ChoiceBox<LanguagesEnum> languageBox;
 
     public ConnectionController(ClientSocketWorker clientSocketWorker) {
         connectionModel = new ConnectionModel(clientSocketWorker, getCurrentStage(), this);
